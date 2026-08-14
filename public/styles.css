@@ -1,21 +1,18 @@
 /*
- * A holding page, deliberately plain.
+ * Four things on an empty page.
  *
- * No webfont, no script, no image above the fold beyond an inline SVG. That is
- * not minimalism for its own sake — it means nothing can shift after paint,
- * the page is one request plus this file, and a crawler that runs no
- * JavaScript sees the whole thing. The designer's version can spend the budget
- * this one is saving.
+ * No webfont, no script, no image beyond an inline SVG. Nothing can shift after
+ * paint and a crawler that runs no JavaScript sees everything there is. The
+ * designer's site can spend the budget this one is saving.
  *
- * The brand is monochrome, so the palette is two tokens and the mark inherits
- * `currentColor`. Dark mode is the same page with the two swapped.
+ * The brand is monochrome, so the palette is three tokens and the mark inherits
+ * `currentColor`. Dark mode is the same page with them swapped.
  */
 
 :root {
   --paper: #ffffff;
   --ink: #101010;
-  --ink-soft: #5c5c5c;
-  --rule: #e4e4e4;
+  --ink-soft: #6b6b6b;
   color-scheme: light dark;
 }
 
@@ -23,8 +20,7 @@
   :root {
     --paper: #0a0a0a;
     --ink: #f2f2f2;
-    --ink-soft: #9a9a9a;
-    --rule: #242424;
+    --ink-soft: #8c8c8c;
   }
 }
 
@@ -32,143 +28,119 @@
 
 body {
   margin: 0;
-  /* System stack. A webfont here would cost a request and a reflow to buy a
-     page that is mostly one paragraph. */
+  /* System stack. A webfont would cost a request and a reflow to set eight
+     words. */
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  font-size: 17px;
-  line-height: 1.65;
   color: var(--ink);
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 main {
-  /* Around 65 characters of running text, which is where prose stops being
-     tiring to read. */
-  max-width: 34rem;
-  margin: 0 auto;
-  padding: clamp(3rem, 12vh, 7rem) 1.5rem 4rem;
+  /* `svh`, not `vh`: on mobile Safari `100vh` is taller than the visible area
+     while the address bar is showing, which pushes a centred layout off the
+     bottom of the screen it is meant to be centred in. */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
 }
 
-.head { margin-bottom: 3.5rem; }
-
 .mark {
-  display: block;
-  height: 2.75rem;
+  height: 3.25rem;
   width: auto;
   color: var(--ink);
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 600;
-  letter-spacing: -0.015em;
-  margin: 0 0 0.5rem;
-}
-
-.lede {
+  letter-spacing: -0.01em;
   margin: 0;
-  font-size: 1.0625rem;
-  color: var(--ink-soft);
-  text-wrap: pretty;
 }
 
-section { margin-bottom: 3rem; }
-
-h2 {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--ink-soft);
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--rule);
-}
-
-p { margin: 0 0 1rem; text-wrap: pretty; }
-p:last-child { margin-bottom: 0; }
-
-ul {
-  margin: 0 0 1.25rem;
-  padding: 0;
-  list-style: none;
-}
-
-li {
-  padding: 0.4rem 0 0.4rem 1.1rem;
-  position: relative;
-  color: var(--ink-soft);
-}
-
-/* A rule rather than a bullet: the list is a set of capabilities, not a
-   sequence, and a numbered or dotted marker would imply an order it does not
-   have. */
-li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1.05em;
-  width: 0.45rem;
-  height: 1px;
-  background: var(--ink-soft);
-}
-
-.plans {
-  margin: 0;
-  display: grid;
-  gap: 0;
-}
-
-.plans > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.plans > div:last-child { border-bottom: 0; }
-
-dt { font-weight: 600; }
-
-dd {
-  margin: 0;
-  color: var(--ink-soft);
-  text-align: right;
-  /* Figures line up down the column. */
-  font-variant-numeric: tabular-nums;
-}
-
-dd b { color: var(--ink); font-weight: 600; }
-
-a {
-  color: inherit;
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 1px;
-}
-
-a:hover { text-decoration-thickness: 2px; }
-
-a:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-footer {
-  margin-top: 4rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rule);
+.by {
+  margin: 0.75rem 0 0;
   font-size: 0.9375rem;
   color: var(--ink-soft);
 }
 
-.fine {
-  font-size: 0.8125rem;
-  margin-top: 0.5rem;
+.contact {
+  margin: 2.5rem 0 0;
+  font-size: 0.9375rem;
+}
+
+/* ---------------------------------------------------------------------------
+   The arrival
+   ---------------------------------------------------------------------------
+   One sequence, once, on load. The mark is drawn from three separate paths, so
+   they come in as three — which is the only ornament on the page and the only
+   place the animation says anything about the subject rather than about
+   itself.
+
+   `both` fill mode matters: without it every element paints at full opacity
+   for the first frame and then snaps to hidden when its animation starts,
+   which reads as a flicker rather than a fade.
+
+   Everything is opacity and transform. Neither triggers layout, so the
+   sequence cannot shift a single pixel of the page it is revealing.
+   --------------------------------------------------------------------------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes settle {
+  from { opacity: 0; transform: translateY(0.75rem) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.mark path {
+  animation: settle 0.75s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+/* Staggered by an eighth of a second — enough to read as three strokes
+   arriving, short enough that the whole mark is present before anyone has
+   decided to look away. */
+.mark path:nth-child(1) { animation-delay: 0.05s; }
+.mark path:nth-child(2) { animation-delay: 0.18s; }
+.mark path:nth-child(3) { animation-delay: 0.31s; }
+
+h1       { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.25, 1) 0.5s both; }
+.by      { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.25, 1) 0.62s both; }
+.contact { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.25, 1) 0.78s both; }
+
+/* Motion is a preference the page has no business overriding. Reduced means
+   the sequence does not run at all — not that it runs faster. */
+@media (prefers-reduced-motion: reduce) {
+  .mark path,
+  h1,
+  .by,
+  .contact {
+    animation: none;
+  }
+
+  a { transition: none; }
+}
+
+a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  transition: color 0.15s ease;
+}
+
+a:hover { color: var(--ink); }
+
+a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 2px;
 }

@@ -3,9 +3,14 @@
 > Point-of-sale and stock control for phone resellers, built for Computer
 > Village, Ikeja. A product of Copper Ledger LTD, a Nigerian company.
 
+The page at suite.ng is a holding page while a fuller site is designed, so it
+carries the mark and little else. This file is the description that page does
+not yet make room for.
+
 Suite tracks each handset by IMEI or serial number from intake to sale, records
 sales and issues receipts, and keeps ledgers for customer credit and supplier
-payables. It runs in a web browser and is built for a phone screen first.
+payables. It runs in a web browser and is built for a phone screen first, so
+there is nothing to install.
 
 ## What it covers
 
@@ -19,11 +24,10 @@ payables. It runs in a web browser and is built for a phone screen first.
 
 ## Plans
 
-Priced by how many people need to sign in. Payment is by bank transfer.
-
-- Starter — ₦15,000/month, covers 2 people
-- Shop — ₦25,000/month, covers 6 people
-- Multi-branch — ₦45,000/month, covers 20 people
+Three plans, priced by how many people need to sign in — that is the thing that
+actually differs between a single counter and a shop with a manager, sellers
+and someone keeping the books. Payment is by bank transfer. Current prices are
+available from hello@suite.ng.
 
 ## Getting an account
 
@@ -33,6 +37,6 @@ inside Suite and sets what each role can see.
 
 ## Links
 
-- https://suite.ng/ — this page
-- https://app.suite.ng/ — sign in (existing customers; not indexed)
+- https://suite.ng/ — this site
+- https://app.suite.ng/ — sign in (existing customers; deliberately not indexed)
 - hello@suite.ng — enquiries
