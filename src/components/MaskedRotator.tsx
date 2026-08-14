@@ -131,11 +131,17 @@ export const MaskedRotator: React.FC<MaskedRotatorProps> = ({
       ref={containerRef}
       className={`inline-block relative overflow-hidden align-baseline select-none transition-[width] will-change-transform ${className}`}
       style={{
-        height: '1.08em',
-        verticalAlign: '-0.08em',
-        display: 'inline-block',
+        verticalAlign: 'baseline',
       }}
     >
+      {/* In-flow spacer ensuring 100% accurate text baseline with surrounding text */}
+      <span
+        className="inline-block whitespace-nowrap invisible pointer-events-none select-none text-inherit font-inherit"
+        aria-hidden="true"
+      >
+        {words[0]}
+      </span>
+
       {/* Active visible word */}
       <span
         id={`${idPrefix}-current`}

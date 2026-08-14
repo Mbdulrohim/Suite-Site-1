@@ -11,7 +11,7 @@ export const PartnersSection: React.FC = () => {
       name: 'Linear',
       logo: (
         <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.02 0C5.38 0 0 5.38 0 12.02s5.38 12.02 12.02 12.02c6.64 0 12.02-5.38 12.02-12.02S18.66 0 12.02 0zm-1.07 4.14c3.92 0 7.15 2.87 7.79 6.64H3.16c.64-3.77 3.87-6.64 7.79-6.64zm-7.79 8.95h15.58c-.64 3.77-3.87 6.64-7.79 6.64-3.92 0-7.15-2.87-7.79-6.64z"/>
+          <path d="M12.02 0C5.38 0 0 5.38 0 12.02s5.38 12.02 12.02 12.02c6.64 0 12.02-5.38 12.02-12.02S18.66 0 12.02 0zm-1.07 4.14c3.92 0 7.15 2.87 7.79 6.64H3.16c.64-3.77 3.87-6.64 7.79-6.64zm-7.79 8.95h15.58c-.64 3.77-3.87 6.64-7.79 6.64-3.92 0-7.15-2.87-7.79-6.64z" />
           <text x="32" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Linear</text>
         </svg>
       ),
@@ -73,7 +73,7 @@ export const PartnersSection: React.FC = () => {
         <div className="flex flex-col items-center text-center">
           {/* Subtle Eyebrow Label */}
           <p className="text-[12px] md:text-[12.5px] font-medium tracking-wider text-[#8A909E] uppercase mb-8 md:mb-10">
-            Trusted by teams building the future of commerce and operations
+            PARTNERS
           </p>
 
           {/* Logos Row */}

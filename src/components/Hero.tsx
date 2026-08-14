@@ -38,15 +38,15 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
               className="tracking-tight text-[42px] xs:text-[48px] sm:text-[54px] lg:text-[48px] xl:text-[54px] leading-[1.08] sm:leading-[1.08] mb-8 select-none font-sans"
               style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
             >
-              <div className="font-semibold text-black flex flex-wrap items-baseline gap-x-2.5 sm:gap-x-3">
+              <div className="font-semibold text-black flex items-baseline gap-x-2.5 sm:gap-x-3 whitespace-nowrap">
                 <MaskedRotator 
                   idPrefix="rotator-actions"
                   words={ACTION_WORDS} 
                   className="font-semibold text-black" 
                 />
               </div>
-              <div className="font-medium text-gray-500 flex flex-wrap items-baseline gap-x-2 sm:gap-x-2.5 mt-1 sm:mt-1.5">
-                <span className="inline-block">your</span>
+              <div className="font-medium text-gray-500 flex items-baseline gap-x-2 sm:gap-x-2.5 mt-1 sm:mt-1.5 whitespace-nowrap">
+                <span className="inline-block whitespace-nowrap">your</span>
                 <MaskedRotator 
                   idPrefix="rotator-nouns"
                   words={NOUN_WORDS} 

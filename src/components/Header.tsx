@@ -12,9 +12,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
   return (
     <header id="main-header" className="w-full sticky top-0 z-50 transition-all duration-200">
       <div className="mx-auto max-w-[1240px] px-5 py-5 md:px-8 md:py-7 flex items-center justify-between">
-        <a 
+        <a
           id="brand-logo"
-          href="#" 
+          href="#"
           className="group flex items-center select-none"
         >
           <img src={wordmarkUrl} alt="SUITE" className="h-[22px] transition-transform duration-300 group-hover:scale-105" />
@@ -46,14 +46,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
           </a>
         </nav>
 
-        {/* Right: Sign Up ↗ pill */}
+        {/* Right: CTA button */}
         <button
           id="header-signup-button"
           onClick={onOpenSignUp}
-          className="group inline-flex items-center justify-center gap-2 bg-[#2D2D2D] hover:bg-[#1A1A1A] text-[#FAF9F6] text-[13.5px] font-medium tracking-tight rounded-[20px] px-[20px] h-[36px] transition-all duration-200 shadow-sm active:scale-[0.98] cursor-pointer"
+          className="group inline-flex items-center justify-center gap-2.5 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[15px] font-medium tracking-tight rounded-full px-[28px] h-[45px] transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
-          <span>Pre-order</span>
-          <ArrowRight className="w-3.5 h-3.5 text-[#FAF9F6]/80 transition-transform duration-200 group-hover:translate-x-0.5" />
+          <span>Get Started</span>
+          <ArrowRight className="w-4 h-4 text-[#FAF9F6]/85 transition-transform duration-200 group-hover:translate-x-0.5" />
         </button>
       </div>
     </header>
