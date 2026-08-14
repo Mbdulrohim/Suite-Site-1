@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MoreHorizontal, MessageSquare, Box, Sparkles } from 'lucide-react';
 
 export const KeepMovingSection: React.FC = () => {
+  const [activeCard, setActiveCard] = useState<number>(0);
   const [toggles, setToggles] = useState({ cortana: true, yumi: true, tadao: true });
 
   const toggleAgent = (key: 'cortana' | 'yumi' | 'tadao') => {
@@ -9,7 +10,7 @@ export const KeepMovingSection: React.FC = () => {
   };
 
   return (
-    <section id="features" className="w-full py-16 md:py-28 lg:py-36">
+    <section id="features" className="w-full py-16 md:py-28 lg:py-36 select-none">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         
         {/* Section Header */}
@@ -22,13 +23,20 @@ export const KeepMovingSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 3-Card Grid (Mobile Stacked, Desktop 3-col) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        {/* 3-Card Grid with Active/Inactive Mobile Accordion & Desktop Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 items-stretch">
           
-          {/* Card 1: Bring your own agents (Active Blue Border from mobile screenshot) */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between border-2 border-[#60A5FA] shadow-[0_8px_30px_rgba(96,165,250,0.08)] relative overflow-hidden">
-            {/* Top Interactive Toggle List */}
-            <div className="bg-[#FAF9F7]/80 rounded-2xl p-4 mb-8 border border-gray-100 space-y-3">
+          {/* Card 0: Bring your own agents */}
+          <div 
+            onClick={() => setActiveCard(0)}
+            className={`bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+              activeCard === 0
+                ? 'border-2 border-[#858585] shadow-[0_8px_30px_rgba(133,133,133,0.12)]'
+                : 'border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#858585]/50'
+            }`}
+          >
+            {/* Top Interactive Toggle List: Hidden on mobile when inactive, visible when active or on desktop */}
+            <div className={`${activeCard === 0 ? 'block' : 'hidden md:block'} bg-[#FAF9F7]/80 rounded-2xl p-4 mb-6 sm:mb-8 border border-gray-100 space-y-3 transition-all duration-200`}>
               
               {/* Row 1: Cortana */}
               <div className="flex items-center justify-between gap-3">
@@ -43,8 +51,12 @@ export const KeepMovingSection: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button 
-                    onClick={() => toggleAgent('cortana')}
-                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.cortana ? 'bg-[#3B82F6]' : 'bg-gray-300'}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleAgent('cortana');
+                    }}
+                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.cortana ? 'bg-[#858585]' : 'bg-gray-300'}`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-white transition-transform ${toggles.cortana ? 'translate-x-4' : 'translate-x-0'}`} />
                   </button>
@@ -55,7 +67,7 @@ export const KeepMovingSection: React.FC = () => {
               {/* Row 2: Yumi with 'Added by Sara' badge */}
               <div className="flex items-center justify-between gap-3 bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-gray-100 text-[#858585] flex items-center justify-center shrink-0">
                     <Box className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
@@ -69,8 +81,12 @@ export const KeepMovingSection: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button 
-                    onClick={() => toggleAgent('yumi')}
-                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.yumi ? 'bg-[#3B82F6]' : 'bg-gray-300'}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleAgent('yumi');
+                    }}
+                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.yumi ? 'bg-[#858585]' : 'bg-gray-300'}`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-white transition-transform ${toggles.yumi ? 'translate-x-4' : 'translate-x-0'}`} />
                   </button>
@@ -91,8 +107,12 @@ export const KeepMovingSection: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button 
-                    onClick={() => toggleAgent('tadao')}
-                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.tadao ? 'bg-[#3B82F6]' : 'bg-gray-300'}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleAgent('tadao');
+                    }}
+                    className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${toggles.tadao ? 'bg-[#858585]' : 'bg-gray-300'}`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-white transition-transform ${toggles.tadao ? 'translate-x-4' : 'translate-x-0'}`} />
                   </button>
@@ -102,22 +122,30 @@ export const KeepMovingSection: React.FC = () => {
 
             </div>
 
-            {/* Bottom Content */}
+            {/* Content Copy */}
             <div>
-              <h3 className="text-gray-900 font-semibold text-[19px] mb-2 tracking-tight">
+              <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
                 Bring your own agents
               </h3>
-              <p className="text-gray-500 text-[14.5px] leading-relaxed">
+              <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
                 Add your existing cloud or CLI agents to Ando so they can work alongside you. Note: Ando isn't an agent orchestration platform.
               </p>
             </div>
           </div>
 
-          {/* Card 2: Share context */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-            <div className="bg-[#FAF9F7]/80 rounded-2xl p-5 mb-8 border border-gray-100 min-h-[160px] flex flex-col justify-center gap-3">
+          {/* Card 1: Share context */}
+          <div 
+            onClick={() => setActiveCard(1)}
+            className={`bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+              activeCard === 1
+                ? 'border-2 border-[#858585] shadow-[0_8px_30px_rgba(133,133,133,0.12)]'
+                : 'border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#858585]/50'
+            }`}
+          >
+            {/* Illustration: Hidden on mobile when inactive, visible when active or on desktop */}
+            <div className={`${activeCard === 1 ? 'block' : 'hidden md:block'} bg-[#FAF9F7]/80 rounded-2xl p-5 mb-6 sm:mb-8 border border-gray-100 min-h-[160px] flex flex-col justify-center gap-3 transition-all duration-200`}>
               <div className="flex items-start gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-gray-100 text-[#858585] flex items-center justify-center shrink-0">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
@@ -129,19 +157,28 @@ export const KeepMovingSection: React.FC = () => {
               </div>
             </div>
 
+            {/* Content Copy */}
             <div>
-              <h3 className="text-gray-900 font-semibold text-[19px] mb-2 tracking-tight">
+              <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
                 Share context
               </h3>
-              <p className="text-gray-500 text-[14.5px] leading-relaxed">
+              <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
                 Conversations, decisions, files, and tools are all in one place so agents understand the work around them, not just the last message they were sent.
               </p>
             </div>
           </div>
 
-          {/* Card 3: Let them chime in */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-            <div className="bg-[#FAF9F7]/80 rounded-2xl p-5 mb-8 border border-gray-100 min-h-[160px] flex flex-col justify-center gap-3">
+          {/* Card 2: Let them chime in */}
+          <div 
+            onClick={() => setActiveCard(2)}
+            className={`bg-white rounded-[28px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+              activeCard === 2
+                ? 'border-2 border-[#858585] shadow-[0_8px_30px_rgba(133,133,133,0.12)]'
+                : 'border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#858585]/50'
+            }`}
+          >
+            {/* Illustration: Hidden on mobile when inactive, visible when active or on desktop */}
+            <div className={`${activeCard === 2 ? 'block' : 'hidden md:block'} bg-[#FAF9F7]/80 rounded-2xl p-5 mb-6 sm:mb-8 border border-gray-100 min-h-[160px] flex flex-col justify-center gap-3 transition-all duration-200`}>
               <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-2 mb-1.5">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -153,11 +190,12 @@ export const KeepMovingSection: React.FC = () => {
               </div>
             </div>
 
+            {/* Content Copy */}
             <div>
-              <h3 className="text-gray-900 font-semibold text-[19px] mb-2 tracking-tight">
+              <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
                 Let them chime in
               </h3>
-              <p className="text-gray-500 text-[14.5px] leading-relaxed">
+              <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
                 Agents can proactively hop into conversations and help out when relevant without being explicitly called every single time.
               </p>
             </div>

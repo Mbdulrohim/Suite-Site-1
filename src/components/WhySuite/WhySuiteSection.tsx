@@ -81,12 +81,12 @@ export const WhySuiteSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 3 Columns (Desktop grid, responsive on mobile) */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-center justify-center relative z-10 max-w-[1140px] mx-auto">
+        {/* 3 Columns (Desktop grid, responsive on mobile) - All same size matching Tools */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-stretch justify-center relative z-10 max-w-[1140px] mx-auto">
           
           {/* Column 1: Products */}
           <div className="flex flex-col items-center w-full">
-            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-7 md:p-10 min-h-[240px] md:min-h-[280px] flex flex-col items-center justify-center relative mb-5 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-6 sm:p-8 h-[280px] sm:h-[300px] md:h-[320px] flex flex-col items-center justify-center relative mb-5 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
               <div className="flex flex-wrap gap-2.5 justify-center max-w-[260px]">
                 <span className="bg-white shadow-sm border border-gray-100 rounded-full px-4 py-2 text-[14px] text-gray-700 font-medium">Sales</span>
                 <span className="bg-white shadow-sm border border-gray-100 rounded-full px-4 py-2 text-[14px] text-gray-700 font-medium flex items-center gap-1.5">
@@ -101,17 +101,17 @@ export const WhySuiteSection: React.FC = () => {
 
           {/* Column 2: Activity / Memory */}
           <div className="flex flex-col items-center w-full">
-            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-7 md:p-10 min-h-[240px] md:min-h-[280px] flex flex-col items-center justify-center relative mb-5 gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
-              <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-400 w-full max-w-[280px] text-left">
+            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-6 sm:p-8 h-[280px] sm:h-[300px] md:h-[320px] flex flex-col items-center justify-center relative mb-5 gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-400 w-full max-w-[260px] text-left">
                 When did the client approve...
               </div>
-              <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-700 w-full max-w-[280px] text-left flex items-center gap-2.5">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-700 w-full max-w-[260px] text-left flex items-center gap-2.5">
                 <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 shrink-0">
                   <Bot className="w-3.5 h-3.5" />
                 </div>
                 <span className="font-medium">They approved it on Tuesday.</span>
               </div>
-              <div className="bg-white/90 shadow-sm border border-gray-100 rounded-xl px-3 py-1.5 text-[11px] text-gray-500 w-fit self-start ml-4 flex items-center gap-1.5">
+              <div className="bg-white/90 shadow-sm border border-gray-100 rounded-xl px-3 py-1.5 text-[11px] text-gray-500 w-fit self-start ml-2 sm:ml-4 flex items-center gap-1.5">
                 <span className="w-3.5 h-3.5 rounded-full bg-gray-200 overflow-hidden text-[9px] flex items-center justify-center">👤</span>
                 <span>Oli: active after 5PM</span>
               </div>
@@ -119,9 +119,9 @@ export const WhySuiteSection: React.FC = () => {
             <span className="text-[17px] text-gray-700 font-medium tracking-tight">Activity</span>
           </div>
 
-          {/* Column 3: Tools (Exact 3x3 Tile Grid from Screenshot) */}
+          {/* Column 3: Tools */}
           <div className="flex flex-col items-center w-full">
-            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-6 sm:p-8 min-h-[240px] md:min-h-[280px] flex flex-col items-center justify-center relative mb-5 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+            <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-6 sm:p-8 h-[280px] sm:h-[300px] md:h-[320px] flex flex-col items-center justify-center relative mb-5 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
                 {toolsList.map((tool, idx) => (
                   <div 
