@@ -1,9 +1,9 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import suiteLogo from '../assets/suite-logo.svg';
-import wordmarkUrl from '../assets/Wordmark.svg';
+import suiteLogo from '../../assets/suite-logo.svg';
+import wordmarkUrl from '../../assets/Wordmark.svg';
 
-interface HeaderProps {
+export interface HeaderProps {
   onOpenSignUp: () => void;
   onNavigateSection?: (sectionId: string) => void;
 }
@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
           href="#"
           className="group flex items-center select-none"
         >
-          <img src={wordmarkUrl} alt="SUITE" className="h-[22px] transition-transform duration-300 group-hover:scale-105" />
+          <img src={wordmarkUrl} alt="SUITE" className="h-[27.5px] transition-transform duration-300 group-hover:scale-105" />
         </a>
 
         {/* Centre: Links (Desktop only, hidden < 768px) */}
@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
         <button
           id="header-signup-button"
           onClick={onOpenSignUp}
-          className="group inline-flex items-center justify-center gap-2.5 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[15px] font-medium tracking-tight rounded-full px-[28px] h-[45px] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+          className="group inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[14px] sm:text-[15px] font-medium tracking-tight rounded-full px-5 sm:px-[28px] h-[40px] sm:h-[45px] transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
           <span>Get Started</span>
           <ArrowRight className="w-4 h-4 text-[#FAF9F6]/85 transition-transform duration-200 group-hover:translate-x-0.5" />

@@ -4,16 +4,10 @@ import {
   Layers, 
   Package, 
   TrendingUp, 
-  CheckCircle2, 
   ArrowUpRight, 
   ArrowDownLeft, 
   Wrench, 
-  MoreHorizontal,
-  Box,
-  RefreshCw,
-  Sparkles,
-  SlidersHorizontal,
-  Bell
+  Box
 } from 'lucide-react';
 
 export const ProductDashboard: React.FC = () => {

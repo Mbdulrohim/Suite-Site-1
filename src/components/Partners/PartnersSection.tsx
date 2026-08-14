@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Partner {
+export interface Partner {
   name: string;
   logo: React.ReactNode;
 }
@@ -76,12 +76,12 @@ export const PartnersSection: React.FC = () => {
             PARTNERS
           </p>
 
-          {/* Logos Row */}
-          <div className="w-full flex flex-wrap items-center justify-center gap-8 sm:gap-12 md:gap-16 lg:gap-20 text-[#6B7280]">
+          {/* Logos Row (Clean 2-col on mobile, 3-col on tablet, flex row on desktop) */}
+          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center justify-items-center justify-center gap-6 sm:gap-10 md:gap-16 lg:gap-20 text-[#6B7280]">
             {partners.map((partner) => (
               <div
                 key={partner.name}
-                className="group transition-all duration-300 opacity-60 hover:opacity-100 hover:text-[#121316] transform hover:-translate-y-0.5 cursor-default flex items-center"
+                className="group transition-all duration-300 opacity-60 hover:opacity-100 hover:text-[#121316] transform hover:-translate-y-0.5 cursor-default flex items-center justify-center h-10"
               >
                 {partner.logo}
               </div>

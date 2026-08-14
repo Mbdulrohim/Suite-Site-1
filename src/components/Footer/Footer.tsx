@@ -1,7 +1,8 @@
 import React from 'react';
-import suiteLogo from '../assets/suite-logo.svg';
-import wordmarkUrl from '../assets/Wordmark.svg';
-interface FooterProps {
+import suiteLogo from '../../assets/suite-logo.svg';
+import wordmarkUrl from '../../assets/Wordmark.svg';
+
+export interface FooterProps {
   onOpenSignUp: () => void;
   onNavigateSection?: (sectionId: string) => void;
 }
@@ -17,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
           <div className="md:col-span-5 flex flex-col items-start justify-between h-full">
             <div>
               <a href="#" className="flex items-center select-none mb-3">
-                <img src={wordmarkUrl} alt="SUITE" className="h-[20px]" />
+                <img src={wordmarkUrl} alt="SUITE" className="h-[25px]" />
               </a>
             </div>
 

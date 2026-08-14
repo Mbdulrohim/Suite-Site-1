@@ -1,5 +1,5 @@
 import React from 'react';
-import wordmarkUrl from '../assets/Wordmark.svg';
+import wordmarkUrl from '../../assets/Wordmark.svg';
 
 export const HugeSuiteWatermark: React.FC = () => {
   return (

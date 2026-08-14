@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { PartnersSection } from './components/PartnersSection';
-import { KeepMovingSection } from './components/KeepMovingSection';
-import { WhySuiteSection } from './components/WhySuiteSection';
-import { ConversionSection } from './components/ConversionSection';
-import { HugeSuiteWatermark } from './components/HugeSuiteWatermark';
-import { Footer } from './components/Footer';
-import { SignUpModal } from './components/SignUpModal';
+import { 
+  Header, 
+  Hero, 
+  PartnersSection, 
+  KeepMovingSection, 
+  WhySuiteSection, 
+  ConversionSection, 
+  HugeSuiteWatermark, 
+  Footer, 
+  SignUpModal 
+} from './components';
 
 export default function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);

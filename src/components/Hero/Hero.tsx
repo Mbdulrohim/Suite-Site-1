@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { MaskedRotator } from './MaskedRotator';
 import { ProductDashboard } from './ProductDashboard';
 
-interface HeroProps {
+export interface HeroProps {
   onOpenSignUp: () => void;
   onNavigateSection?: (sectionId: string) => void;
 }
@@ -35,14 +35,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
             {/* Main Headline */}
             <h1
               id="hero-headline"
-              className="tracking-tight text-[42px] xs:text-[48px] sm:text-[54px] lg:text-[48px] xl:text-[54px] leading-[1.08] sm:leading-[1.08] mb-8 select-none font-sans"
+              className="tracking-tight text-[32px] xs:text-[38px] sm:text-[48px] lg:text-[48px] xl:text-[54px] leading-[1.12] mb-8 select-none font-sans"
               style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
             >
-              <div className="font-semibold text-black flex items-baseline gap-x-2.5 sm:gap-x-3 whitespace-nowrap">
+              <div className="font-medium text-black flex items-baseline gap-x-2 sm:gap-x-3 whitespace-nowrap">
                 <MaskedRotator
                   idPrefix="rotator-actions"
                   words={ACTION_WORDS}
-                  className="font-semibold text-black"
+                  className="font-medium text-black"
                 />
               </div>
               <div className="font-medium text-gray-500 flex items-baseline gap-x-2 sm:gap-x-2.5 mt-1 sm:mt-1.5 whitespace-nowrap">
@@ -61,21 +61,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
+                className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[14px] sm:text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
               />
               <button
                 type="button"
                 onClick={onOpenSignUp}
-                className="w-12 h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0"
+                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0"
               >
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
           </div>
 
           {/* Right Column: 58% on desktop (7 cols out of 12) */}
-          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-[1.1]">
+          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-100 lg:scale-[1.1]">
             <div className="w-full p-3.5 sm:p-5 md:p-6 bg-gradient-to-br from-[#EEF4FB] via-[#F4F7FB] to-[#F7F5F0] rounded-[28px] border border-[#E4ECF4]">
               <ProductDashboard />
             </div>

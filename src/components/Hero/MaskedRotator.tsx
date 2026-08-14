@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
-interface MaskedRotatorProps {
+export interface MaskedRotatorProps {
   words: string[];
   className?: string;
   delayOffset?: number; // small offset if we want two rotators to stagger slightly or synchronized

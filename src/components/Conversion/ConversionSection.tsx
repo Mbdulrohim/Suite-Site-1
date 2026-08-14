@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
-interface ConversionSectionProps {
+export interface ConversionSectionProps {
   onOpenSignUp: () => void;
 }
 
