@@ -22,18 +22,10 @@ export const ProductDashboard: React.FC = () => {
 
   return (
     <div id="product-dashboard-container" className="relative w-full max-w-[680px] mx-auto select-none">
-      {/* Invisible/Pale blue-grey ambient glow behind window */}
-      <div 
-        className="absolute -inset-6 -z-10 rounded-[32px] pointer-events-none opacity-65 blur-2xl"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(215, 228, 245, 0.55) 0%, rgba(230, 235, 245, 0.25) 50%, transparent 75%)'
-        }}
-      />
-
       {/* Main Window Frame */}
       <div 
         id="dashboard-window"
-        className="w-full bg-[#FFFFFF] border border-[#E7E5DE] rounded-[14px] md:rounded-[16px] shadow-[0_12px_40px_-15px_rgba(18,19,22,0.07),0_1px_3px_rgba(18,19,22,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_-15px_rgba(18,19,22,0.1)]"
+        className="w-full bg-[#FFFFFF] border border-[#E7E5DE] rounded-[18px] md:rounded-[22px] overflow-hidden"
       >
         {/* Window Top Navigation / Titlebar */}
         <div className="h-[46px] border-b border-[#EFECE6] px-4.5 bg-[#FAF9F7] flex items-center justify-between">

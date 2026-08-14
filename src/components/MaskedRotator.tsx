@@ -140,7 +140,7 @@ export const MaskedRotator: React.FC<MaskedRotatorProps> = ({
       <span
         id={`${idPrefix}-current`}
         ref={currentWordRef}
-        className="inline-block whitespace-nowrap absolute left-0 top-0 text-[#121316] font-semibold"
+        className="inline-block whitespace-nowrap absolute left-0 top-0 text-inherit font-inherit"
       >
         {words[0]}
       </span>
@@ -149,7 +149,7 @@ export const MaskedRotator: React.FC<MaskedRotatorProps> = ({
       <span
         id={`${idPrefix}-next`}
         ref={nextWordRef}
-        className="inline-block whitespace-nowrap absolute left-0 top-0 text-[#121316] font-semibold"
+        className="inline-block whitespace-nowrap absolute left-0 top-0 text-inherit font-inherit"
         style={{ display: 'none' }}
       >
         {words[1] || words[0]}
@@ -158,7 +158,7 @@ export const MaskedRotator: React.FC<MaskedRotatorProps> = ({
       {/* Invisible off-DOM measurer */}
       <span
         ref={measurerRef}
-        className="inline-block whitespace-nowrap absolute opacity-0 pointer-events-none -z-10 text-[#121316] font-semibold"
+        className="inline-block whitespace-nowrap absolute opacity-0 pointer-events-none -z-10 text-inherit font-inherit"
         aria-hidden="true"
       >
         {words[0]}

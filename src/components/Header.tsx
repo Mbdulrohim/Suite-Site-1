@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
         </a>
 
         {/* Centre: Links (Desktop only, hidden < 768px) */}
-        <nav id="desktop-nav" className="hidden md:flex items-center gap-8 text-[14px] text-[#555861] font-medium tracking-tight">
+        <nav id="desktop-nav" className="hidden md:flex items-center gap-8 text-[18px] text-[#555861] font-medium tracking-tight">
           <a
             id="nav-link-about"
             href="#why-suite"

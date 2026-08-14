@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { PartnersSection } from './components/PartnersSection';
 import { KeepMovingSection } from './components/KeepMovingSection';
 import { WhySuiteSection } from './components/WhySuiteSection';
 import { ConversionSection } from './components/ConversionSection';
@@ -33,6 +34,9 @@ export default function App() {
           onOpenSignUp={() => setIsSignUpOpen(true)}
           onNavigateSection={scrollToSection}
         />
+
+        {/* Partners / Social Proof Section */}
+        <PartnersSection />
 
         {/* 2. Section Two: Keep business moving (3-card interactive layout) */}
         <KeepMovingSection />

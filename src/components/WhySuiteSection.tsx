@@ -11,7 +11,7 @@ export const WhySuiteSection: React.FC = () => {
           <h2 className="text-[#121316] font-medium tracking-tight text-[28px] sm:text-[34px] md:text-[40px] leading-[1.1] mb-4">
             How is Suite different<br/>from <span className="text-gray-400">spreadsheets</span>
           </h2>
-          <p className="text-gray-500 text-[15px] sm:text-[16px] leading-[1.6]">
+          <p className="text-gray-500 text-[18px] leading-[1.6]">
             We connect the parts of your business that usually live in separate places.
           </p>
         </div>
@@ -21,7 +21,7 @@ export const WhySuiteSection: React.FC = () => {
           
           {/* Column 1: Context */}
           <div className="flex flex-col items-center">
-            <div className="w-full bg-gray-50/80 rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4">
+            <div className="w-full bg-gray-50/80 border-[0.5px] border-[#e8e8e8] rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4">
               <div className="flex flex-wrap gap-2 justify-center max-w-[200px] opacity-80">
                 <span className="bg-white shadow-sm border border-gray-100 rounded-full px-3 py-1 text-xs text-gray-700 font-medium">Sales</span>
                 <span className="bg-white shadow-sm border border-gray-100 rounded-full px-3 py-1 text-xs text-gray-700 font-medium flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500"/> Agent</span>
@@ -34,7 +34,7 @@ export const WhySuiteSection: React.FC = () => {
 
           {/* Column 2: Memory */}
           <div className="flex flex-col items-center">
-            <div className="w-full bg-gray-50/80 rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4 gap-2">
+            <div className="w-full bg-gray-50/80 border-[0.5px] border-[#e8e8e8] rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4 gap-2">
               <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-2 text-[10px] text-gray-400 w-[80%] text-left">
                 When did the client approve...
               </div>
@@ -50,7 +50,7 @@ export const WhySuiteSection: React.FC = () => {
 
           {/* Column 3: Inbox */}
           <div className="flex flex-col items-center">
-            <div className="w-full bg-gray-50/80 rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4">
+            <div className="w-full bg-gray-50/80 border-[0.5px] border-[#e8e8e8] rounded-2xl p-6 aspect-[4/3] flex flex-col items-center justify-center relative mb-4">
               <div className="grid grid-cols-3 gap-2">
                 {[1,2,3,4,5,6,7,8,9].map(i => (
                   <div key={i} className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center">

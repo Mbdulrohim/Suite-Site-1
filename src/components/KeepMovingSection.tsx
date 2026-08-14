@@ -11,7 +11,7 @@ export const KeepMovingSection: React.FC = () => {
           <h2 className="text-[#121316] font-medium tracking-tight text-[28px] sm:text-[34px] md:text-[40px] leading-[1.1] mb-4">
             Move business forward
           </h2>
-          <p className="text-gray-500 text-[15px] sm:text-[16px] leading-[1.6]">
+          <p className="text-gray-500 text-[18px] leading-[1.6]">
             Stay on top of stock, sales and services without chasing spreadsheets, messages or missing updates.
           </p>
         </div>
@@ -66,7 +66,7 @@ export const KeepMovingSection: React.FC = () => {
               <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
                 Record what matters
               </h3>
-              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+              <p className="text-gray-500 text-[18px] leading-relaxed">
                 Add products, services and stock as they enter your business.
               </p>
             </div>
@@ -109,7 +109,7 @@ export const KeepMovingSection: React.FC = () => {
               <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
                 See what’s moving
               </h3>
-              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+              <p className="text-gray-500 text-[18px] leading-relaxed">
                 Know what came in, what went out and what needs attention.
               </p>
             </div>
@@ -152,7 +152,7 @@ export const KeepMovingSection: React.FC = () => {
               <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
                 Keep it in sync
               </h3>
-              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+              <p className="text-gray-500 text-[18px] leading-relaxed">
                 Updates flow across stock, orders and activity as work happens.
               </p>
             </div>
