@@ -1,0 +1,18 @@
+# A page with no JavaScript can afford the strictest policy there is, so it
+# takes it. `script-src` is absent because `default-src 'none'` already refuses
+# scripts, and there are none to allow.
+/*
+  Content-Security-Policy: default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), interest-cohort=()
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Nothing here is content-hashed, so a long cache would mean a copy edit taking
+# a week to appear. An hour is the compromise: the assets are small and the
+# page is one file.
+/styles.css
+  Cache-Control: public, max-age=3600
+/og.png
+  Cache-Control: public, max-age=3600

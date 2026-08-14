@@ -1,0 +1,6 @@
+# suite.ng is the site meant to be found. The app at app.suite.ng carries a
+# noindex and its own robots.txt; this one is deliberately open.
+User-agent: *
+Allow: /
+
+Sitemap: https://suite.ng/sitemap.xml

@@ -1,0 +1,174 @@
+/*
+ * A holding page, deliberately plain.
+ *
+ * No webfont, no script, no image above the fold beyond an inline SVG. That is
+ * not minimalism for its own sake — it means nothing can shift after paint,
+ * the page is one request plus this file, and a crawler that runs no
+ * JavaScript sees the whole thing. The designer's version can spend the budget
+ * this one is saving.
+ *
+ * The brand is monochrome, so the palette is two tokens and the mark inherits
+ * `currentColor`. Dark mode is the same page with the two swapped.
+ */
+
+:root {
+  --paper: #ffffff;
+  --ink: #101010;
+  --ink-soft: #5c5c5c;
+  --rule: #e4e4e4;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a0a0a;
+    --ink: #f2f2f2;
+    --ink-soft: #9a9a9a;
+    --rule: #242424;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* System stack. A webfont here would cost a request and a reflow to buy a
+     page that is mostly one paragraph. */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  /* Around 65 characters of running text, which is where prose stops being
+     tiring to read. */
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 12vh, 7rem) 1.5rem 4rem;
+}
+
+.head { margin-bottom: 3.5rem; }
+
+.mark {
+  display: block;
+  height: 2.75rem;
+  width: auto;
+  color: var(--ink);
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+section { margin-bottom: 3rem; }
+
+h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+p { margin: 0 0 1rem; text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+
+ul {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  padding: 0.4rem 0 0.4rem 1.1rem;
+  position: relative;
+  color: var(--ink-soft);
+}
+
+/* A rule rather than a bullet: the list is a set of capabilities, not a
+   sequence, and a numbered or dotted marker would imply an order it does not
+   have. */
+li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.05em;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--ink-soft);
+}
+
+.plans {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.plans > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.plans > div:last-child { border-bottom: 0; }
+
+dt { font-weight: 600; }
+
+dd {
+  margin: 0;
+  color: var(--ink-soft);
+  text-align: right;
+  /* Figures line up down the column. */
+  font-variant-numeric: tabular-nums;
+}
+
+dd b { color: var(--ink); font-weight: 600; }
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover { text-decoration-thickness: 2px; }
+
+a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+.fine {
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+}

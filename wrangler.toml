@@ -1,0 +1,9 @@
+# Cloudflare Pages, with no build step.
+#
+# There is nothing to compile: one HTML file, one stylesheet, and a handful of
+# icons. A bundler here would add a toolchain to maintain and a build to wait
+# for, in exchange for nothing a holding page needs. When the designer's site
+# arrives it will bring its own.
+name = "suite-ng"
+compatibility_date = "2026-08-01"
+pages_build_output_dir = "public"
