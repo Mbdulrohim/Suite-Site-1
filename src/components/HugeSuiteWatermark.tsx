@@ -1,50 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import wordmarkUrl from '../assets/Wordmark.svg';
 
 export const HugeSuiteWatermark: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Calculate how close the watermark is to the center of viewport
-      const total = windowHeight + rect.height;
-      const current = windowHeight - rect.top;
-      const progress = Math.min(Math.max(current / total, 0), 1);
-      
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Opacity: .018 -> .045, translateY: 20px -> 0
-  const opacity = 0.02 + scrollProgress * 0.025;
-  const translateY = 20 * (1 - scrollProgress);
-
   return (
     <div 
       id="watermark-container"
-      ref={containerRef}
-      className="w-full overflow-hidden flex items-center justify-center select-none pointer-events-none py-4 sm:py-8"
+      className="w-full overflow-hidden flex items-center justify-center select-none pointer-events-none py-10 sm:py-20"
       aria-hidden="true"
     >
       <div
-        className="font-bold tracking-[-0.075em] leading-none whitespace-nowrap text-[#121316] transition-transform duration-150 will-change-transform"
+        className="w-full max-w-[1240px] px-5"
         style={{
-          fontSize: 'clamp(130px, 25vw, 380px)',
-          opacity: opacity,
-          transform: `translateY(${translateY}px)`,
+          height: 'clamp(100px, 20vw, 300px)',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=2000&auto=format&fit=crop")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          WebkitMaskImage: `url(${wordmarkUrl})`,
+          WebkitMaskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+          maskImage: `url(${wordmarkUrl})`,
+          maskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          opacity: 0.8
         }}
-      >
-        SUITE
-      </div>
+      />
     </div>
   );
 };

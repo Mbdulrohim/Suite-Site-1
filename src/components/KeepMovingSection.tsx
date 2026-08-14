@@ -1,269 +1,159 @@
-import React, { useState } from 'react';
-import { 
-  Plus, 
-  Package, 
-  Wrench, 
-  Box, 
-  User, 
-  ArrowRight, 
-  Check, 
-  AlertCircle, 
-  TrendingDown, 
-  CreditCard, 
-  RefreshCw,
-  Sparkles
-} from 'lucide-react';
+import React from 'react';
+import { Shield, Sparkles, Check } from 'lucide-react';
 
 export const KeepMovingSection: React.FC = () => {
-  const [activeCard, setActiveCard] = useState<number>(0);
-  const [selectedItemType, setSelectedItemType] = useState<'product' | 'service' | 'stock' | 'customer'>('product');
-
   return (
-    <section id="features" className="w-full py-16 md:py-28 lg:py-36 border-t border-[#EAE8E0]/70">
+    <section id="features" className="w-full py-16 md:py-28 lg:py-36">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         
         {/* Section Header */}
-        <div className="max-w-[580px] mb-12 md:mb-16">
-          <h2 className="text-[#121316] font-medium tracking-[-0.035em] text-[28px] sm:text-[34px] md:text-[40px] leading-[1.1] mb-3.5">
-            Keep business moving
+        <div className="flex flex-col items-center text-center max-w-[580px] mx-auto mb-12 md:mb-16">
+          <h2 className="text-[#121316] font-medium tracking-tight text-[28px] sm:text-[34px] md:text-[40px] leading-[1.1] mb-4">
+            Move business forward
           </h2>
-          <p className="text-[#585E6E] text-[15px] sm:text-[16px] md:text-[17px] leading-[1.55]">
-            From stock arriving to an order leaving, Suite keeps every moving part connected.
+          <p className="text-gray-500 text-[15px] sm:text-[16px] leading-[1.6]">
+            Stay on top of stock, sales and services without chasing spreadsheets, messages or missing updates.
           </p>
         </div>
 
         {/* 3-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           
-          {/* Card 1: Record everything */}
-          <div
-            id="feature-card-1"
-            onMouseEnter={() => setActiveCard(0)}
-            onFocus={() => setActiveCard(0)}
-            tabIndex={0}
-            className={`group relative bg-[#FFFFFF] rounded-[16px] p-6 sm:p-7 flex flex-col justify-between cursor-pointer outline-none ${
-              activeCard === 0
-                ? 'border-[1.5px] border-[#2563EB]/80 shadow-[0_12px_32px_-12px_rgba(37,99,235,0.12)] -translate-y-[2px]'
-                : 'border border-[#ECEAE3] hover:border-[#DCDAD2] hover:-translate-y-[2px] shadow-sm'
-            }`}
-            style={{
-              transition: 'all 350ms cubic-bezier(.22,1,.36,1)',
-            }}
-          >
-            {/* Top Interactive UI Placeholder: Add-product form */}
-            <div className="w-full bg-[#FAF9F7] border border-[#EFECE5] rounded-[12px] p-4 mb-8">
-              <div className="flex items-center justify-between pb-3 border-b border-[#ECEAE3]">
-                <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#121316]">
-                  <Plus className="w-3.5 h-3.5 text-[#2563EB]" />
-                  <span>Add item</span>
+          {/* Card 1: Inbox-driven workflows */}
+          <div className="bg-white rounded-[20px] p-6 sm:p-8 flex flex-col justify-between border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
+            
+            {/* UI Mockup Area */}
+            <div className="relative mb-10 mt-2">
+              <div className="bg-white rounded-[12px] border border-gray-100 p-3 shadow-sm mb-3">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center bg-gray-50">
+                      <div className="w-2 h-2 rounded-sm bg-gray-200" />
+                    </div>
+                    <div className="text-[12px] font-medium text-gray-800">Q3 Planning</div>
+                  </div>
+                  <div className="bg-blue-100 text-blue-600 text-[10px] font-medium px-2 py-0.5 rounded-full">New</div>
                 </div>
-                <span className="text-[10px] font-mono bg-[#EAE8E0] px-1.5 py-0.5 rounded text-[#646A7A]">Quick entry</span>
+              </div>
+              
+              <div className="bg-white rounded-[12px] border border-gray-100 p-3 shadow-sm mb-3 ml-4">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full border border-blue-500 flex items-center justify-center bg-blue-50 text-blue-500">
+                      <Check className="w-3 h-3" />
+                    </div>
+                    <div className="text-[12px] font-medium text-gray-800 line-through opacity-50">Design review</div>
+                  </div>
+                </div>
               </div>
 
-              {/* Selector Pills */}
-              <div className="grid grid-cols-2 gap-1.5 mt-3">
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelectedItemType('product'); }}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-[11px] font-medium transition-all ${
-                    selectedItemType === 'product'
-                      ? 'bg-[#121316] text-[#FFFFFF] shadow-xs'
-                      : 'bg-[#FFFFFF] border border-[#ECEAE3] text-[#4A5060] hover:bg-[#F2F0E8]'
-                  }`}
-                >
-                  <Package className="w-3 h-3" />
-                  <span>Product</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelectedItemType('service'); }}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-[11px] font-medium transition-all ${
-                    selectedItemType === 'service'
-                      ? 'bg-[#121316] text-[#FFFFFF] shadow-xs'
-                      : 'bg-[#FFFFFF] border border-[#ECEAE3] text-[#4A5060] hover:bg-[#F2F0E8]'
-                  }`}
-                >
-                  <Wrench className="w-3 h-3" />
-                  <span>Service</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelectedItemType('stock'); }}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-[11px] font-medium transition-all ${
-                    selectedItemType === 'stock'
-                      ? 'bg-[#121316] text-[#FFFFFF] shadow-xs'
-                      : 'bg-[#FFFFFF] border border-[#ECEAE3] text-[#4A5060] hover:bg-[#F2F0E8]'
-                  }`}
-                >
-                  <Box className="w-3 h-3" />
-                  <span>Stock</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelectedItemType('customer'); }}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-[11px] font-medium transition-all ${
-                    selectedItemType === 'customer'
-                      ? 'bg-[#121316] text-[#FFFFFF] shadow-xs'
-                      : 'bg-[#FFFFFF] border border-[#ECEAE3] text-[#4A5060] hover:bg-[#F2F0E8]'
-                  }`}
-                >
-                  <User className="w-3 h-3" />
-                  <span>Customer</span>
-                </button>
-              </div>
-
-              {/* Dynamic preview row */}
-              <div className="mt-3 pt-2.5 border-t border-[#ECEAE3] flex items-center justify-between text-[11px] text-[#717788]">
-                <span className="font-mono">Auto-generated SKU</span>
-                <span className="font-mono font-medium text-[#121316] bg-[#ECE9DF] px-1.5 py-0.5 rounded">
-                  {selectedItemType === 'product' ? 'PRD-8821' : selectedItemType === 'service' ? 'SRV-0419' : selectedItemType === 'stock' ? 'STK-9902' : 'CST-3301'}
-                </span>
+              <div className="bg-white rounded-[12px] border border-gray-100 p-3 shadow-sm ml-8">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center bg-gray-50">
+                      <div className="w-2 h-2 rounded-sm bg-gray-200" />
+                    </div>
+                    <div className="text-[12px] font-medium text-gray-800">Finalise copy</div>
+                  </div>
+                  <div className="bg-blue-100 text-blue-600 text-[10px] font-medium px-2 py-0.5 rounded-full">1m</div>
+                </div>
               </div>
             </div>
 
-            {/* Bottom Copy */}
-            <div>
-              <h3 className="text-[#121316] font-semibold text-[19px] sm:text-[20px] tracking-[-0.02em] mb-2">
-                Record everything
+            {/* Content */}
+            <div className="relative z-10">
+              <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
+                Record what matters
               </h3>
-              <p className="text-[#5E6474] text-[14px] sm:text-[14.5px] leading-[1.55]">
-                Add products, services, stock and business activity as they happen.
+              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+                Add products, services and stock as they enter your business.
               </p>
             </div>
           </div>
 
-          {/* Card 2: Know what’s happening */}
-          <div
-            id="feature-card-2"
-            onMouseEnter={() => setActiveCard(1)}
-            onFocus={() => setActiveCard(1)}
-            tabIndex={0}
-            className={`group relative bg-[#FFFFFF] rounded-[16px] p-6 sm:p-7 flex flex-col justify-between cursor-pointer outline-none ${
-              activeCard === 1
-                ? 'border-[1.5px] border-[#2563EB]/80 shadow-[0_12px_32px_-12px_rgba(37,99,235,0.12)] -translate-y-[2px]'
-                : 'border border-[#ECEAE3] hover:border-[#DCDAD2] hover:-translate-y-[2px] shadow-sm'
-            }`}
-            style={{
-              transition: 'all 350ms cubic-bezier(.22,1,.36,1)',
-            }}
-          >
-            {/* Top Interactive UI Placeholder: Live inventory numbers */}
-            <div className="w-full bg-[#FAF9F7] border border-[#EFECE5] rounded-[12px] p-4 mb-8">
-              <div className="flex items-center justify-between pb-2.5 border-b border-[#ECEAE3]">
-                <span className="text-[12px] font-semibold text-[#121316]">Inventory</span>
-                <span className="text-[10px] font-mono text-[#059669] flex items-center gap-1 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-                  Realtime
-                </span>
-              </div>
-
-              <div className="space-y-1.5 mt-2.5">
-                <div className="flex items-center justify-between text-[11.5px] py-1 px-1.5 rounded hover:bg-[#F2F0E8] transition-colors">
-                  <span className="text-[#2B303C] font-medium">iPhone 18</span>
-                  <span className="font-mono font-semibold text-[#121316]">24</span>
+          {/* Card 2: Share context */}
+          <div className="bg-white rounded-[20px] p-6 sm:p-8 flex flex-col justify-between border border-gray-100 shadow-sm">
+            {/* UI Mockup Area */}
+            <div className="relative mb-10 mt-2">
+              <div className="bg-gray-50 rounded-[12px] border border-gray-200 p-4 relative">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded bg-gray-300 shrink-0 overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix" alt="avatar" />
+                  </div>
+                  <div>
+                    <div className="text-[12px] text-gray-800 mb-1">
+                      <span className="font-semibold mr-1">Rory</span>
+                      <span className="text-gray-400">@design</span>
+                    </div>
+                    <div className="text-[12px] text-gray-600">
+                      Design team is moving to <span className="bg-yellow-100 text-yellow-800 px-1 rounded font-medium">Ando</span>! 🚀
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-[11.5px] py-1 px-1.5 rounded hover:bg-[#F2F0E8] transition-colors">
-                  <span className="text-[#2B303C] font-medium">MacBook Air</span>
-                  <span className="font-mono font-semibold text-[#121316]">11</span>
-                </div>
-                <div className="flex items-center justify-between text-[11.5px] py-1 px-1.5 rounded hover:bg-[#F2F0E8] transition-colors">
-                  <span className="text-[#2B303C] font-medium">AirPods</span>
-                  <span className="font-mono font-semibold text-[#121316]">38</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px] py-1 px-1.5 rounded bg-[#FEF2F2] border border-[#FEE2E2]">
-                  <span className="text-[#B91C1C] font-medium flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    Low stock alert
-                  </span>
-                  <span className="font-mono font-semibold text-[#B91C1C]">3</span>
+                
+                <div className="mt-4 bg-white border border-gray-200 rounded-lg p-3">
+                  <div className="flex items-center justify-between text-[11px] mb-2">
+                    <span className="font-medium text-gray-800">Email from 10:00am</span>
+                    <Shield className="w-3.5 h-3.5 text-blue-500" />
+                  </div>
+                  <div className="text-[11px] text-gray-500 truncate">
+                    Welcome to the Ando beta...
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Copy */}
-            <div>
-              <h3 className="text-[#121316] font-semibold text-[19px] sm:text-[20px] tracking-[-0.02em] mb-2">
-                Know what’s happening
+            {/* Content */}
+            <div className="relative z-10">
+              <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
+                See what’s moving
               </h3>
-              <p className="text-[#5E6474] text-[14px] sm:text-[14.5px] leading-[1.55]">
-                See quantities, movement and activity without digging through spreadsheets.
+              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+                Know what came in, what went out and what needs attention.
               </p>
             </div>
           </div>
 
-          {/* Card 3: Keep it connected */}
-          <div
-            id="feature-card-3"
-            onMouseEnter={() => setActiveCard(2)}
-            onFocus={() => setActiveCard(2)}
-            tabIndex={0}
-            className={`group relative bg-[#FFFFFF] rounded-[16px] p-6 sm:p-7 flex flex-col justify-between cursor-pointer outline-none ${
-              activeCard === 2
-                ? 'border-[1.5px] border-[#2563EB]/80 shadow-[0_12px_32px_-12px_rgba(37,99,235,0.12)] -translate-y-[2px]'
-                : 'border border-[#ECEAE3] hover:border-[#DCDAD2] hover:-translate-y-[2px] shadow-sm'
-            }`}
-            style={{
-              transition: 'all 350ms cubic-bezier(.22,1,.36,1)',
-            }}
-          >
-            {/* Top Interactive UI Placeholder: Activity stream */}
-            <div className="w-full bg-[#FAF9F7] border border-[#EFECE5] rounded-[12px] p-4 mb-8">
-              <div className="flex items-center justify-between pb-2.5 border-b border-[#ECEAE3]">
-                <span className="text-[12px] font-semibold text-[#121316]">Activity stream</span>
-                <span className="text-[10px] font-mono text-[#2563EB] bg-[#EFF6FF] px-1.5 py-0.5 rounded font-medium">
-                  Auto-sync
-                </span>
-              </div>
-
-              <div className="mt-2.5 space-y-2 relative">
-                {/* Visual timeline connector line */}
-                <div className="absolute left-[9px] top-2 bottom-2 w-[1px] bg-[#E2E0D8]" />
-
-                {/* Event 1 */}
-                <div className="flex items-start gap-2.5 relative">
-                  <div className="w-[18px] h-[18px] rounded-full bg-[#121316] text-[#FFFFFF] flex items-center justify-center text-[9px] shrink-0 z-10">
-                    <Check className="w-2.5 h-2.5" />
-                  </div>
-                  <div className="min-w-0 flex-1 text-[11px]">
-                    <div className="font-semibold text-[#121316]">Order #1024 created</div>
-                    <div className="text-[10px] text-[#6E7585] font-mono">-1 iPhone 18 Pro</div>
-                  </div>
+          {/* Card 3: Extreme reach */}
+          <div className="bg-white rounded-[20px] p-6 sm:p-8 flex flex-col justify-between border border-gray-100 shadow-sm relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
+             
+            {/* UI Mockup Area */}
+            <div className="relative mb-10 mt-2">
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 bg-white p-2 rounded-lg">
+                   <div className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                     <Sparkles className="w-3.5 h-3.5" />
+                   </div>
+                   <div>
+                     <div className="text-[12px] font-medium text-gray-800">Ask Ando <span className="text-gray-400 font-normal text-[10px] ml-1">Today at 10:00am</span></div>
+                     <div className="text-[12px] text-gray-600 mt-0.5">
+                       Drafting a response...
+                     </div>
+                   </div>
                 </div>
-
-                {/* Event 2 */}
-                <div className="flex items-start gap-2.5 relative">
-                  <div className="w-[18px] h-[18px] rounded-full bg-[#2563EB] text-[#FFFFFF] flex items-center justify-center text-[9px] shrink-0 z-10">
-                    <CreditCard className="w-2.5 h-2.5" />
-                  </div>
-                  <div className="min-w-0 flex-1 text-[11px]">
-                    <div className="font-semibold text-[#121316]">Payment received</div>
-                    <div className="text-[10px] text-[#059669] font-mono">£1,199 settled</div>
-                  </div>
-                </div>
-
-                {/* Event 3 */}
-                <div className="flex items-start gap-2.5 relative">
-                  <div className="w-[18px] h-[18px] rounded-full bg-[#10B981] text-[#FFFFFF] flex items-center justify-center text-[9px] shrink-0 z-10">
-                    <RefreshCw className="w-2.5 h-2.5" />
-                  </div>
-                  <div className="min-w-0 flex-1 text-[11px]">
-                    <div className="font-semibold text-[#121316]">Inventory updated</div>
-                    <div className="text-[10px] text-[#6E7585] font-mono">3 warehouses reconciled</div>
-                  </div>
+                <div className="flex items-start gap-3 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                   <div className="w-6 h-6 rounded bg-indigo-500 text-white flex items-center justify-center shrink-0 text-[10px] font-bold">
+                     D
+                   </div>
+                   <div>
+                     <div className="text-[12px] font-medium text-gray-800">Discord User</div>
+                     <div className="text-[12px] text-gray-600 mt-0.5">
+                       Is there an API available for this?
+                     </div>
+                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Copy */}
-            <div>
-              <h3 className="text-[#121316] font-semibold text-[19px] sm:text-[20px] tracking-[-0.02em] mb-2">
-                Keep it connected
+            {/* Content */}
+            <div className="relative z-10">
+              <h3 className="text-gray-900 font-medium text-[16px] mb-2 tracking-tight">
+                Keep it in sync
               </h3>
-              <p className="text-[#5E6474] text-[14px] sm:text-[14.5px] leading-[1.55]">
-                A sale, return or update automatically flows through the rest of your business.
+              <p className="text-gray-500 text-[13.5px] leading-relaxed">
+                Updates flow across stock, orders and activity as work happens.
               </p>
             </div>
           </div>

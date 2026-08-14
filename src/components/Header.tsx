@@ -1,5 +1,7 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import suiteLogo from '../assets/suite-logo.svg';
+import wordmarkUrl from '../assets/Wordmark.svg';
 
 interface HeaderProps {
   onOpenSignUp: () => void;
@@ -10,18 +12,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
   return (
     <header id="main-header" className="w-full sticky top-0 z-50 transition-all duration-200">
       <div className="mx-auto max-w-[1240px] px-5 py-5 md:px-8 md:py-7 flex items-center justify-between">
-        {/* Left: SUITE Logo */}
         <a 
           id="brand-logo"
           href="#" 
-          className="group flex items-center gap-2.5 text-[#121316] font-semibold tracking-[-0.03em] text-[17px] select-none"
+          className="group flex items-center select-none"
         >
-          {/* Geometric Symbol: clean minimalistic nested operations glyph */}
-          <div className="w-[18px] h-[18px] relative flex items-center justify-center">
-            <div className="w-4 h-4 border-[1.5px] border-[#121316] rounded-[3px] rotate-45 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-105" />
-            <div className="w-1.5 h-1.5 bg-[#121316] rounded-[1px] absolute" />
-          </div>
-          <span className="font-bold tracking-[-0.04em] text-[18px]">SUITE</span>
+          <img src={wordmarkUrl} alt="SUITE" className="h-[22px] transition-transform duration-300 group-hover:scale-105" />
         </a>
 
         {/* Centre: Links (Desktop only, hidden < 768px) */}
@@ -54,10 +50,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
         <button
           id="header-signup-button"
           onClick={onOpenSignUp}
-          className="group inline-flex items-center justify-center gap-1.5 bg-[#121316] hover:bg-[#202227] text-[#FAF9F6] text-[13.5px] font-medium tracking-tight rounded-full px-[18px] h-[38px] md:h-[40px] transition-all duration-200 shadow-sm active:scale-[0.98] cursor-pointer"
+          className="group inline-flex items-center justify-center gap-2 bg-[#2D2D2D] hover:bg-[#1A1A1A] text-[#FAF9F6] text-[13.5px] font-medium tracking-tight rounded-[20px] px-[20px] h-[36px] transition-all duration-200 shadow-sm active:scale-[0.98] cursor-pointer"
         >
-          <span>Sign Up</span>
-          <ArrowUpRight className="w-3.5 h-3.5 text-[#FAF9F6]/80 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <span>Pre-order</span>
+          <ArrowRight className="w-3.5 h-3.5 text-[#FAF9F6]/80 transition-transform duration-200 group-hover:translate-x-0.5" />
         </button>
       </div>
     </header>
