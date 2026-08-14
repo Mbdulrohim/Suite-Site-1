@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-page: #FAF9F6;
+    --text-primary: #121316;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-subtle: #E5E4DE;
+    --border-card: #ECEAE3;
+    --card-bg: #FFFFFF;
+    --card-hover: #FDFCFA;
+    --accent-blue: #2563EB;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Restrained smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E2E0D8;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C8C5B9;
+}
+
+/* Subtle backdrop blur helper */
+.subtle-glass {
+  background: rgba(250, 249, 246, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
