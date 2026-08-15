@@ -55,16 +55,16 @@ export const ProseReveal: React.FC = () => {
     <section 
       id="prose-reveal"
       ref={containerRef} 
-      className="w-full py-20 sm:py-28 md:py-36 lg:py-44 select-none"
+      className="w-full py-16 sm:py-24 md:py-32 lg:py-36 select-none"
     >
-      <div className="mx-auto max-w-[1040px] px-5 sm:px-8 md:px-12">
-        <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
+      <div className="mx-auto max-w-[880px] px-5 sm:px-8 text-center">
+        <div className="flex flex-col gap-6 sm:gap-8 items-center">
           {PROSE_PARAGRAPHS.map((paragraph, pIdx) => {
             const words = paragraph.split(' ');
             return (
               <p 
                 key={pIdx} 
-                className="text-[26px] xs:text-[30px] sm:text-[38px] md:text-[46px] lg:text-[52px] leading-[1.25] sm:leading-[1.22] font-medium tracking-tight font-sans"
+                className="text-[24px] md:text-[36px] leading-[1.3] md:leading-[1.35] font-medium tracking-tight font-sans text-center"
                 style={{ 
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif' 
                 }}
@@ -73,7 +73,7 @@ export const ProseReveal: React.FC = () => {
                   <span
                     key={`${pIdx}-${wIdx}`}
                     ref={addToRefs}
-                    className="inline-block mr-[0.28em] transition-colors will-change-[opacity,color]"
+                    className="inline-block mr-[0.26em] transition-colors will-change-[opacity,color]"
                   >
                     {word}
                   </span>
