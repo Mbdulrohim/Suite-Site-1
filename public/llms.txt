@@ -1,7 +1,7 @@
 # Suite
 
-> Point-of-sale and stock control for phone resellers, built for Computer
-> Village, Ikeja. A product of Copper Ledger LTD, a Nigerian company.
+> Point-of-sale and stock control for phone shops across Nigeria. A product of
+> Copper Ledger LTD, a Nigerian company.
 
 The page at suite.ng is a holding page while a fuller site is designed, so it
 carries the mark and little else. This file is the description that page does
@@ -24,10 +24,10 @@ there is nothing to install.
 
 ## Plans
 
-Three plans, priced by how many people need to sign in — that is the thing that
+Plans are priced by how many people need to sign in — that is the thing that
 actually differs between a single counter and a shop with a manager, sellers
-and someone keeping the books. Payment is by bank transfer. Current prices are
-available from hello@suite.ng.
+and someone keeping the books. Payment is by bank transfer. Current plans and
+prices are available from hello@suite.ng.
 
 ## Getting an account
 
