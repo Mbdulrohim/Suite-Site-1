@@ -1,6 +1,7 @@
 export * from './Header';
 export * from './Hero';
 export * from './Partners';
+export * from './ProseReveal';
 export * from './Features';
 export * from './WhySuite';
 export * from './Conversion';

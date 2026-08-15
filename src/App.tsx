@@ -3,6 +3,7 @@ import {
   Header, 
   Hero, 
   PartnersSection, 
+  ProseReveal,
   KeepMovingSection, 
   WhySuiteSection, 
   ConversionSection, 
@@ -39,6 +40,9 @@ export default function App() {
 
         {/* Partners / Social Proof Section */}
         <PartnersSection />
+
+        {/* Word-by-word Scroll Reveal Prose */}
+        <ProseReveal />
 
         {/* 2. Section Two: Keep business moving (3-card interactive layout) */}
         <KeepMovingSection />
