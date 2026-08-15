@@ -109,7 +109,18 @@
 
   <p class="by">A product of Copper Ledger LTD.</p>
 
+  <!--
+    Cloudflare's Email Address Obfuscation rewrites any address it finds into a
+    placeholder plus a script that decodes it in the browser. This page sets
+    `default-src 'none'`, so that script is blocked and the placeholder never
+    turns back into anything — the address rendered as "[email protected]" to
+    every visitor. These comment tags are Cloudflare's own opt-out and switch
+    the rewrite off for this element only, which is a smaller change than
+    turning the feature off across the whole zone.
+  -->
+  <!--email_off-->
   <p class="contact"><a href="mailto:hello@suite.ng">hello@suite.ng</a></p>
+  <!--/email_off-->
 
 </main>
 </body>
