@@ -101,3 +101,17 @@ same history (it was the holding page this replaced) but does not deploy.
   jobs.
 - Fonts load from Google Fonts over the network. Self-hosting them via
   `@fontsource` would remove a render-blocking third-party request.
+- `HugeSuiteWatermark` hotlinks its photo texture from `images.unsplash.com`.
+  A decorative element on the critical path of a third party we do not control:
+  if that URL changes, the section silently renders empty. It should be
+  downloaded, converted to WebP and served from `public/`. `public/_headers`
+  allows the host only because of this.
+- Cloudflare injects its Web Analytics beacon at the edge, which is why
+  `static.cloudflareinsights.com` is in `script-src`. Turning Web Analytics off
+  for the zone would let both entries come out.
+- `robots.txt` is **not** what `scripts/seo.mjs` generates. Cloudflare's Managed
+  robots.txt / AI Content Signals prepends its own block, which sets
+  `ai-train=no` and `Disallow: /` for ClaudeBot, GPTBot, Google-Extended,
+  Applebot-Extended, CCBot, Bytespider, meta-externalagent and Amazonbot. That
+  works against `llms.txt`. It is a zone setting, not something this repo can
+  change.

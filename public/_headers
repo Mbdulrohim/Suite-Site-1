@@ -6,8 +6,17 @@
 # 'unsafe-inline' in style-src is GSAP: it animates by writing inline style
 # attributes, which CSP counts as inline styles. There is no nonce path for
 # that short of rewriting the animations.
+#
+# The two third-party hosts are each here for one thing, and both would be
+# better off gone — see "Known gaps" in the README:
+#   images.unsplash.com   the photo texture inside the masked SUITE wordmark
+#                         (HugeSuiteWatermark). Blocked, that section renders
+#                         as empty space.
+#   static.cloudflareinsights.com  the Web Analytics beacon Cloudflare injects
+#                         at the edge. Blocked, it errors in the console on
+#                         every page load and reports nothing.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
