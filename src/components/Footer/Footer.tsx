@@ -22,8 +22,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
               </a>
             </div>
 
-            <div className="mt-8 md:mt-16 text-[11px] text-[#8C92A4] font-mono">
-              © 2026 Copper Ledger Inc.
+            <div className="mt-8 md:mt-16 flex flex-col gap-1.5 text-[11px] text-[#8C92A4] font-mono">
+              <span>© {new Date().getFullYear()} Copper Ledger LTD. Lagos, Nigeria.</span>
+              <span>
+                Built by{' '}
+                <a
+                  href="https://mbdulrohim.dev"
+                  rel="author"
+                  className="text-[#646A7A] hover:text-[#121316] transition-colors"
+                >
+                  mbdulrohim
+                </a>
+              </span>
             </div>
           </div>
 

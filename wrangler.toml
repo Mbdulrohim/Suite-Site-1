@@ -1,0 +1,5 @@
+# Cloudflare Pages. The build runs Vite, prerenders each route with a real
+# browser, then writes sitemap/robots/llms into the same output directory.
+name = "suite-ng"
+compatibility_date = "2026-08-01"
+pages_build_output_dir = "dist"
