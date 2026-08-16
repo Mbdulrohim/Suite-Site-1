@@ -27,24 +27,33 @@ pnpm preview      # serve dist/ locally
 pnpm lint         # tsc --noEmit
 ```
 
-## The build has three steps, and the last two matter
+## The build has four steps, and the last two matter
 
 `pnpm build` runs:
 
-1. **`vite build`** — bundles into `dist/`.
-2. **`scripts/prerender.mjs`** — loads each route in headless Chrome, scrolls it
-   so the scroll-triggered sections mount, and writes the rendered HTML back to
-   `dist/`. Without this a crawler receives an empty `<div id="root">`; the
-   copy on this page is the entire reason the site exists, so it has to be in
-   the markup. It prints the character count of text it captured — if that
-   number collapses, something stopped rendering.
-3. **`scripts/seo.mjs`** — generates `sitemap.xml`, `robots.txt` and `llms.txt`
+1. **`vite build`** — the browser bundle, into `dist/`.
+2. **`vite build --ssr src/entry-server.tsx`** — the same `<App />` compiled for
+   Node, into `dist-ssr/` (git-ignored, a build artifact).
+3. **`scripts/prerender.mjs`** — imports that bundle, renders it with
+   `react-dom/server`, and injects the markup into `dist/index.html`. Without
+   this a crawler receives an empty `<div id="root">`; the copy on this page is
+   the entire reason the site exists, so it has to be in the markup. It prints
+   the character count of readable text — if that number collapses, something
+   stopped rendering.
+4. **`scripts/seo.mjs`** — generates `sitemap.xml`, `robots.txt` and `llms.txt`
    into `dist/`. Generated rather than hand-kept so they cannot drift.
 
-Prerendering needs Chrome. It looks in the default macOS location and can be
-pointed elsewhere with `CHROME_PATH`. If Chrome is absent the step logs a
-warning and skips, so CI without a browser still produces a build — but that
-build is **not** the one to deploy.
+This step used to drive a real Chrome through puppeteer. That worked on a Mac
+and silently did nothing on Cloudflare's build image, which has no browser — so
+every deploy shipped the empty shell while the local build looked fine. A
+server render needs no browser, behaves the same in both places, and fails the
+build loudly instead of skipping.
+
+The one rule that keeps it working: **nothing in the tree may touch `window` or
+`document` while rendering.** Effects and event handlers are fine — they do not
+run on the server. `src/main.tsx` uses `hydrateRoot`, so the client adopts this
+markup rather than repainting it; a mismatch shows up as a console error on
+first load.
 
 Verify before shipping:
 
@@ -79,8 +88,9 @@ name = "suite-ng"
 pages_build_output_dir = "dist"
 ```
 
-The Pages project builds from this repository. Confirm which GitHub repository
-the `suite-ng` project is connected to before assuming a push here goes live.
+The `suite-ng` Pages project is connected to **`Mbdulrohim/Suite-Site-1`** —
+pushes to `main` there are what goes live. `Mbdulrohim/Suite-Site` holds the
+same history (it was the holding page this replaced) but does not deploy.
 
 ## Known gaps
 

@@ -1,63 +1,49 @@
 /**
- * Render each route with a real browser and write the HTML back to dist/.
+ * Put the page's words into dist/index.html.
  *
- * Vite ships a client-rendered SPA, so without this the page a crawler
- * receives is an empty `<div id="root">`. Prerendering is framework-agnostic
- * on purpose: no SSG plugin to keep in step with React or Vite majors.
+ * Vite ships a client-rendered SPA, so the document a crawler receives is an
+ * empty `<div id="root">` — the headline, the prose, the whole site is
+ * assembled by JavaScript the crawler may never run.
+ *
+ * This used to drive a real Chrome via puppeteer. That worked on a Mac and
+ * silently did nothing on Cloudflare's build image, which has no browser
+ * installed — so every deploy shipped the empty shell while the local build
+ * looked correct. Rendering through react-dom/server instead needs no browser,
+ * so it behaves identically here and on the builder, and it cannot half-fail:
+ * if the render throws, the build fails loudly rather than shipping a husk.
+ *
+ * GSAP still animates on the client exactly as before. Its work happens in
+ * effects, which never run here, so the markup this writes is the page's
+ * resting state — which is also the state a crawler should read.
  */
-import puppeteer from 'puppeteer-core';
-import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
-const CHROME =
-  process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const ROUTES = ['/'];
 const DIST = 'dist';
-const PORT = 4183;
+const SSR_ENTRY = path.resolve('dist-ssr/entry-server.js');
+const ROOT = '<div id="root"></div>';
 
-if (!fs.existsSync(CHROME)) {
-  console.warn(`prerender: no Chrome at ${CHROME} — skipping (set CHROME_PATH to enable)`);
-  process.exit(0);
+if (!fs.existsSync(SSR_ENTRY)) {
+  console.error(`prerender: ${SSR_ENTRY} is missing — run the --ssr build first`);
+  process.exit(1);
 }
 
-const server = spawn('pnpm', ['exec', 'vite', 'preview', '--port', String(PORT), '--strictPort'], {
-  stdio: 'ignore',
-});
-await new Promise((resolve) => setTimeout(resolve, 2000));
+const { render } = await import(pathToFileURL(SSR_ENTRY).href);
+const body = render();
 
-const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new' });
-try {
-  for (const route of ROUTES) {
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1440, height: 900 });
-    await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'networkidle0' });
+const file = path.join(DIST, 'index.html');
+const shell = fs.readFileSync(file, 'utf8');
 
-    // Scroll-triggered sections only mount their text once they have been
-    // near the viewport, and that text is the entire point of prerendering.
-    await page.evaluate(async () => {
-      for (let y = 0; y < document.body.scrollHeight; y += 700) {
-        window.scrollTo(0, y);
-        await new Promise((r) => setTimeout(r, 120));
-      }
-      window.scrollTo(0, 0);
-    });
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const html = await page.content();
-    const out = path.join(DIST, route === '/' ? 'index.html' : `${route}/index.html`);
-    fs.mkdirSync(path.dirname(out), { recursive: true });
-    fs.writeFileSync(out, html);
-
-    const text = html
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    console.log(`prerendered ${route} — ${text.length} chars of text in the HTML`);
-    await page.close();
-  }
-} finally {
-  await browser.close();
-  server.kill();
+if (!shell.includes(ROOT)) {
+  console.error(`prerender: could not find ${ROOT} in ${file}`);
+  process.exit(1);
 }
+
+fs.writeFileSync(file, shell.replace(ROOT, `<div id="root">${body}</div>`));
+
+const text = body
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+console.log(`prerender: / — ${text.length} chars of readable text in the HTML`);
