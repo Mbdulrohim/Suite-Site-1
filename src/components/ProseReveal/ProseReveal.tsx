@@ -12,10 +12,9 @@ const PROSE_PARAGRAPHS = [
 ];
 
 export const ProseReveal: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<HTMLSpanElement[]>([]);
 
-  // Collect all word refs cleanly
   wordsRef.current = [];
   const addToRefs = (el: HTMLSpanElement | null) => {
     if (el && !wordsRef.current.includes(el)) {
@@ -24,29 +23,29 @@ export const ProseReveal: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!containerRef.current || wordsRef.current.length === 0) return;
+    if (!sectionRef.current || wordsRef.current.length === 0) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         wordsRef.current,
         {
-          opacity: 0.15,
-          color: '#A1A7B7',
+          opacity: 0.12,
+          color: '#B8BDCC',
         },
         {
           opacity: 1,
           color: '#121316',
-          stagger: 0.04,
-          ease: 'none',
+          stagger: 0.05,
+          ease: 'power1.out',
           scrollTrigger: {
-            trigger: containerRef.current,
+            trigger: sectionRef.current,
             start: 'top 75%',
-            end: 'bottom 35%',
-            scrub: 0.5,
+            end: 'bottom 25%',
+            scrub: 1,
           },
         }
       );
-    }, containerRef);
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
@@ -54,10 +53,10 @@ export const ProseReveal: React.FC = () => {
   return (
     <section 
       id="prose-reveal"
-      ref={containerRef} 
-      className="w-full py-16 sm:py-24 md:py-32 lg:py-36 select-none"
+      ref={sectionRef} 
+      className="w-full py-24 sm:py-32 md:py-44 select-none relative z-10 px-5 sm:px-8"
     >
-      <div className="mx-auto max-w-[880px] px-5 sm:px-8 text-center">
+      <div className="mx-auto max-w-[880px] text-center">
         <div className="flex flex-col gap-6 sm:gap-8 items-center">
           {PROSE_PARAGRAPHS.map((paragraph, pIdx) => {
             const words = paragraph.split(' ');
