@@ -28,7 +28,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
               href="#"
               className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border-[0.5px] border-gray-300 bg-transparent text-[13px] text-gray-600 hover:text-gray-900 mb-6 md:mb-8 transition-colors duration-150"
             >
-              <span>Read “Ando: Building Slack from Scratch”</span>
+              <span>Join Us: over 100M processed.</span>
               <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
             </a>
 

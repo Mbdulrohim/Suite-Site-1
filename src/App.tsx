@@ -5,6 +5,7 @@ import {
   PartnersSection, 
   ProseReveal,
   KeepMovingSection, 
+  DemoShowcase,
   WhySuiteSection, 
   ConversionSection, 
   HugeSuiteWatermark, 
@@ -46,6 +47,9 @@ export default function App() {
 
         {/* 2. Section Two: Keep business moving (3-card interactive layout) */}
         <KeepMovingSection />
+
+        {/* Demo Showcase: Big MacBook 5 with 70px rounded-12px Play Demo button */}
+        <DemoShowcase onOpenSignUp={() => setIsSignUpOpen(true)} />
 
         {/* 3. Why Suite works differently: Products, Activity, Tools + Curved SVG connectors */}
         <WhySuiteSection />

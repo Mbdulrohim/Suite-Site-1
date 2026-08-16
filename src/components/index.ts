@@ -3,6 +3,7 @@ export * from './Hero';
 export * from './Partners';
 export * from './ProseReveal';
 export * from './Features';
+export * from './DemoShowcase';
 export * from './WhySuite';
 export * from './Conversion';
 export * from './Watermark';
