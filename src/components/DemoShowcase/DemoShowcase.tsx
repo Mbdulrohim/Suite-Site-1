@@ -10,41 +10,35 @@ export const DemoShowcase: React.FC<DemoShowcaseProps> = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
-    <section id="demo-showcase" className="w-full py-12 md:py-20 lg:py-28 select-none">
+    <section id="demo-showcase" className="w-full py-8 sm:py-14 md:py-20 select-none">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         
-        {/* Showcase Container */}
-        <div className="relative w-full rounded-[24px] sm:rounded-[32px] overflow-hidden bg-gradient-to-b from-[#F5F4F0] via-[#FAF9F7] to-[#FAF9F6] border border-[#E8E6DE] p-4 sm:p-8 md:p-12 flex flex-col items-center justify-center shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
+        {/* Showcase Container: Image fills container with zero empty space around */}
+        <div className="relative w-full overflow-hidden rounded-[18px] sm:rounded-[24px] md:rounded-[28px] flex items-center justify-center">
           
-          {/* Main Visual Frame with Overlay */}
-          <div className="relative w-full max-w-[1040px] flex items-center justify-center">
-            
-            {/* Big MacBook 5 Image */}
-            <img 
-              src={macbookImg} 
-              alt="Suite MacBook Pro Demo" 
-              className="w-full h-auto object-contain transition-transform duration-700 hover:scale-[1.01]"
-              loading="lazy"
-            />
+          {/* Big MacBook 5 Image filling 100% of the container */}
+          <img 
+            src={macbookImg} 
+            alt="Suite MacBook Pro Demo" 
+            className="w-full h-auto block object-cover rounded-[18px] sm:rounded-[24px] md:rounded-[28px]"
+            loading="lazy"
+          />
 
-            {/* Centered Play Demo Button (70px height, rounded 12px) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <button
-                type="button"
-                id="play-demo-button"
-                onClick={() => setIsPlaying(true)}
-                className="pointer-events-auto group inline-flex items-center justify-center gap-3.5 bg-white/95 hover:bg-white text-[#121316] border border-white/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.18)] hover:shadow-[0_24px_50px_rgba(0,0,0,0.22)] h-[60px] sm:h-[70px] px-7 sm:px-9 rounded-[12px] transition-all duration-300 hover:scale-105 active:scale-[0.98] cursor-pointer"
-              >
-                {/* Circular Play Icon badge */}
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#121316] text-[#FAF9F6] flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shrink-0">
-                  <Play className="w-4 h-4 fill-current ml-0.5" />
-                </div>
-                <span className="text-[16px] sm:text-[18px] font-semibold tracking-tight">
-                  Play Demo
-                </span>
-              </button>
-            </div>
-
+          {/* Centered Black Rounded Play Demo Button (70px height) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <button
+              type="button"
+              id="play-demo-button"
+              onClick={() => setIsPlaying(true)}
+              className="pointer-events-auto group inline-flex items-center justify-center gap-3 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] shadow-[0_16px_36px_rgba(0,0,0,0.32)] hover:shadow-[0_22px_44px_rgba(0,0,0,0.4)] h-[58px] sm:h-[70px] px-8 sm:px-10 rounded-full transition-all duration-300 hover:scale-105 active:scale-[0.98] cursor-pointer"
+            >
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shrink-0">
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FAF9F6] fill-current ml-0.5" />
+              </div>
+              <span className="text-[15px] sm:text-[17px] font-medium tracking-tight">
+                Play Demo
+              </span>
+            </button>
           </div>
 
         </div>
