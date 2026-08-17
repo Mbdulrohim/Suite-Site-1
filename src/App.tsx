@@ -7,6 +7,7 @@ import {
   KeepMovingSection, 
   DemoShowcase,
   WhySuiteSection, 
+  PricingSection,
   ConversionSection, 
   HugeSuiteWatermark, 
   Footer, 
@@ -54,7 +55,10 @@ export default function App() {
         {/* 3. Why Suite works differently: Products, Activity, Tools + Curved SVG connectors */}
         <WhySuiteSection />
 
-        {/* 4. Main Conversion Section: Generous whitespace + bold statement */}
+        {/* 4. Pricing Section: 3 tiers, monthly/yearly toggle with savings */}
+        <PricingSection onOpenSignUp={() => setIsSignUpOpen(true)} />
+
+        {/* 5. Main Conversion Section: Generous whitespace + bold statement */}
         <ConversionSection 
           onOpenSignUp={() => setIsSignUpOpen(true)}
         />

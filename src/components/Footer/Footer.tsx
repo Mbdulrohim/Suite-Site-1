@@ -41,11 +41,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
                 Features
               </a>
               <a 
-                href="#features" 
-                onClick={(e) => { e.preventDefault(); onNavigateSection?.('features'); }} 
+                href="#pricing" 
+                onClick={(e) => { e.preventDefault(); onNavigateSection?.('pricing'); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
-                Inventory
+                Pricing
               </a>
             </div>
 

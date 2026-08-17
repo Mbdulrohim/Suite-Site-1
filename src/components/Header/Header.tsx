@@ -44,6 +44,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
           >
             Features
           </a>
+          <a
+            id="nav-link-pricing"
+            href="#pricing"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigateSection?.('pricing');
+            }}
+            className="hover:text-[#121316] transition-colors duration-150 py-1"
+          >
+            Pricing
+          </a>
         </nav>
 
         {/* Right: CTA button */}

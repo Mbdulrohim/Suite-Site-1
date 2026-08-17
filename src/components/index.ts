@@ -5,6 +5,7 @@ export * from './ProseReveal';
 export * from './Features';
 export * from './DemoShowcase';
 export * from './WhySuite';
+export * from './Pricing';
 export * from './Conversion';
 export * from './Watermark';
 export * from './Footer';
