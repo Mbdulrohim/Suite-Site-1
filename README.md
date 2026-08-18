@@ -91,9 +91,18 @@ name = "suite-ng"
 pages_build_output_dir = "dist"
 ```
 
-The `suite-ng` Pages project is connected to **`Mbdulrohim/Suite-Site-1`** —
-pushes to `main` there are what goes live. `Mbdulrohim/Suite-Site` holds the
-same history (it was the holding page this replaced) but does not deploy.
+The Pages project is **`suite-site`** — it serves `suite.ng` and `www.suite.ng`.
+It is connected to **`Mbdulrohim/Suite-Site-1`**, and pushes to `main` there are
+what goes live. `Mbdulrohim/Suite-Site` holds the same history (it was the
+holding page this replaced) but does not deploy.
+
+Two traps in that sentence, both of which have already cost time:
+
+- **`git push` alone pushes to the mirror**, because `main` tracks `mirror/main`
+  — the remote that does *not* deploy. Push to `origin` explicitly.
+- **`wrangler.toml` said `name = "suite-ng"`** for a while, which is not a
+  project on this account. Every project-scoped wrangler command failed against
+  it with "Project not found".
 
 ## `suite.ng/<slug>` — a shop's public page
 
@@ -109,6 +118,7 @@ Three files:
 | `functions/[slug].ts` | Routing, fetch, cache, headers. A Pages Function. |
 | `src/public-profile/render.ts` | The document, as a string. Pure, no I/O. |
 | `test/*.test.ts` | Both of the above, run with `pnpm test`. |
+| `public/404.html` | Makes an unknown path answer 404 and mean it. |
 
 The data comes from `GET https://api.suite.ng/public/profiles/<slug>`, which is
 the only route on that API reached with no session and no tenant header. Point
@@ -116,13 +126,17 @@ it elsewhere with a `SUITE_API_URL` environment variable on the Pages project.
 
 Three things about this are easy to undo by accident:
 
-- **Marketing paths resolve before shop slugs, by being asked rather than
-  listed.** `[slug]` matches every single-segment path, `/pricing` and
-  `/sitemap.xml` included. The Function calls `next()` first and only treats a
-  404 from the asset server as "this path is unclaimed". A hard-coded reserved
-  list here would be a third copy of the one in the database and the one implied
-  by this site's own routes, and the day they disagree is the day a new page
-  404s in production while working locally.
+- **The API is asked before the asset server, and that order is load-bearing.**
+  `[slug]` matches every single-segment path — `/pricing` and `/sitemap.xml`
+  included — so the Function has to decide what a path means. The natural
+  ordering is assets first, treating a 404 as "unclaimed". That shipped, and it
+  served the marketing homepage for every shop on the platform, because **Pages
+  answers an unknown path with `index.html` and a 200, not a 404.** Asking the
+  API first means a published page renders whatever the asset server does. Only
+  when the API says no does the Function fall through to `next()`, so a
+  marketing page added later still wins its own path. Nothing here keeps a
+  reserved-path list: the database already refuses to publish a profile under
+  one.
 - **The page loads nothing over the network** — no script, no webfont, no remote
   image. It is one request that renders complete on first byte, which is a
   deliberate trade against matching this site's typeface: it is read on the

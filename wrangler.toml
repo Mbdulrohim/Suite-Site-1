@@ -1,5 +1,8 @@
 # Cloudflare Pages. The build runs Vite, prerenders each route with a real
 # browser, then writes sitemap/robots/llms into the same output directory.
-name = "suite-ng"
+# Must match the Pages project this deploys to. It said "suite-ng" for a while,
+# which is not a project on the account — `wrangler pages deployment list` and
+# every other project-scoped command failed against it until this was corrected.
+name = "suite-site"
 compatibility_date = "2026-08-01"
 pages_build_output_dir = "dist"

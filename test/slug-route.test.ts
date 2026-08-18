@@ -52,6 +52,15 @@ interface CallOptions {
   headers?: Record<string, string>;
 }
 
+/**
+ * Pages' answer for a path it does not have, once `public/404.html` exists.
+ *
+ * The default used to be a 404 because that is what the asset server *ought* to
+ * say. It said 200 with the homepage instead, the handler passed that straight
+ * through, and every shop page on the domain rendered as the marketing site.
+ * The stub encoded an assumption; production had the facts. The regression test
+ * for it is below, and it drives the 200 case explicitly rather than by default.
+ */
 const call = (path: string, options: CallOptions = {}): Promise<Response> => {
   const asset = options.asset ?? new Response('not found', { status: 404 });
   return onRequestGet({
@@ -75,17 +84,38 @@ describe('what reaches the API at all', () => {
     assert.equal(asked, false, 'the API was asked about a static file');
   });
 
-  it('lets a real page win over a shop slug', async () => {
+  it('serves a marketing page that is not a shop', async () => {
     /*
-     * Marketing paths resolve first, and they resolve by being asked rather
-     * than by being listed here. The database refuses to publish a profile
-     * under a reserved path, so nothing can be shadowed by this.
+     * `[slug]` matches every single-segment path, so /pricing arrives here
+     * exactly like /ade-gadgets. Nothing can be shadowed the other way: the
+     * database refuses to publish a profile under a reserved path.
      */
-    api(() => new Response(JSON.stringify(PROFILE), { status: 200 }));
+    api(() => new Response('{}', { status: 404 }));
     const res = await call('/pricing', { asset: new Response('<h1>Pricing</h1>', { status: 200 }) });
 
     assert.equal(res.status, 200);
     assert.equal(await res.text(), '<h1>Pricing</h1>');
+  });
+
+  it('renders the shop even when the asset server answers 200 for everything', async () => {
+    /*
+     * The regression. Cloudflare Pages serves index.html with a 200 — not a
+     * 404 — for a path it does not have, so a handler that asks the assets
+     * first and treats "not 404" as "this is a real page" returns the marketing
+     * homepage for every shop on the platform. It did, in production, for half
+     * an hour.
+     *
+     * Asking the API first is what makes a published page render regardless of
+     * what the asset server decides an unknown path means. public/404.html
+     * fixes the underlying soft-404 as well, and this asserts the handler does
+     * not depend on that file being there.
+     */
+    api(() => new Response(JSON.stringify(PROFILE), { status: 200 }));
+    const spa = new Response('<title>Suite — stock and sales for phone shops</title>', { status: 200 });
+    const res = await call('/ade-gadgets', { asset: spa });
+
+    assert.equal(res.status, 200);
+    assert.ok((await res.text()).includes('<h1>Ade Gadgets</h1>'), 'the homepage was served instead');
   });
 });
 

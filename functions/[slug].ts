@@ -9,7 +9,8 @@
  * `[slug]` matches exactly one path segment, so `/` and `/assets/index-abc.js`
  * never reach this file. Everything else at the top level does, including
  * `/robots.txt` and any marketing page added later — which is what the routing
- * below is mostly about.
+ * below is mostly about, and it is ordered the way it is for a reason worth
+ * reading before changing it.
  *
  * Deliberately not typed against @cloudflare/workers-types. The tsconfig this
  * repo lints with is a browser React config, and adding a Workers lib to it to
@@ -77,20 +78,6 @@ export const onRequestGet = async (context: Context): Promise<Response> => {
 
   if (!SLUG.test(slug)) return next();
 
-  /*
-   * Marketing paths resolve before shop slugs, and they resolve by being asked
-   * rather than by being listed. A hard-coded list of reserved paths here would
-   * be a third copy of the one in `reserved_slugs` and the one implied by the
-   * site's own routes, and the day they disagree is the day a new /pricing page
-   * 404s in production while working locally. The asset server already knows
-   * what it serves; a 404 from it means the path is genuinely unclaimed.
-   *
-   * Safe because the database refuses to publish a profile under a reserved
-   * path, so a slug can never be shadowed by a page that does not exist yet.
-   */
-  const asset = await next();
-  if (asset.status !== 404) return asset;
-
   const origin = new URL(request.url).origin;
   const api = (env.SUITE_API_URL ?? DEFAULT_API).replace(/\/$/, '');
 
@@ -138,6 +125,26 @@ export const onRequestGet = async (context: Context): Promise<Response> => {
   }
 
   if (!response.ok) {
+    /*
+     * Not a shop. It may still be a page this site serves — `[slug]` matches
+     * every single-segment path, so `/pricing` arrives here exactly like
+     * `/ade-gadgets` does. Ask the asset server before answering.
+     *
+     * This order — API first, assets second — is the opposite of what reads
+     * naturally, and it is deliberate. Pages serves `index.html` with a **200**
+     * for a path it does not have, so "ask the assets first and treat a 404 as
+     * unclaimed" quietly returns the marketing homepage for every shop on the
+     * platform. It did exactly that in production. Asking the API first means a
+     * published page renders no matter what the asset server decides to do with
+     * paths it does not recognise.
+     *
+     * `public/404.html` makes that decision an honest 404, which is what turns
+     * the branch below into a real answer rather than the homepage again. The
+     * ordering here is what stops that file being load-bearing.
+     */
+    const asset = await next();
+    if (asset.status < 400) return asset;
+
     return html(problem(origin, 'No page at this address', missing), 404, {
       'cache-control': 'public, max-age=60, s-maxage=300',
     });
