@@ -46,7 +46,7 @@ const SLUG = /^[a-z0-9][a-z0-9-]{0,79}$/;
  * this every edge cache would keep serving the old markup until each shop
  * happened to save something.
  */
-const RENDERER = 'r1';
+const RENDERER = 'r2';
 
 /**
  * Security headers for a response `_headers` never sees.
@@ -157,7 +157,13 @@ export const onRequestGet = async (context: Context): Promise<Response> => {
    * renders of one `updated_at` are equivalent HTML, which is exactly what a
    * weak validator claims.
    */
-  const etag = `W/"${profile.slug}-${Date.parse(profile.updatedAt)}-${RENDERER}"`;
+  /*
+   * The Lagos date is in here because the page marks today's row in the opening
+   * hours. Without it a page rendered on Tuesday keeps being served on
+   * Wednesday with Tuesday still highlighted, for as long as the edge holds it.
+   */
+  const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Lagos' });
+  const etag = `W/"${profile.slug}-${Date.parse(profile.updatedAt)}-${day}-${RENDERER}"`;
   if (request.headers.get('if-none-match') === etag) {
     return new Response(null, { status: 304, headers: { etag, ...SECURITY } });
   }

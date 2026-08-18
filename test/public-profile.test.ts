@@ -42,8 +42,10 @@ const blank: PublicProfile = {
   updatedAt: '2026-08-18T09:00:00.000Z',
 };
 
-const render = (patch: Partial<PublicProfile> = {}): string =>
-  renderProfilePage({ ...blank, ...patch }, { origin: 'https://suite.ng' });
+// `today` is pinned so the opening-hours highlight does not make this suite
+// behave differently on a Sunday.
+const render = (patch: Partial<PublicProfile> = {}, today = 'Wednesday'): string =>
+  renderProfilePage({ ...blank, ...patch }, { origin: 'https://suite.ng', today });
 
 describe('a shop cannot write markup into its own page', () => {
   it('escapes a script tag in the description', () => {
@@ -247,5 +249,51 @@ describe('the document itself', () => {
     const page = render({ description: 'Phones', brands: ['Apple'], services: ['Repairs'] });
     assert.equal(page.match(/<h1[ >]/g)?.length, 1);
     assert.ok(page.includes('<h1>Ade Gadgets</h1>'));
+  });
+});
+
+describe('the page as a designed thing', () => {
+  it('shows initials when a shop has no logo, rather than an empty box', () => {
+    // A grey placeholder says "this page is unfinished" about a shop that
+    // simply has no logo file. Every business has initials.
+    const page = render({ displayName: 'Doyex Phones' });
+    assert.ok(page.includes('>DP</div>'));
+    assert.ok(!page.includes('<img'), 'a shop with no logo still rendered an image');
+  });
+
+  it('uses the real logo when there is one, and labels it', () => {
+    const page = render({ logo: 'data:image/png;base64,AA' });
+    assert.match(page, /<img src="data:image\/png;base64,AA" alt="Ade Gadgets logo"/);
+  });
+
+  it('marks today in the opening hours', () => {
+    /*
+     * Nigeria does not observe DST, so "today" is Africa/Lagos and nothing
+     * about the reader. It is passed in rather than read from the clock so a
+     * render stays a pure function of its inputs — the Function stamps the date
+     * into the ETag so a cached page cannot keep pointing at yesterday.
+     */
+    const hours = { Tuesday: '9am – 7pm', Wednesday: '9am – 7pm', Thursday: '9am – 7pm' };
+    const page = render({ openingHours: hours }, 'Wednesday');
+
+    assert.ok(page.includes('<div class="now"><dt>Wednesday</dt>'));
+    assert.equal(page.match(/class="now"/g)?.length, 1, 'more than one day was marked');
+  });
+
+  it('matches a day inside a range, which is how shops actually write hours', () => {
+    const page = render({ openingHours: { 'Monday – Saturday': '9am – 8pm' } }, 'Saturday');
+    assert.ok(page.includes('class="now"'));
+  });
+
+  it('marks nothing when the day names are not days', () => {
+    const page = render({ openingHours: { Weekdays: '9am – 7pm' } }, 'Wednesday');
+    assert.ok(!page.includes('class="now"'));
+  });
+
+  it('does not repeat one number as both phone and WhatsApp in the contact list', () => {
+    // The same number in two labelled rows reads as a mistake on the page.
+    const page = render({ publicPhone: '0803 999 8888', whatsappPhone: '0803 999 8888' });
+    assert.equal(page.match(/<dt>WhatsApp<\/dt>/g), null);
+    assert.ok(page.includes('WhatsApp'), 'the WhatsApp button went too');
   });
 });

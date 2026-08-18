@@ -165,7 +165,7 @@ describe('a published shop', () => {
      */
     api(() => new Response(JSON.stringify(PROFILE), { status: 200 }));
     const etag = (await call('/ade-gadgets')).headers.get('etag') ?? '';
-    assert.match(etag, /-r\d+"$/);
+    assert.match(etag, /-\d{4}-\d{2}-\d{2}-r\d+"$/);
   });
 });
 
