@@ -123,6 +123,44 @@ export function whatsappHref(value: string | null): string | null {
  * renderer accepts a flat object of strings and skips anything else, rather than
  * inventing a format the writer never agreed to.
  */
+const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+/**
+ * Whether a row of opening hours covers today.
+ *
+ * Shops write "Monday – Friday", not seven rows, so a literal substring test
+ * finds nothing on a Wednesday — which is the answer for four days out of five.
+ * A dash (or "to") means the named days are the ends of a range and everything
+ * between them counts; a comma or an ampersand means they are a list and only
+ * the named days do. Ranges wrap, because "Saturday – Sunday" is a weekend and
+ * not an empty set.
+ *
+ * Unknown words simply do not match. A shop writing "Weekdays" gets no
+ * highlight, which is the correct amount of guessing to do about somebody
+ * else's trading hours.
+ */
+export function coversToday(label: string, today: string): boolean {
+  const target = DAYS.indexOf(today.trim().toLowerCase());
+  if (target < 0) return false;
+
+  const lower = label.toLowerCase();
+  const named = DAYS
+    .map((day, index) => ({ index, at: lower.indexOf(day) }))
+    .filter((hit) => hit.at >= 0)
+    .sort((a, b) => a.at - b.at);
+  if (named.length === 0) return false;
+  if (named.length === 1) return named[0]!.index === target;
+
+  const isRange = /[-–—]|\bto\b/.test(lower);
+  if (!isRange) return named.some((hit) => hit.index === target);
+
+  const from = named[0]!.index;
+  const to = named[named.length - 1]!.index;
+  return from <= to
+    ? target >= from && target <= to
+    : target >= from || target <= to;
+}
+
 export function openingHours(value: unknown): Array<[string, string]> {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) return [];
   return Object.entries(value as Record<string, unknown>)
@@ -181,18 +219,18 @@ const ICON = {
   chat: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 20.5l1.5-4.6a8.4 8.4 0 0 1-.9-3.9 8.4 8.4 0 0 1 8.4-8.4h.5a8.4 8.4 0 0 1 8 8z"/>',
   pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
   globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
-  arrow: '<path d="M7 17 17 7M9 7h8v8"/>',
+  up: '<path d="M7 17 17 7M9 7h8v8"/>',
 } as const;
 
-const icon = (name: keyof typeof ICON): string =>
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
+const icon = (name: keyof typeof ICON, cls = ''): string =>
+  `<svg${cls === '' ? '' : ` class="${cls}"`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
 
 /** A titled block of pills, or nothing at all when the shop listed none. */
 function pills(title: string, values: string[], cls: string): string {
   const kept = values.map((v) => v.trim()).filter((v) => v !== '');
   if (kept.length === 0) return '';
-  return `<section class="panel">
-      <h2>${esc(title)}</h2>
+  return `<section class="block">
+      <p class="eyebrow">${esc(title)}</p>
       <ul class="pills ${cls}">${kept.map((v) => `<li>${esc(v)}</li>`).join('')}</ul>
     </section>`;
 }
@@ -205,11 +243,11 @@ const SOCIALS = [
 ] as const;
 
 /**
- * The initials shown when a shop has no logo, or has not made it public.
+ * The mark shown when a shop has no logo, or has not made it public.
  *
  * A grey placeholder box would say "this page is unfinished" about a shop that
- * simply has no logo file. Initials on a copper plate read as a mark rather
- * than as a gap, and every business has initials.
+ * simply has no logo file. Initials read as a mark rather than as a gap, and
+ * every business has initials.
  */
 function initials(name: string): string {
   const words = name.split(/\s+/).filter((w) => /[a-z0-9]/i.test(w));
@@ -258,6 +296,7 @@ export function renderProfilePage(profile: PublicProfile, options: RenderOptions
   const map = safeHref(profile.mapUrl);
   const website = safeHref(profile.websiteUrl);
   const hours = openingHours(profile.openingHours);
+  const todayRow = hours.find(([day]) => coversToday(day, today));
 
   const title = clamp(phrase === '' ? `${name} | Suite` : `${name} — ${phrase} | Suite`, 65);
   const meta = clamp(
@@ -296,24 +335,24 @@ export function renderProfilePage(profile: PublicProfile, options: RenderOptions
   };
 
   /*
-   * Ranked, not listed. Somebody arriving here wants to call, or wants to know
-   * where the shop is — in that order — so Call is the only filled button and
-   * the rest step down in weight from it. Four equal buttons is four decisions.
+   * One dark pill and the rest quiet, which is how the marketing site treats a
+   * primary action. Somebody arriving here wants to call; four buttons of equal
+   * weight is four decisions to make before doing the obvious one.
    */
   const actions = [
-    tel === null ? '' : `<a class="btn go" href="tel:${esc(tel)}">${icon('phone')}<span>Call</span></a>`,
+    tel === null ? '' : `<a class="cta" href="tel:${esc(tel)}">${icon('phone')}<span>Call</span></a>`,
     whatsapp === null
-      ? (whatsappTel === null ? '' : `<a class="btn wa" href="tel:${esc(whatsappTel)}">${icon('chat')}<span>WhatsApp</span></a>`)
-      : `<a class="btn wa" href="${esc(whatsapp)}" rel="noopener nofollow">${icon('chat')}<span>WhatsApp</span></a>`,
-    map === null ? '' : `<a class="btn" href="${esc(map)}" rel="noopener nofollow">${icon('pin')}<span>Directions</span></a>`,
-    website === null ? '' : `<a class="btn" href="${esc(website)}" rel="noopener nofollow">${icon('globe')}<span>Website</span></a>`,
+      ? (whatsappTel === null ? '' : `<a class="ghost" href="tel:${esc(whatsappTel)}">${icon('chat')}<span>WhatsApp</span></a>`)
+      : `<a class="ghost" href="${esc(whatsapp)}" rel="noopener nofollow">${icon('chat')}<span>WhatsApp</span></a>`,
+    map === null ? '' : `<a class="ghost" href="${esc(map)}" rel="noopener nofollow">${icon('pin')}<span>Directions</span></a>`,
+    website === null ? '' : `<a class="ghost" href="${esc(website)}" rel="noopener nofollow">${icon('globe')}<span>Website</span></a>`,
   ].join('');
 
   const contactRows = [
-    profile.publicPhone === null ? '' : row('Phone', profile.publicPhone, tel === null ? null : `tel:${tel}`, 'num'),
+    profile.publicPhone === null ? '' : row('Phone', profile.publicPhone, tel === null ? null : `tel:${tel}`, 'mono'),
     profile.whatsappPhone === null || profile.whatsappPhone === profile.publicPhone
       ? ''
-      : row('WhatsApp', profile.whatsappPhone, whatsapp ?? (whatsappTel === null ? null : `tel:${whatsappTel}`), 'num'),
+      : row('WhatsApp', profile.whatsappPhone, whatsapp ?? (whatsappTel === null ? null : `tel:${whatsappTel}`), 'mono'),
     address === '' ? '' : row('Address', address, map, 'addr'),
   ].join('');
 
@@ -322,17 +361,17 @@ export function renderProfilePage(profile: PublicProfile, options: RenderOptions
       const href = safeHref(profile[key]);
       return href === null
         ? ''
-        : `<li><a href="${esc(href)}" rel="noopener nofollow me">${esc(label)}${icon('arrow')}</a></li>`;
+        : `<li><a href="${esc(href)}" rel="noopener nofollow me"><span>${esc(label)}</span>${icon('up')}</a></li>`;
     })
     .join('');
 
   const since = profile.publishedAt === null
     ? ''
-    : `<span class="since">On Suite since ${new Date(profile.publishedAt).getUTCFullYear()}</span>`;
+    : `<span class="mono since">On Suite since ${new Date(profile.publishedAt).getUTCFullYear()}</span>`;
 
-  const logoPlate = profile.logo === null
+  const mark = profile.logo === null
     ? `<div class="plate plate-text" aria-hidden="true">${esc(initials(name))}</div>`
-    : `<div class="plate"><img src="${esc(profile.logo)}" alt="${esc(name)} logo" width="88" height="88"></div>`;
+    : `<div class="plate"><img src="${esc(profile.logo)}" alt="${esc(name)} logo" width="64" height="64"></div>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -342,7 +381,7 @@ export function renderProfilePage(profile: PublicProfile, options: RenderOptions
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(meta)}">
 ${isThin(profile) ? '<meta name="robots" content="noindex, follow">\n' : ''}<link rel="canonical" href="${esc(url)}">
-<meta name="theme-color" content="#14151A">
+<meta name="theme-color" content="#FAF9F6">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
@@ -360,71 +399,85 @@ ${isThin(profile) ? '<meta name="robots" content="noindex, follow">\n' : ''}<lin
 </head>
 <body>
 
-<div class="band">
-  <div class="wrap band-top">
-    <a class="wordmark" href="${esc(origin)}/">Suite</a>
-    <span class="band-tag">Business page</span>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="wordmark" href="${esc(origin)}/">
+      <span class="diamond" aria-hidden="true"><i></i></span>Suite
+    </a>
+    <span class="mono topbar-tag">Business page</span>
   </div>
-  <div class="wrap identity">
-    ${logoPlate}
-    <div class="identity-text">
-      <h1>${esc(name)}</h1>
-      ${phrase === '' ? '' : `<p class="phrase">${esc(phrase)}</p>`}
-      ${address === '' ? '' : `<p class="locale">${icon('pin')}<span>${esc(address)}</span></p>`}
-    </div>
+</header>
+
+<main class="wrap">
+
+  <!-- The identity sits in the same soft tray the marketing site puts its
+       product in: gradient ground, hairline border, generous corner. -->
+  <div class="tray">
+    <article class="sheet">
+      <div class="sheet-bar">
+        <span class="mono sheet-url">${esc(url.replace(/^https?:\/\//, ''))}</span>
+        <span class="tag"><i class="dot"></i>Managed with Suite</span>
+      </div>
+
+      <div class="sheet-body">
+        <div class="ident">
+          ${mark}
+          <div class="ident-text">
+            <h1>${esc(name)}</h1>
+            ${phrase === '' ? '' : `<p class="phrase">${esc(phrase)}</p>`}
+          </div>
+        </div>
+
+        ${address === '' && todayRow === undefined ? '' : `<div class="facts">
+          ${address === '' ? '' : `<span class="fact">${icon('pin')}${esc(address)}</span>`}
+          ${todayRow === undefined ? '' : `<span class="fact open"><i class="dot"></i>Today · <b class="mono">${esc(todayRow[1])}</b></span>`}
+        </div>`}
+
+        ${description === '' ? '' : `<p class="lede">${esc(description)}</p>`}
+
+        ${actions === '' ? '' : `<nav class="actions" aria-label="Contact ${esc(name)}">${actions}</nav>`}
+      </div>
+    </article>
   </div>
-</div>
 
-<div class="wrap">
-  ${actions === '' ? '' : `<nav class="actions" aria-label="Contact ${esc(name)}">${actions}</nav>`}
+  <div class="grid">
+    ${contactRows === '' ? '' : `<section class="block">
+      <p class="eyebrow">Contact</p>
+      <dl class="rows">${contactRows}</dl>
+    </section>`}
 
-  <div class="cols">
-    <div class="main">
-      ${description === '' ? '' : `<section class="panel lede">
-        <h2>About</h2>
-        <p>${esc(description)}</p>
-      </section>`}
-
-      ${pills('Brands carried', profile.brands, 'brand')}
-      ${pills('What they do', profile.services, 'service')}
-    </div>
-
-    <aside class="side">
-      ${contactRows === '' ? '' : `<section class="panel">
-        <h2>Contact</h2>
-        <dl class="rows">${contactRows}</dl>
-      </section>`}
-
-      ${hours.length === 0 ? '' : `<section class="panel">
-        <h2>Opening hours</h2>
-        <dl class="hours">${hours
-          .map(([day, time]) => {
-            const now = today !== '' && day.toLowerCase().includes(today.toLowerCase());
-            return `<div${now ? ' class="now"' : ''}><dt>${esc(day)}</dt><dd>${esc(time)}</dd></div>`;
-          })
-          .join('')}</dl>
-      </section>`}
-
-      ${socials === '' ? '' : `<section class="panel">
-        <h2>Official pages</h2>
-        <ul class="social">${socials}</ul>
-      </section>`}
-    </aside>
+    ${hours.length === 0 ? '' : `<section class="block">
+      <p class="eyebrow">Opening hours</p>
+      <dl class="hours">${hours
+        .map(([day, time]) => {
+          const now = coversToday(day, today);
+          return `<div${now ? ' class="now"' : ''}><dt>${esc(day)}</dt><dd class="mono">${esc(time)}</dd></div>`;
+        })
+        .join('')}</dl>
+    </section>`}
   </div>
+
+  ${pills('Brands carried', profile.brands, 'brand')}
+  ${pills('What they do', profile.services, 'service')}
+
+  ${socials === '' ? '' : `<section class="block">
+    <p class="eyebrow">Official pages</p>
+    <ul class="social">${socials}</ul>
+  </section>`}
 
   <section class="mark">
-    <p class="mark-head"><span class="dot"></span><strong>Managed with Suite</strong>${since}</p>
-    <p class="mark-note">Suite is the software ${esc(name)} runs its shop on. Everything on this
-      page is written by the business itself — it is not a review, a rating, or a check by Suite.</p>
-    <a class="mark-link" href="${esc(origin)}/">What Suite is${icon('arrow')}</a>
+    <p class="mark-line"><span class="tag"><i class="dot"></i>Managed with Suite</span>${since}</p>
+    <p class="mark-note">Suite is the software ${esc(name)} runs its shop on. Everything on this page
+      is written by the business itself — it is not a review, a rating, or a check by Suite.</p>
+    <a class="mark-link" href="${esc(origin)}/">What Suite is${icon('up')}</a>
   </section>
-</div>
+
+</main>
 
 <footer class="foot">
   <div class="wrap foot-in">
-    <p>${esc(url.replace(/^https?:\/\//, ''))}</p>
-    <p>A page on Suite, by Copper Ledger LTD · built by
-      <a href="https://mbdulrohim.dev" rel="noopener">mbdulrohim</a></p>
+    <p class="mono">© ${new Date().getUTCFullYear()} Copper Ledger LTD. Lagos, Nigeria.</p>
+    <p class="mono">Built by <a href="https://mbdulrohim.dev" rel="author noopener">mbdulrohim</a></p>
   </div>
 </footer>
 
@@ -432,7 +485,7 @@ ${isThin(profile) ? '<meta name="robots" content="noindex, follow">\n' : ''}<lin
 </html>`;
 }
 
-/** One label/value line in the contact card, linked when it can be. */
+/** One label/value line in the contact block, linked when it can be. */
 function row(label: string, value: string, href: string | null, cls: string): string {
   const inner = `<span class="${cls}">${esc(value)}</span>`;
   return `<div><dt>${esc(label)}</dt><dd>${
@@ -445,115 +498,131 @@ function row(label: string, value: string, href: string | null, cls: string): st
  * subresources renders complete on the first response — which on a market-stall
  * connection is the difference between a phone number and a white screen.
  *
- * Light only, and on purpose. This is a storefront, not a document a reader
- * settles into: it commits to one look the way a printed card does, and the
- * page paints its own ground rather than borrowing the device's.
+ * Every value here is lifted from the marketing site rather than invented: the
+ * #FAF9F6 ground, the #FAF9F7 tray, the 0.5px hairlines, the 28px corner, the
+ * shadow at 2% black, the medium-weight tracking-tight headline, the dark pill
+ * with an arrow, the mono treatment on every number and label, and the gradient
+ * panel the homepage wraps its product in. A page under the same domain, one
+ * click from that homepage, should not be a different piece of software.
  *
- * The accent is copper, for Copper Ledger — the company whose mark is at the
- * bottom of every one of these pages. Green stays semantic: it is the colour of
- * the two things that mean "reachable right now", the call button and today's
- * row in the opening hours.
+ * The exception is the typeface: the marketing site loads Plus Jakarta Sans and
+ * JetBrains Mono from Google, and this page loads nothing over the network. It
+ * uses the same system stack the homepage already hard-codes for its own
+ * headline, and the system mono for the same roles — which keeps the mono as a
+ * signal rather than as a font.
  */
 const STYLE = `
 :root{
---paper:#F4F3EE;--card:#FFF;--ink:#14151A;--ink-2:#3B3E46;--soft:#6E717A;--faint:#9A9DA5;
---line:#E4E2D9;--hair:#EFEEE7;--copper:#A2562A;--copper-2:#C9793F;--copper-wash:#F7EEE7;
---go:#0E6E41;--go-wash:#E9F2EC;--band:#14151A;
---shadow:0 1px 2px rgba(20,21,26,.05),0 8px 24px -12px rgba(20,21,26,.18);
+--paper:#FAF9F6;--white:#FFF;--tray:#FAF9F7;--ink:#121316;--ink-2:#1F2228;
+--text:#646A7A;--soft:#717684;--faint:#8C92A4;--fainter:#9CA3AF;
+--line:#E7E5DE;--line-2:#EFECE6;--hair:#E8E8E8;
+--blue:#2563EB;--blue-wash:#EFF6FF;--green:#15803D;--green-2:#22C55E;--green-wash:#F0FDF4;--green-line:#DCFCE7;
+--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;font-synthesis-weight:none}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 a{color:inherit;text-decoration:none}
-svg{width:17px;height:17px;flex:none}
-.wrap{width:100%;max-width:900px;margin:0 auto;padding:0 20px}
+svg{width:16px;height:16px;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 20px}
+@media(min-width:640px){.wrap{padding:0 32px}}
 
-/* Identity band — the shop's name at signboard scale, reversed out. */
-.band{background:var(--band);color:var(--paper);padding-bottom:52px}
-.band-top{display:flex;align-items:center;justify-content:space-between;height:56px}
-.wordmark{font-weight:800;font-size:15px;letter-spacing:-.035em}
-.band-tag{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#7E828C}
-.identity{display:flex;gap:18px;align-items:flex-start;padding-top:14px}
-.plate{width:88px;height:88px;flex:none;border-radius:20px;background:var(--card);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 14px 30px -14px rgba(0,0,0,.7)}
-.plate img{width:100%;height:100%;object-fit:contain;padding:10px}
-.plate-text{background:linear-gradient(150deg,var(--copper-2),var(--copper));color:#fff;font-size:30px;font-weight:800;letter-spacing:-.03em}
-.identity-text{min-width:0;padding-top:4px}
-h1{font-size:clamp(30px,7.4vw,46px);line-height:1.03;font-weight:800;letter-spacing:-.042em;text-wrap:balance}
-.phrase{margin-top:9px;font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--copper-2)}
-.locale{margin-top:12px;display:flex;gap:7px;align-items:flex-start;font-size:13.5px;color:#A7AAB2;max-width:46ch}
-.locale svg{margin-top:4px;width:15px;height:15px}
+.topbar-in{height:64px;display:flex;align-items:center;justify-content:space-between}
+.wordmark{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;letter-spacing:-.02em}
+.diamond{width:14px;height:14px;border:1px solid var(--ink);border-radius:2px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center}
+.diamond i{width:4px;height:4px;background:var(--ink);border-radius:1px}
+.topbar-tag{font-size:11px;color:var(--faint);letter-spacing:.02em}
 
-/* Action bar, lifted onto the band so it is the first thing under the name. */
-.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));gap:8px;background:var(--card);border-radius:18px;padding:8px;margin-top:-34px;box-shadow:var(--shadow);position:relative}
-.btn{display:flex;align-items:center;justify-content:center;gap:9px;height:52px;border-radius:12px;font-size:14.5px;font-weight:650;border:1px solid var(--line);background:var(--card);transition:background .15s,border-color .15s}
-.btn.go{background:var(--go);border-color:var(--go);color:#fff}
-.btn.wa{background:var(--go-wash);border-color:#CBE3D6;color:var(--go)}
-.btn:hover{border-color:var(--ink)}
-.btn.go:hover{background:#0B5C36;border-color:#0B5C36}
-.btn.wa:hover{background:#DDECE3;border-color:var(--go)}
+/* The tray: the homepage's product container, holding the shop instead. */
+.tray{background:linear-gradient(135deg,#EEF4FB 0%,#F4F7FB 46%,#F7F5F0 100%);border:1px solid #E4ECF4;border-radius:28px;padding:12px}
+.sheet{background:var(--white);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.sheet-bar{min-height:46px;padding:10px 18px;background:var(--tray);border-bottom:1px solid var(--line-2);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.sheet-url{font-size:11.5px;color:var(--soft)}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-wash);border:1px solid var(--green-line);color:var(--green);font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green-2);flex:none}
+.sheet-body{padding:26px 20px 24px}
 
-/* Two columns once there is room; the sidebar is the reference material. */
-.cols{display:grid;gap:14px;margin-top:14px;align-items:start}
-.main,.side{display:grid;gap:14px;align-items:start}
-.panel{background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:22px}
-.panel h2{font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin-bottom:15px}
-.lede p{font-size:16.5px;line-height:1.62;color:var(--ink-2);white-space:pre-line;max-width:62ch}
+.ident{display:flex;align-items:center;gap:16px}
+.plate{width:64px;height:64px;flex:none;border-radius:16px;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.plate img{width:100%;height:100%;object-fit:contain;padding:8px}
+.plate-text{background:var(--tray);color:var(--ink);font-size:22px;font-weight:600;letter-spacing:-.03em}
+.ident-text{min-width:0}
+h1{font-size:clamp(28px,6.4vw,44px);line-height:1.1;font-weight:500;letter-spacing:-.028em;text-wrap:balance}
+.phrase{margin-top:6px;font-size:15px;color:var(--fainter)}
 
-.pills{list-style:none;display:flex;flex-wrap:wrap;gap:7px}
-.pills li{font-size:13.5px;font-weight:550;padding:7px 13px;border-radius:9px;line-height:1.3}
-.pills.brand li{background:var(--copper-wash);color:#7C4321}
-.pills.service li{background:#F2F1EB;color:var(--ink-2);border:1px solid var(--hair)}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.fact{display:inline-flex;align-items:center;gap:7px;border:.5px solid #D6D3CB;border-radius:999px;padding:6px 14px;font-size:13px;color:var(--text);background:transparent}
+.fact svg{width:14px;height:14px;color:var(--fainter)}
+.fact.open{background:var(--green-wash);border-color:var(--green-line);color:var(--green)}
+.fact.open b{font-weight:600;font-size:12.5px}
 
-.rows{display:grid;gap:0}
-.rows>div{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--hair);align-items:baseline}
+.lede{margin-top:20px;font-size:16.5px;line-height:1.62;color:var(--text);white-space:pre-line;max-width:64ch}
+
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+.cta,.ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:background .2s,border-color .2s,box-shadow .2s}
+.cta{background:var(--ink);color:var(--paper);box-shadow:0 2px 10px rgba(0,0,0,.09)}
+.cta:hover{background:#000;box-shadow:0 6px 20px rgba(0,0,0,.14)}
+.ghost{background:var(--white);border:.5px solid #D6D3CB;color:var(--ink-2)}
+.ghost:hover{border-color:var(--ink);background:#FDFCFA}
+
+.grid{display:grid;gap:14px;margin-top:14px}
+.block{background:var(--tray);border:.5px solid var(--hair);border-radius:28px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.02);margin-top:14px}
+.grid .block{margin-top:0}
+.eyebrow{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);margin-bottom:16px}
+
+.rows{display:grid}
+.rows>div{display:grid;grid-template-columns:84px 1fr;gap:14px;padding:11px 0;border-top:1px solid #EAE8E1;align-items:baseline}
 .rows>div:first-child{border-top:0;padding-top:0}
-.rows dt{font-size:12.5px;color:var(--soft)}
-.rows dd{font-size:15px;min-width:0}
-.rows a{color:var(--copper);border-bottom:1px solid transparent}
-.rows a:hover{border-bottom-color:currentColor}
-.num{font-variant-numeric:tabular-nums;letter-spacing:.01em;font-weight:600;white-space:nowrap}
-.addr{white-space:pre-line}
+.rows dt{font-size:12.5px;color:var(--faint)}
+.rows dd{font-size:15px;min-width:0;color:var(--ink-2)}
+.rows dd .mono{font-size:14.5px;font-weight:500;white-space:nowrap}
+.rows dd .addr{white-space:pre-line;display:block}
+.rows a{color:var(--blue)}
+.rows a:hover{text-decoration:underline;text-underline-offset:3px}
 
-.hours{display:grid;gap:0;font-size:14px}
-.hours>div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--hair)}
+.hours{display:grid;font-size:14px}
+.hours>div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid #EAE8E1}
 .hours>div:first-child{border-top:0;padding-top:0}
 .hours dt{color:var(--soft)}
-.hours dd{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
-.hours .now dt{color:var(--go);font-weight:650;display:flex;align-items:center;gap:7px}
-.hours .now dt::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--go);flex:none}
-.hours .now dd{color:var(--go)}
+.hours dd{font-weight:500;text-align:right;font-size:13.5px}
+.hours .now dt{color:var(--green);font-weight:500}
+.hours .now dd{color:var(--green)}
 
-.social{list-style:none;display:grid;gap:2px}
-.social a{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14.5px;font-weight:550;padding:11px 0;border-top:1px solid var(--hair)}
-.social li:first-child a{border-top:0;padding-top:0}
-.social svg{width:14px;height:14px;color:var(--faint)}
-.social a:hover{color:var(--copper)}
-.social a:hover svg{color:var(--copper)}
+.pills{list-style:none;display:flex;flex-wrap:wrap;gap:9px}
+.pills li{background:var(--white);border:1px solid #F0EFEA;box-shadow:0 1px 2px rgba(0,0,0,.03);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:500;color:#374151;line-height:1.3}
+.pills.service li{color:var(--ink-2)}
 
-/* Trust mark: a quiet strip, not another card competing with the shop's own. */
-.mark{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:20px 22px;background:transparent}
-.mark-head{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:14.5px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--copper);flex:none}
-.since{color:var(--soft);font-size:12.5px;margin-left:auto;font-variant-numeric:tabular-nums}
-.mark-note{margin-top:9px;font-size:13px;line-height:1.55;color:var(--soft);max-width:64ch}
-.mark-link{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:13px;font-weight:600;color:var(--copper)}
-.mark-link svg{width:13px;height:13px}
+.social{list-style:none;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.social a{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--white);border:1px solid #F0EFEA;border-radius:14px;padding:13px 16px;font-size:14.5px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.03);transition:border-color .2s}
+.social svg{width:13px;height:13px;color:var(--fainter)}
+.social a:hover{border-color:#D6D3CB}
+.social a:hover svg{color:var(--ink)}
 
-.foot{margin-top:40px;border-top:1px solid var(--line);padding:20px 0 44px}
-.foot-in{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;font-size:12px;color:var(--faint)}
-.foot a{color:var(--soft);border-bottom:1px solid var(--line)}
+.mark{margin-top:14px;border:.5px solid var(--hair);border-radius:28px;padding:24px}
+.mark-line{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.since{font-size:11.5px;color:var(--faint)}
+.mark-note{margin-top:12px;font-size:13px;line-height:1.6;color:var(--faint);max-width:66ch}
+.mark-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:500;color:var(--text)}
+.mark-link:hover{color:var(--ink)}
+.mark-link svg{width:12px;height:12px}
 
-a:focus-visible{outline:2px solid var(--copper);outline-offset:3px;border-radius:4px}
+.foot{padding:56px 0 64px}
+.foot-in{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;font-size:11px;color:var(--faint)}
+.foot a{color:var(--text)}
+.foot a:hover{color:var(--ink)}
+
+a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
-@media(min-width:760px){
-  .band{padding-bottom:60px}
-  .identity{gap:24px;padding-top:20px}
-  .plate{width:108px;height:108px;border-radius:24px}
-  .plate-text{font-size:38px}
-  .panel{padding:26px}
-  .cols{grid-template-columns:minmax(0,1fr) 322px;gap:16px}
-  .actions{margin-top:-38px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-  .side{position:sticky;top:16px}
+@media(min-width:720px){
+  .tray{padding:14px;border-radius:32px}
+  .sheet{border-radius:24px}
+  .sheet-body{padding:34px 32px 32px}
+  .ident{gap:20px}
+  .plate{width:76px;height:76px;border-radius:18px}
+  .plate-text{font-size:26px}
+  .block,.mark{padding:28px}
+  .grid{grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
 }
 `;

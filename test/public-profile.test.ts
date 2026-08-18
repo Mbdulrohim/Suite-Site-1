@@ -16,7 +16,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
-  esc, isThin, openingHours, renderProfilePage, safeHref, telHref, whatsappHref,
+  coversToday, esc, isThin, openingHours, renderProfilePage, safeHref, telHref, whatsappHref,
   type PublicProfile,
 } from '../src/public-profile/render.ts';
 
@@ -281,13 +281,42 @@ describe('the page as a designed thing', () => {
   });
 
   it('matches a day inside a range, which is how shops actually write hours', () => {
-    const page = render({ openingHours: { 'Monday – Saturday': '9am – 8pm' } }, 'Saturday');
+    /*
+     * The one that caught a real hole: a substring test finds "Saturday" inside
+     * "Monday – Saturday" and finds nothing at all for a Wednesday, which is
+     * the answer four weekdays out of five. Shops do not write seven rows.
+     */
+    assert.equal(coversToday('Monday – Friday', 'Wednesday'), true);
+    assert.equal(coversToday('Monday - Friday', 'Saturday'), false);
+    assert.equal(coversToday('Monday to Friday', 'Monday'), true);
+    const page = render({ openingHours: { 'Monday – Friday': '8:30am – 7pm' } }, 'Wednesday');
     assert.ok(page.includes('class="now"'));
   });
 
+  it('wraps a range across the end of the week', () => {
+    // "Saturday – Sunday" is a weekend, not an empty set.
+    assert.equal(coversToday('Saturday – Sunday', 'Sunday'), true);
+    assert.equal(coversToday('Saturday – Sunday', 'Wednesday'), false);
+  });
+
+  it('treats a comma list as a list, not as a range', () => {
+    // Monday, Wednesday, Friday must not quietly include Tuesday.
+    assert.equal(coversToday('Monday, Wednesday, Friday', 'Wednesday'), true);
+    assert.equal(coversToday('Monday, Wednesday, Friday', 'Tuesday'), false);
+    assert.equal(coversToday('Saturday & Sunday', 'Sunday'), true);
+  });
+
   it('marks nothing when the day names are not days', () => {
+    // "Weekdays" gets no highlight. That is the correct amount of guessing to
+    // do about somebody else's trading hours.
+    assert.equal(coversToday('Weekdays', 'Wednesday'), false);
     const page = render({ openingHours: { Weekdays: '9am – 7pm' } }, 'Wednesday');
     assert.ok(!page.includes('class="now"'));
+  });
+
+  it("puts today's hours in the header, where somebody deciding to visit looks", () => {
+    const page = render({ openingHours: { 'Monday – Friday': '8:30am – 7pm', Sunday: 'Closed' } }, 'Wednesday');
+    assert.ok(page.includes('Today · <b class="mono">8:30am – 7pm</b>'));
   });
 
   it('does not repeat one number as both phone and WhatsApp in the contact list', () => {
