@@ -1,13 +1,11 @@
 import React from 'react';
-import suiteLogo from '../../assets/suite-logo.svg';
 import wordmarkUrl from '../../assets/Wordmark.svg';
 
 export interface FooterProps {
-  onOpenSignUp: () => void;
   onNavigateSection?: (sectionId: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
   return (
     <footer id="main-footer" className="w-full pt-16 pb-20 select-none">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
@@ -51,11 +49,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
                 Features
               </a>
               <a 
-                href="#features" 
-                onClick={(e) => { e.preventDefault(); onNavigateSection?.('features'); }} 
+                href="#why-suite" 
+                onClick={(e) => { e.preventDefault(); onNavigateSection?.('why-suite'); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
-                Inventory
+                Why Suite
               </a>
             </div>
 
@@ -70,11 +68,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
                 About
               </a>
               <a 
-                href="#signup" 
-                onClick={(e) => { e.preventDefault(); onOpenSignUp(); }} 
+                href="mailto:hello@suite.ng" 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
-                Careers
+                Contact
               </a>
             </div>
 

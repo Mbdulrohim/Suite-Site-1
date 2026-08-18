@@ -8,8 +8,8 @@ export interface SignUpModalProps {
 
 export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [teamSize, setTeamSize] = useState('1-10');
+  const [shopName, setShopName] = useState('');
+  const [counters, setCounters] = useState('1');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,22 +66,22 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
           <div>
             <div className="mb-6">
               <h3 className="text-[22px] font-bold text-[#121316] tracking-tight mb-2">
-                Join the Suite Early Access
+                Get Suite in your shop
               </h3>
               <p className="text-[14px] text-[#646A7A] leading-relaxed">
-                Connect stock, sales, services and operations in one workspace.
+                Stock, sales, credit and suppliers in one place. We set your shop up and move your stock in with you.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Work Email <span className="text-red-500">*</span>
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="name@company.com"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
@@ -90,30 +90,30 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
 
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Company Name
+                  Shop name
                 </label>
                 <input
                   type="text"
-                  placeholder="Acme Goods Ltd"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="e.g. Ade Gadgets, Ikeja"
+                  value={shopName}
+                  onChange={(e) => setShopName(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
                 />
               </div>
 
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Team Size
+                  People selling
                 </label>
                 <select
-                  value={teamSize}
-                  onChange={(e) => setTeamSize(e.target.value)}
+                  value={counters}
+                  onChange={(e) => setCounters(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all cursor-pointer"
                 >
-                  <option value="1-10">1-10 employees</option>
-                  <option value="11-50">11-50 employees</option>
-                  <option value="51-200">51-200 employees</option>
-                  <option value="200+">200+ employees</option>
+                  <option value="1">Just me</option>
+                  <option value="2-3">2-3 people</option>
+                  <option value="4-10">4-10 people</option>
+                  <option value="10+">More than 10</option>
                 </select>
               </div>
 
@@ -123,10 +123,10 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
                 className="w-full h-[44px] mt-2 inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[14.5px] font-medium rounded-xl transition-all shadow-md active:scale-[0.99] cursor-pointer disabled:opacity-75"
               >
                 {isLoading ? (
-                  <span>Securing your spot...</span>
+                  <span>Sending...</span>
                 ) : (
                   <>
-                    <span>Request Early Access</span>
+                    <span>Request a setup</span>
                     <ArrowRight className="w-4 h-4 text-[#FAF9F6]/80" />
                   </>
                 )}
@@ -134,7 +134,7 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
 
               <div className="text-center">
                 <span className="text-[11px] text-[#8C92A4]">
-                  No credit card required. Private beta rollout.
+                  No card needed. We will call you to set it up.
                 </span>
               </div>
             </form>
@@ -145,10 +145,10 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h3 className="text-[20px] font-bold text-[#121316] tracking-tight mb-2">
-              You're on the list!
+              We have your details
             </h3>
             <p className="text-[14px] text-[#646A7A] max-w-[300px] leading-relaxed mb-6">
-              We've reserved early access for <strong className="text-[#121316]">{email}</strong>. Look out for our invite code.
+              We will reach out to <strong className="text-[#121316]">{email}</strong> to arrange your setup.
             </p>
             <button
               onClick={onClose}

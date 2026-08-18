@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import suiteLogo from '../../assets/suite-logo.svg';
 import wordmarkUrl from '../../assets/Wordmark.svg';
 
 export interface HeaderProps {

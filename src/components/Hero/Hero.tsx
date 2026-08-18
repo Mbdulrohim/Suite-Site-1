@@ -8,10 +8,15 @@ export interface HeroProps {
   onNavigateSection?: (sectionId: string) => void;
 }
 
-const ACTION_WORDS = ['Manage', 'Record', 'Track'];
-const NOUN_WORDS = ['products', 'goods', 'services'];
+/*
+ * The two rotators run on the same interval with a small stagger, so index i of
+ * one is read against index i of the other. They have to make three true
+ * sentences in order, not three interchangeable words.
+ */
+const ACTION_WORDS = ['Track', 'Record', 'Settle'];
+const NOUN_WORDS = ['stock', 'sales', 'books'];
 
-export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) => {
   return (
     <section id="hero-section" className="w-full pt-20 pb-20 md:pt-28 md:pb-28 lg:pt-32 lg:pb-36">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
@@ -25,10 +30,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
             {/* Eyebrow copy */}
             <a
               id="hero-eyebrow"
-              href="#"
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateSection?.('features');
+              }}
               className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border-[0.5px] border-gray-300 bg-transparent text-[13px] text-gray-600 hover:text-gray-900 mb-6 md:mb-8 transition-colors duration-150"
             >
-              <span>Read “Ando: Building Slack from Scratch”</span>
+              <span>Every handset tracked by IMEI</span>
               <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
             </a>
 

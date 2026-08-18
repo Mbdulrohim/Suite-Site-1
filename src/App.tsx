@@ -38,16 +38,16 @@ export default function App() {
           onNavigateSection={scrollToSection}
         />
 
-        {/* Partners / Social Proof Section */}
+        {/* What Suite handles — a strip, not a partner wall. See PartnersSection. */}
         <PartnersSection />
 
         {/* Word-by-word Scroll Reveal Prose */}
         <ProseReveal />
 
-        {/* 2. Section Two: Keep business moving (3-card interactive layout) */}
+        {/* 2. Built for how the counter really works (3-card interactive layout) */}
         <KeepMovingSection />
 
-        {/* 3. Why Suite works differently: Products, Activity, Tools + Curved SVG connectors */}
+        {/* 3. Different from spreadsheets: One system, Activity, What it records */}
         <WhySuiteSection />
 
         {/* 4. Main Conversion Section: Generous whitespace + bold statement */}
@@ -60,10 +60,7 @@ export default function App() {
       </main>
 
       {/* 6. Refined Footer */}
-      <Footer 
-        onOpenSignUp={() => setIsSignUpOpen(true)}
-        onNavigateSection={scrollToSection}
-      />
+      <Footer onNavigateSection={scrollToSection} />
 
       {/* Interactive Sign Up Modal */}
       <SignUpModal 
