@@ -12,7 +12,9 @@ are separate deployments on separate registrable domains.
 Vite 6 · React 19 · Tailwind CSS v4 · GSAP · lucide-react · TypeScript.
 Package manager is **pnpm**.
 
-No router: it is one page, with in-page section navigation.
+No router: the marketing site is one page, with in-page section navigation. The
+one dynamic route is `suite.ng/<slug>`, served by a Cloudflare Pages Function —
+see below.
 
 ## Running it
 
@@ -25,6 +27,7 @@ pnpm dev          # http://localhost:3000
 pnpm build        # vite build → prerender → seo
 pnpm preview      # serve dist/ locally
 pnpm lint         # tsc --noEmit
+pnpm test         # node:test, no runner — covers the public profile page
 ```
 
 ## The build has four steps, and the last two matter
@@ -92,6 +95,51 @@ The `suite-ng` Pages project is connected to **`Mbdulrohim/Suite-Site-1`** —
 pushes to `main` there are what goes live. `Mbdulrohim/Suite-Site` holds the
 same history (it was the holding page this replaced) but does not deploy.
 
+## `suite.ng/<slug>` — a shop's public page
+
+Every Suite shop can publish a page at its own address on this domain:
+`suite.ng/ade-gadgets`. It is the shop's web presence if it has no site, and a
+stable business card pointing at its site if it does. The address goes on the
+shop's receipts, so it has to keep working long after the paper is printed.
+
+Three files:
+
+| File | Job |
+| --- | --- |
+| `functions/[slug].ts` | Routing, fetch, cache, headers. A Pages Function. |
+| `src/public-profile/render.ts` | The document, as a string. Pure, no I/O. |
+| `test/*.test.ts` | Both of the above, run with `pnpm test`. |
+
+The data comes from `GET https://api.suite.ng/public/profiles/<slug>`, which is
+the only route on that API reached with no session and no tenant header. Point
+it elsewhere with a `SUITE_API_URL` environment variable on the Pages project.
+
+Three things about this are easy to undo by accident:
+
+- **Marketing paths resolve before shop slugs, by being asked rather than
+  listed.** `[slug]` matches every single-segment path, `/pricing` and
+  `/sitemap.xml` included. The Function calls `next()` first and only treats a
+  404 from the asset server as "this path is unclaimed". A hard-coded reserved
+  list here would be a third copy of the one in the database and the one implied
+  by this site's own routes, and the day they disagree is the day a new page
+  404s in production while working locally.
+- **The page loads nothing over the network** — no script, no webfont, no remote
+  image. It is one request that renders complete on first byte, which is a
+  deliberate trade against matching this site's typeface: it is read on the
+  connection somebody has while standing in a market. That is also why its CSP
+  can be `default-src 'none'`, which `public/_headers` cannot be. Function
+  responses do not inherit `_headers` at all, so the Function sets its own.
+- **Everything on the page is text a shop typed.** It is escaped on the way into
+  the document, into attributes, and into the JSON-LD block — where `<` alone
+  ends the script early. Links are checked for being http or https at the sink
+  as well as at the API, because rows written before that check existed were
+  never revalidated.
+
+A shop that renames gets a 301 from the API, which this turns into a 301 to the
+new public path. A profile with nothing filled in still answers at its URL —
+a receipt may already carry it — but asks not to be indexed, so the domain does
+not fill up with pages that say only a name.
+
 ## Known gaps
 
 - The footer links **Security**, **Terms of service** and **Privacy policy**
@@ -106,6 +154,10 @@ same history (it was the holding page this replaced) but does not deploy.
   if that URL changes, the section silently renders empty. It should be
   downloaded, converted to WebP and served from `public/`. `public/_headers`
   allows the host only because of this.
+- The public sitemap lists only `/`. Published shop pages are not in it yet:
+  that needs an endpoint on the API listing published slugs, which does not
+  exist. Until then those pages are found by their printed address, not by
+  crawl.
 - Cloudflare injects its Web Analytics beacon at the edge, which is why
   `static.cloudflareinsights.com` is in `script-src`. Turning Web Analytics off
   for the zone would let both entries come out.
