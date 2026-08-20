@@ -4,10 +4,11 @@ import { submitWaitlist } from '../../waitlist';
 
 export interface SignUpModalProps {
   isOpen: boolean;
+  initialEmail?: string;
   onClose: () => void;
 }
 
-export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
+export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, initialEmail = '', onClose }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -17,6 +18,16 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // The hero is the first step of this same form. Carry its email into the
+  // detailed step instead of saving an incomplete lead before the person has
+  // had a chance to tell us who and where the shop is.
+  useEffect(() => {
+    if (!isOpen) return;
+    setEmail(initialEmail.trim());
+    setIsSubmitted(false);
+    setError(null);
+  }, [isOpen, initialEmail]);
 
   // Close on ESC key press
   useEffect(() => {

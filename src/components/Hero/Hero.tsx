@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { MaskedRotator } from './MaskedRotator';
 import { ProductDashboard } from './ProductDashboard';
-import { submitWaitlist } from '../../waitlist';
 
 export interface HeroProps {
-  onOpenSignUp: () => void;
+  onOpenSignUp: (email?: string) => void;
   onNavigateSection?: (sectionId: string) => void;
 }
 
@@ -17,20 +16,12 @@ export interface HeroProps {
 const ACTION_WORDS = ['Track', 'Record', 'Settle'];
 const NOUN_WORDS = ['stock', 'sales', 'books'];
 
-export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) => {
   const [email, setEmail] = useState('');
-  const [website, setWebsite] = useState('');
-  const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const submit = async (event: React.FormEvent) => {
+  const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    setState('sending');
-    try {
-      await submitWaitlist({ email, source: 'hero', website });
-      setState('success');
-    } catch {
-      setState('error');
-    }
+    onOpenSignUp(email.trim());
   };
 
   return (
@@ -89,37 +80,18 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
                 required
                 maxLength={254}
                 value={email}
-                onChange={(event) => { setEmail(event.target.value); setState('idle'); }}
+                onChange={(event) => { setEmail(event.target.value); }}
                 placeholder="Enter your email"
                 className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[14px] sm:text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
               />
-              <input
-                type="text"
-                name="website"
-                value={website}
-                onChange={(event) => { setWebsite(event.target.value); }}
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                className="absolute h-px w-px opacity-0 pointer-events-none"
-              />
               <button
                 type="submit"
-                disabled={state === 'sending' || state === 'success'}
-                aria-label="Join the Suite waitlist"
-                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0 disabled:opacity-60"
+                aria-label="Continue with your business details"
+                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0"
               >
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               </div>
-              <p
-                aria-live="polite"
-                className={`mt-2 px-2 text-[12px] ${state === 'error' ? 'text-red-600' : 'text-gray-500'}`}
-              >
-                {state === 'sending' && 'Saving your place…'}
-                {state === 'success' && 'You are on the list. We will reach out.'}
-                {state === 'error' && 'We could not save that. Please try again.'}
-              </p>
             </form>
 
           </div>

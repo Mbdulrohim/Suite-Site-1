@@ -14,6 +14,12 @@ import {
 
 export default function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [signUpEmail, setSignUpEmail] = useState('');
+
+  const openSignUp = (email = '') => {
+    setSignUpEmail(email.trim());
+    setIsSignUpOpen(true);
+  };
 
   const scrollToSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
@@ -26,7 +32,7 @@ export default function App() {
     <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between selection:bg-[#121316] selection:text-[#FAF9F6] antialiased">
       {/* Top Header */}
       <Header 
-        onOpenSignUp={() => setIsSignUpOpen(true)}
+        onOpenSignUp={() => openSignUp()}
         onNavigateSection={scrollToSection}
       />
 
@@ -34,7 +40,7 @@ export default function App() {
       <main className="flex-1 w-full flex flex-col">
         {/* 1. Hero Section with dynamic masked rotating headline & software window visual */}
         <Hero 
-          onOpenSignUp={() => setIsSignUpOpen(true)}
+          onOpenSignUp={openSignUp}
           onNavigateSection={scrollToSection}
         />
 
@@ -52,7 +58,7 @@ export default function App() {
 
         {/* 4. Main Conversion Section: Generous whitespace + bold statement */}
         <ConversionSection 
-          onOpenSignUp={() => setIsSignUpOpen(true)}
+          onOpenSignUp={() => openSignUp()}
         />
 
         {/* 5. Huge Faint SUITE Graphic */}
@@ -65,6 +71,7 @@ export default function App() {
       {/* Interactive Sign Up Modal */}
       <SignUpModal 
         isOpen={isSignUpOpen}
+        initialEmail={signUpEmail}
         onClose={() => setIsSignUpOpen(false)}
       />
     </div>
