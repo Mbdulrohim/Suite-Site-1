@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port=3000",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/seo.mjs",
-    "test": "node --test 'test/*.test.ts'",
+    "test": "node --test test/*.test.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"

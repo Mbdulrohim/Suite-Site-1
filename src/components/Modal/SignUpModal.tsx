@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, ArrowRight } from 'lucide-react';
+import { submitWaitlist } from '../../waitlist';
 
 export interface SignUpModalProps {
   isOpen: boolean;
@@ -8,10 +9,14 @@ export interface SignUpModalProps {
 
 export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [shopName, setShopName] = useState('');
   const [counters, setCounters] = useState('1');
+  const [website, setWebsite] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Close on ESC key press
   useEffect(() => {
@@ -30,14 +35,26 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate short network request
-    setTimeout(() => {
-      setIsLoading(false);
+    setError(null);
+    try {
+      await submitWaitlist({
+        email,
+        name,
+        phone,
+        shopName,
+        note: `People selling: ${counters}`,
+        source: 'signup-modal',
+        website,
+      });
       setIsSubmitted(true);
-    }, 600);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'We could not save that just now.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,7 +67,7 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
     >
       <div 
         id="signup-modal-container"
-        className="relative w-full max-w-[440px] bg-[#FAF9F6] border border-[#EAE8E0] rounded-[24px] p-6 sm:p-8 shadow-2xl transition-all animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-[440px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-[#FAF9F6] border border-[#EAE8E0] rounded-[24px] p-6 sm:p-8 shadow-2xl transition-all animate-in zoom-in-95 duration-200"
       >
         {/* Close Button */}
         <button
@@ -81,11 +98,44 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
                 <input
                   type="email"
                   required
+                  maxLength={254}
+                  autoComplete="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
+                    Your name
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={120}
+                    autoComplete="name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    maxLength={32}
+                    autoComplete="tel"
+                    placeholder="0803 123 4567"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
+                  />
+                </div>
               </div>
 
               <div>
@@ -94,12 +144,30 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
                 </label>
                 <input
                   type="text"
+                  maxLength={160}
                   placeholder="e.g. Ade Gadgets, Ikeja"
                   value={shopName}
                   onChange={(e) => setShopName(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
                 />
               </div>
+
+              <input
+                type="text"
+                name="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute h-px w-px opacity-0 pointer-events-none"
+              />
+
+              {error !== null && (
+                <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-[12px] text-red-700">
+                  {error}
+                </p>
+              )}
 
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">

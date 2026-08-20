@@ -6,3 +6,8 @@
 name = "suite-site"
 compatibility_date = "2026-08-01"
 pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "copper-ledger"
+database_name = "copper-ledger"
+database_id = "c13332c9-cbfa-4b4b-835b-69184d306b68"
