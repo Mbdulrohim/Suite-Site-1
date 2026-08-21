@@ -1,4 +1,6 @@
 /** Public, same-origin waitlist intake for suite.ng. */
+import { sendWaitlistConfirmation } from '../_lib/mail.ts';
+
 interface D1Statement {
   bind: (...values: unknown[]) => D1Statement;
   run: () => Promise<unknown>;
@@ -10,7 +12,15 @@ interface D1Binding {
 
 interface Context {
   request: Request;
-  env: { 'copper-ledger'?: D1Binding };
+  env: {
+    'copper-ledger'?: D1Binding;
+    SMTP_HOST?: string;
+    SMTP_PORT?: string;
+    SMTP_USER?: string;
+    SMTP_PASSWORD?: string;
+    SMTP_FROM_EMAIL?: string;
+    SMTP_SENDER_NAME?: string;
+  };
 }
 
 type Input = Record<string, unknown>;
@@ -115,6 +125,14 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
       note,
       source ?? 'suite-site',
     ).run();
+    const delivered = await sendWaitlistConfirmation(env, {
+      to: email,
+      name,
+      shopName,
+    });
+    if (!delivered && env.SMTP_HOST !== undefined) {
+      console.error('waitlist confirmation delivery failed');
+    }
     return json({ ok: true });
   } catch (error) {
     console.error('waitlist intake failed', error);
