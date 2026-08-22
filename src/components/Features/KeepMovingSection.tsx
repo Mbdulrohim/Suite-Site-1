@@ -25,10 +25,10 @@ export const KeepMovingSection: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center max-w-[620px] mx-auto mb-12 md:mb-20">
           <h2 className="text-[#121316] font-medium tracking-tight text-[28px] sm:text-[36px] md:text-[42px] leading-[1.1] mb-4">
-            Built for how the counter really works
+            Everything your store does, in one place
           </h2>
           <p className="text-gray-500 text-[16px] sm:text-[18px] leading-[1.6]">
-            Two people serving at once, on two phones, on a network that comes and goes. Suite is designed around that, not around an office desk.
+            From scanning an IMEI to settling supplier debt, from customer receipts to price adjustments — Suite tracks it all so nothing slips through the counter.
           </p>
         </div>
 
@@ -134,10 +134,10 @@ export const KeepMovingSection: React.FC = () => {
             {/* Content Copy */}
             <div>
               <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
-                Everyone on their own login
+                Staff access, your rules
               </h3>
               <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
-                A rep can sell without being able to move a price. Selling below the floor needs a manager. Somebody who leaves is switched off, not deleted — their sales stay in the books.
+                A rep can sell but not change a price. Discounts below the floor need a manager. Someone who leaves is disabled — their transactions stay in the record exactly as they happened.
               </p>
             </div>
           </div>
@@ -169,10 +169,10 @@ export const KeepMovingSection: React.FC = () => {
             {/* Content Copy */}
             <div>
               <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
-                Works when the network doesn't
+                Inventory that updates itself
               </h3>
               <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
-                Sell, book in stock and print a receipt with no signal at all. Everything queues on the phone and sends itself when the network returns — and the other till catches up on its own.
+                Every gadget — iPhone, MacBook, AirPods, power bank — tracked by IMEI or serial. Sell one unit and the count drops everywhere instantly. No end-of-day manual tallies.
               </p>
             </div>
           </div>
@@ -202,10 +202,10 @@ export const KeepMovingSection: React.FC = () => {
             {/* Content Copy */}
             <div>
               <h3 className="text-gray-900 font-semibold text-[18px] sm:text-[19px] mb-2 tracking-tight">
-                Says what went wrong, in your words
+                Receipts, debts and history — all linked
               </h3>
               <p className="text-gray-500 text-[14px] sm:text-[14.5px] leading-relaxed">
-                When something is refused, Suite says what it was, what to do about it, and whether trying again would even help. No error codes, no dead ends at the counter.
+                Every sale generates a customer receipt. Every supplier delivery updates the debt ledger. Every price change is logged. Pull up any transaction, any time, from any device.
               </p>
             </div>
           </div>

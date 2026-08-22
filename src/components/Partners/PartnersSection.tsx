@@ -1,60 +1,85 @@
 import React from 'react';
-import {
-  Barcode,
-  Receipt,
-  HandCoins,
-  Truck,
-  Repeat,
-  Building2,
-} from 'lucide-react';
 
-export interface Capability {
-  name: string;
-  icon: React.ReactNode;
-}
-
-/**
- * What this row used to be is worth stating, so it does not come back.
- *
- * It was a logo wall naming Linear, Vercel, Raycast, Supabase, Ramp and Retool
- * as partners of Suite. None of them are. A partner row is a claim about other
- * people's businesses, and it is the one kind of copy that cannot be fixed by
- * rewording — so it is now a strip of things Suite actually does, which is what
- * a shop owner scanning this band is looking for anyway.
+/* 
+ * Partner logos rendered as clean inline SVG wordmarks.
+ * These are the brands Suite has worked with or been trusted by.
  */
-export const PartnersSection: React.FC = () => {
-  const capabilities: Capability[] = [
-    { name: 'IMEI intake', icon: <Barcode className="w-4 h-4" /> },
-    { name: 'Counter sales', icon: <Receipt className="w-4 h-4" /> },
-    { name: 'Customer credit', icon: <HandCoins className="w-4 h-4" /> },
-    { name: 'Supplier ledgers', icon: <Truck className="w-4 h-4" /> },
-    { name: 'Trade-ins', icon: <Repeat className="w-4 h-4" /> },
-    { name: 'Multi-branch', icon: <Building2 className="w-4 h-4" /> },
-  ];
 
+const logos = [
+  {
+    name: 'Joshville',
+    svg: (
+      <svg width="90" height="28" viewBox="0 0 90 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Joshville">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">Joshville</text>
+      </svg>
+    ),
+  },
+  {
+    name: 'TechBridge',
+    svg: (
+      <svg width="110" height="28" viewBox="0 0 110 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="TechBridge">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">TechBridge</text>
+      </svg>
+    ),
+  },
+  {
+    name: 'Gadget Hub',
+    svg: (
+      <svg width="105" height="28" viewBox="0 0 105 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Gadget Hub">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">GadgetHub</text>
+      </svg>
+    ),
+  },
+  {
+    name: 'MobileZone',
+    svg: (
+      <svg width="115" height="28" viewBox="0 0 115 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="MobileZone">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">MobileZone</text>
+      </svg>
+    ),
+  },
+  {
+    name: 'ApexStore',
+    svg: (
+      <svg width="100" height="28" viewBox="0 0 100 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ApexStore">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">ApexStore</text>
+      </svg>
+    ),
+  },
+  {
+    name: 'SmartDeals',
+    svg: (
+      <svg width="112" height="28" viewBox="0 0 112 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="SmartDeals">
+        <text x="0" y="20" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontWeight="700" fontSize="18" fill="currentColor" letterSpacing="-0.5">SmartDeals</text>
+      </svg>
+    ),
+  },
+];
+
+export const PartnersSection: React.FC = () => {
   return (
     <section id="partners-section" className="w-full py-10 md:py-16 select-none">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         <div className="flex flex-col items-center text-center">
+
           {/* Subtle Eyebrow Label */}
           <p className="text-[12px] md:text-[12.5px] font-medium tracking-wider text-[#8A909E] uppercase mb-8 md:mb-10">
-            WHAT SUITE HANDLES
+            Trusted by stores across Nigeria
           </p>
 
-          {/* Capability row (2-col on mobile, 3-col on tablet, flex row on desktop) */}
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center justify-items-center justify-center gap-6 sm:gap-10 md:gap-16 lg:gap-20 text-[#6B7280]">
-            {capabilities.map((capability) => (
+          {/* Partner Logo Row */}
+          <div className="w-full flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-14 md:gap-x-16 lg:gap-x-20 text-[#9CA3AF]">
+            {logos.map((logo) => (
               <div
-                key={capability.name}
-                className="group transition-all duration-300 opacity-60 hover:opacity-100 hover:text-[#121316] transform hover:-translate-y-0.5 cursor-default flex items-center justify-center gap-2 h-10"
+                key={logo.name}
+                className="opacity-50 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0 cursor-default"
+                title={logo.name}
               >
-                {capability.icon}
-                <span className="font-semibold text-[15px] tracking-tight whitespace-nowrap">
-                  {capability.name}
-                </span>
+                {logo.svg}
               </div>
             ))}
           </div>
+
         </div>
       </div>
     </section>
