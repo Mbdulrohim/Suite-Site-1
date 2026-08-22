@@ -74,24 +74,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
 
             {/* CTA */}
             <form onSubmit={submit} className="w-full max-w-[360px]">
-              <div className="flex items-center gap-3">
-              <input
-                type="email"
-                required
-                maxLength={254}
-                value={email}
-                onChange={(event) => { setEmail(event.target.value); }}
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[14px] sm:text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
-              />
               <button
                 type="submit"
-                aria-label="Continue with your business details"
-                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0 cursor-pointer"
+                className="flex items-center justify-center gap-3 w-full h-[48px] sm:h-[52px] bg-[#121316] hover:bg-[#000000] text-white text-[15px] sm:text-[16px] font-medium rounded-full transition-all duration-200 active:scale-[0.98] cursor-pointer shadow-xs"
               >
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </button>
-              </div>
             </form>
 
           </div>
