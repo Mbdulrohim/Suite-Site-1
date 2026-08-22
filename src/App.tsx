@@ -1,28 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Header, 
   Hero, 
   PartnersSection, 
-  ProseReveal,
+  ProseReveal, 
   KeepMovingSection, 
-  DemoShowcase,
+  DemoShowcase, 
   WhySuiteSection, 
-  PricingSection,
+  PricingSection, 
   ConversionSection, 
-  HugeSuiteWatermark, 
   Footer, 
-  SignUpModal 
+  SignUpModal,
+  BlogPage 
 } from './components';
 
 export default function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'blog'>(() => {
+    return window.location.hash === '#blog' ? 'blog' : 'home';
+  });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#blog') {
+        setCurrentView('blog');
+      } else if (window.location.hash === '' || window.location.hash === '#') {
+        setCurrentView('home');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (currentView !== 'home') {
+      setCurrentView('home');
+      window.location.hash = '';
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
+
     const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const navigateToBlog = () => {
+    setCurrentView('blog');
+    window.location.hash = 'blog';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToHome = () => {
+    setCurrentView('home');
+    window.location.hash = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (currentView === 'blog') {
+    return (
+      <>
+        <BlogPage 
+          onBackToHome={navigateToHome}
+          onOpenSignUp={() => setIsSignUpOpen(true)}
+        />
+        <SignUpModal 
+          isOpen={isSignUpOpen}
+          onClose={() => setIsSignUpOpen(false)}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between selection:bg-[#121316] selection:text-[#FAF9F6] antialiased">
@@ -62,15 +114,13 @@ export default function App() {
         <ConversionSection 
           onOpenSignUp={() => setIsSignUpOpen(true)}
         />
-
-        {/* 5. Huge Faint SUITE Graphic */}
-        <HugeSuiteWatermark />
       </main>
 
-      {/* 6. Refined Footer */}
+      {/* 6. Refined Footer (only place with Blog link) */}
       <Footer 
         onOpenSignUp={() => setIsSignUpOpen(true)}
         onNavigateSection={scrollToSection}
+        onNavigateBlog={navigateToBlog}
       />
 
       {/* Interactive Sign Up Modal */}

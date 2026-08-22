@@ -10,3 +10,4 @@ export * from './Conversion';
 export * from './Watermark';
 export * from './Footer';
 export * from './Modal';
+export * from './Blog';

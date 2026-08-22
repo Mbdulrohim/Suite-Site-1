@@ -7,17 +7,16 @@ export interface PricingSectionProps {
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
-  const [activeSlide, setActiveSlide] = useState<number>(1); // Default to middle popular card on mobile
 
   const plans = [
     {
-      id: 'starter',
+      id: 'basic',
       name: 'Basic Plan',
-      monthlyPrice: '₦7,500',
-      yearlyEffectivePrice: '₦3,750',
-      yearlyBilledAmount: '₦45,000',
-      discountNote: '50% off',
+      monthlyPrice: '₦25,000',
+      yearlyEffectivePrice: '₦15,000',
       isPopular: false,
+      isCustom: false,
+      ctaText: 'Get Started',
       iconType: 'info',
       features: [
         'Update Cycle',
@@ -30,13 +29,13 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
       ],
     },
     {
-      id: 'growth',
+      id: 'standard',
       name: 'Standard Plan',
-      monthlyPrice: '₦25,000',
-      yearlyEffectivePrice: '₦15,000',
-      yearlyBilledAmount: '₦180,000',
-      discountNote: '40% off',
+      monthlyPrice: '₦55,000',
+      yearlyEffectivePrice: '₦29,166',
       isPopular: true,
+      isCustom: false,
+      ctaText: 'Get Started',
       iconType: 'green-check',
       features: [
         'Update Cycle',
@@ -50,21 +49,20 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
     },
     {
       id: 'enterprise',
-      name: 'Premium Plan',
-      monthlyPrice: '₦55,000',
-      yearlyEffectivePrice: '₦29,166',
-      yearlyBilledAmount: '₦350,000',
-      discountNote: '~47% off',
+      name: 'Enterprise Plan',
+      monthlyPrice: 'Custom',
+      yearlyEffectivePrice: 'Custom',
       isPopular: false,
+      isCustom: true,
+      description: 'Custom workflows designed around your infrastructure. Trusted by teams like Joshville.',
+      ctaText: 'Contact Team',
       iconType: 'dark-check',
       features: [
-        'Update Cycle',
-        'Subscription Policy',
-        'Communication',
-        'Companies',
-        'Requests',
-        'Support',
-        'Additional Director',
+        'Custom Workflow Integration',
+        'Dedicated Account Manager',
+        'Unlimited Team Seats',
+        'Custom Audit Logs & SLA',
+        '24/7 Priority Support',
       ],
     },
   ];
@@ -72,7 +70,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
   return (
     <section id="pricing" className="w-full py-16 sm:py-24 md:py-32 lg:py-40 select-none overflow-hidden">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-        
+
         {/* Header Title & Subtitle */}
         <div className="flex flex-col items-center text-center max-w-[620px] mx-auto mb-10 sm:mb-16">
           <h2 className="text-[#121316] font-medium tracking-tight text-[34px] sm:text-[44px] md:text-[52px] leading-[1.1] mb-3 font-sans">
@@ -86,8 +84,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
           <div className="relative mt-8 sm:mt-10 inline-flex items-center">
             {/* Green Discount Floating Badge */}
             <div className="absolute -top-3.5 right-1 z-10">
-              <span className="bg-[#D8F8E5] text-[#16A34A] text-[10px] font-medium px-2 py-0.5 rounded-full shadow-xs border border-[#BBF7D0]">
-                2months FREE
+              <span className="bg-[#D8F8E5] text-[#16A34A] text-[10px] font-medium px-2 py-0.5 rounded-full border border-[#BBF7D0]">
+                5 months FREE
               </span>
             </div>
 
@@ -96,22 +94,20 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
               <button
                 type="button"
                 onClick={() => setBillingCycle('monthly')}
-                className={`px-5 sm:px-6 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer ${
-                  billingCycle === 'monthly'
-                    ? 'bg-white text-[#121316] shadow-sm'
-                    : 'text-[#666666] hover:text-[#121316]'
-                }`}
+                className={`px-5 sm:px-6 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer ${billingCycle === 'monthly'
+                  ? 'bg-white text-[#121316] shadow-sm'
+                  : 'text-[#666666] hover:text-[#121316]'
+                  }`}
               >
                 Monthly
               </button>
               <button
                 type="button"
                 onClick={() => setBillingCycle('yearly')}
-                className={`px-5 sm:px-6 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer ${
-                  billingCycle === 'yearly'
-                    ? 'bg-white text-[#121316] shadow-sm'
-                    : 'text-[#666666] hover:text-[#121316]'
-                }`}
+                className={`px-5 sm:px-6 py-1.5 rounded-full text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer ${billingCycle === 'yearly'
+                  ? 'bg-white text-[#121316] shadow-sm'
+                  : 'text-[#666666] hover:text-[#121316]'
+                  }`}
               >
                 Yearly
               </button>
@@ -119,28 +115,18 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
           </div>
         </div>
 
-        {/* 3 Pricing Cards: Mobile Horizontal Swipe Carousel, Desktop 3-column Layout */}
+        {/* 3 Pricing Cards: 15k, 29.1k, Enterprise */}
         <div className="relative w-full">
-          <div 
-            className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-center max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-8 pt-4 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none"
-            onScroll={(e) => {
-              const target = e.currentTarget;
-              const slideWidth = target.scrollWidth / plans.length;
-              const index = Math.round(target.scrollLeft / slideWidth);
-              if (index >= 0 && index < plans.length) {
-                setActiveSlide(index);
-              }
-            }}
-          >
+          <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-end max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-6 pt-4 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none">
             {plans.map((plan) => {
               const currentPrice = billingCycle === 'yearly' ? plan.yearlyEffectivePrice : plan.monthlyPrice;
 
               if (plan.isPopular) {
                 return (
-                  /* Popular Standard Plan (Bigger, framed in royal blue with top banner) */
+                  /* Popular Standard Plan (29.1k / 55k) - Taller at top, bottom-aligned */
                   <div
                     key={plan.id}
-                    className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center relative rounded-[32px] bg-[#0047FF] p-[3px] shadow-[0_20px_50px_rgba(0,71,255,0.18)] flex flex-col transition-all duration-300 md:scale-[1.04] z-10"
+                    className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center relative rounded-[32px] bg-[#444444] p-[2.5px] flex flex-col z-10"
                   >
                     {/* Top 'Popular' header banner */}
                     <div className="py-3 px-6 text-white text-[14px] font-medium tracking-wide text-left">
@@ -163,13 +149,13 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
                           <span className="text-[18px] sm:text-[20px] font-medium text-[#444444]">/m</span>
                         </div>
 
-                        {/* Royal Blue CTA Button */}
+                        {/* Primary CTA Button */}
                         <button
                           type="button"
                           onClick={onOpenSignUp}
-                          className="w-full h-[48px] sm:h-[50px] bg-[#0047FF] hover:bg-[#0038CC] text-white text-[15px] font-medium rounded-full flex items-center justify-center transition-all duration-200 shadow-sm active:scale-[0.98] cursor-pointer mb-8"
+                          className="w-full h-[48px] sm:h-[50px] bg-[#444444] hover:bg-[#333333] text-white text-[15px] font-medium rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer mb-8"
                         >
-                          Get Started
+                          {plan.ctaText}
                         </button>
 
                         {/* Feature List (Green Checkmarks) */}
@@ -188,10 +174,10 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
               }
 
               return (
-                /* Unfilled / Transparent Cards (Basic Plan & Premium Plan) */
+                /* Unfilled / Transparent Cards (Basic 15k & Enterprise Plan) - Bottom-aligned */
                 <div
                   key={plan.id}
-                  className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center bg-transparent p-6 sm:p-8 flex flex-col justify-between transition-all duration-200"
+                  className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center bg-transparent p-6 sm:p-8 flex flex-col justify-between"
                 >
                   <div>
                     {/* Title */}
@@ -199,22 +185,31 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
                       {plan.name}
                     </div>
 
-                    {/* Price Figure (444444 fill, font-medium) */}
+                    {/* Price Figure / Custom Title */}
                     <div className="flex items-baseline gap-1 mb-8 text-left">
                       <span className="text-[38px] sm:text-[46px] font-medium text-[#444444] tracking-tight font-sans">
                         {currentPrice}
                       </span>
-                      <span className="text-[18px] sm:text-[20px] font-medium text-[#444444]">/m</span>
+                      {!plan.isCustom && (
+                        <span className="text-[18px] sm:text-[20px] font-medium text-[#444444]">/m</span>
+                      )}
                     </div>
 
-                    {/* Royal Blue CTA Button */}
+                    {/* Primary CTA Button */}
                     <button
                       type="button"
                       onClick={onOpenSignUp}
-                      className="w-full h-[48px] sm:h-[50px] bg-[#0047FF] hover:bg-[#0038CC] text-white text-[15px] font-medium rounded-full flex items-center justify-center transition-all duration-200 shadow-sm active:scale-[0.98] cursor-pointer mb-8"
+                      className="w-full h-[48px] sm:h-[50px] bg-[#444444] hover:bg-[#333333] text-white text-[15px] font-medium rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer mb-8"
                     >
-                      Get Started
+                      {plan.ctaText}
                     </button>
+
+                    {/* Enterprise Custom Copy or Feature List */}
+                    {plan.isCustom && plan.description && (
+                      <p className="text-[13px] sm:text-[13.5px] font-medium text-[#666666] leading-relaxed mb-6 text-left">
+                        {plan.description}
+                      </p>
+                    )}
 
                     {/* Feature List */}
                     <div className="space-y-4 text-left">
@@ -240,18 +235,6 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
                 </div>
               );
             })}
-          </div>
-
-          {/* Mobile Carousel Pagination Dots */}
-          <div className="flex md:hidden items-center justify-center gap-2 mt-2">
-            {plans.map((_, idx) => (
-              <span
-                key={idx}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  activeSlide === idx ? 'w-6 bg-[#0047FF]' : 'w-1.5 bg-gray-300'
-                }`}
-              />
-            ))}
           </div>
         </div>
 

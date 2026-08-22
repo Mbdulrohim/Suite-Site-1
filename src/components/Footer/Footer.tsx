@@ -5,16 +5,18 @@ import wordmarkUrl from '../../assets/Wordmark.svg';
 export interface FooterProps {
   onOpenSignUp: () => void;
   onNavigateSection?: (sectionId: string) => void;
+  onNavigateBlog?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection, onNavigateBlog }) => {
   return (
-    <footer id="main-footer" className="w-full pt-16 pb-20 select-none">
+    <footer id="main-footer" className="w-full pt-16 pb-12 select-none overflow-hidden">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 justify-between items-start">
+        {/* Navigation & Brand Links Row */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 justify-between items-start mb-16 md:mb-24">
           
-          {/* Bottom Left: Small Suite Icon & Brand identity */}
+          {/* Bottom Left: Suite Wordmark & Copyright */}
           <div className="md:col-span-5 flex flex-col items-start justify-between h-full">
             <div>
               <a href="#" className="flex items-center select-none mb-3">
@@ -60,6 +62,20 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
                 About
               </a>
               <a 
+                href="#blog" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  if (onNavigateBlog) {
+                    onNavigateBlog();
+                  } else {
+                    window.location.hash = 'blog';
+                  }
+                }} 
+                className="text-[#646A7A] hover:text-[#121316] transition-colors"
+              >
+                Blog
+              </a>
+              <a 
                 href="#signup" 
                 onClick={(e) => { e.preventDefault(); onOpenSignUp(); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
@@ -96,6 +112,32 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection 
 
           </div>
 
+        </div>
+
+        {/* Big Masked SUITE Watermark spanning footer base */}
+        <div 
+          id="footer-suite-watermark"
+          className="w-full flex items-center justify-center select-none pointer-events-none pt-4"
+          aria-hidden="true"
+        >
+          <div
+            className="w-full max-w-[1240px]"
+            style={{
+              height: 'clamp(80px, 18vw, 260px)',
+              backgroundImage: 'url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=2000&auto=format&fit=crop")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              WebkitMaskImage: `url(${wordmarkUrl})`,
+              WebkitMaskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskImage: `url(${wordmarkUrl})`,
+              maskSize: 'contain',
+              maskRepeat: 'no-repeat',
+              maskPosition: 'center',
+              opacity: 0.85
+            }}
+          />
         </div>
 
       </div>
