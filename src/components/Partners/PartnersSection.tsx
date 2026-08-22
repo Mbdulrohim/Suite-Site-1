@@ -1,70 +1,35 @@
 import React from 'react';
+import {
+  Barcode,
+  Receipt,
+  HandCoins,
+  Truck,
+  Repeat,
+  Building2,
+} from 'lucide-react';
 
-export interface Partner {
+export interface Capability {
   name: string;
-  logo: React.ReactNode;
+  icon: React.ReactNode;
 }
 
+/**
+ * What this row used to be is worth stating, so it does not come back.
+ *
+ * It was a logo wall naming Linear, Vercel, Raycast, Supabase, Ramp and Retool
+ * as partners of Suite. None of them are. A partner row is a claim about other
+ * people's businesses, and it is the one kind of copy that cannot be fixed by
+ * rewording — so it is now a strip of things Suite actually does, which is what
+ * a shop owner scanning this band is looking for anyway.
+ */
 export const PartnersSection: React.FC = () => {
-  const partners: Partner[] = [
-    {
-      name: 'Linear',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.02 0C5.38 0 0 5.38 0 12.02s5.38 12.02 12.02 12.02c6.64 0 12.02-5.38 12.02-12.02S18.66 0 12.02 0zm-1.07 4.14c3.92 0 7.15 2.87 7.79 6.64H3.16c.64-3.77 3.87-6.64 7.79-6.64zm-7.79 8.95h15.58c-.64 3.77-3.87 6.64-7.79 6.64-3.92 0-7.15-2.87-7.79-6.64z" />
-          <text x="32" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Linear</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Vercel',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L24 22H0L12 2Z" />
-          <text x="32" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Vercel</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Raycast',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 110 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8.2 2.5a1.8 1.8 0 0 0-2.5 0L1.5 6.7a1.8 1.8 0 0 0 0 2.5l4.2 4.2a1.8 1.8 0 0 0 2.5 0l4.2-4.2a1.8 1.8 0 0 0 0-2.5L8.2 2.5zM17.5 11.8a1.8 1.8 0 0 0-2.5 0l-4.2 4.2a1.8 1.8 0 0 0 0 2.5l4.2 4.2a1.8 1.8 0 0 0 2.5 0l4.2-4.2a1.8 1.8 0 0 0 0-2.5l-4.2-4.2z" />
-          <text x="30" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Raycast</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Supabase',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.8 1.2c-.6-.8-1.9-.4-1.9.6v10.2H2.2c-1 0-1.5 1.2-.8 1.9l9.9 11.4c.6.8 1.9.4 1.9-.6V14.5h8.7c1 0 1.5-1.2.8-1.9L12.8 1.2z" />
-          <text x="32" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Supabase</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Ramp',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 90 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 20L14 4h6L10 20H4z" />
-          <path d="M12 20l5.5-9h6L18 20h-6z" opacity="0.6" />
-          <text x="30" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Ramp</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Retool',
-      logo: (
-        <svg className="h-5 md:h-6 w-auto fill-current" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="4" width="7" height="7" rx="1.5" />
-          <rect x="11" y="4" width="7" height="7" rx="1.5" opacity="0.7" />
-          <rect x="2" y="13" width="7" height="7" rx="1.5" opacity="0.7" />
-          <rect x="11" y="13" width="7" height="7" rx="1.5" opacity="0.4" />
-          <text x="26" y="17" className="font-semibold text-[15px] tracking-tight" fill="currentColor">Retool</text>
-        </svg>
-      ),
-    },
+  const capabilities: Capability[] = [
+    { name: 'IMEI intake', icon: <Barcode className="w-4 h-4" /> },
+    { name: 'Counter sales', icon: <Receipt className="w-4 h-4" /> },
+    { name: 'Customer credit', icon: <HandCoins className="w-4 h-4" /> },
+    { name: 'Supplier ledgers', icon: <Truck className="w-4 h-4" /> },
+    { name: 'Trade-ins', icon: <Repeat className="w-4 h-4" /> },
+    { name: 'Multi-branch', icon: <Building2 className="w-4 h-4" /> },
   ];
 
   return (
@@ -73,17 +38,20 @@ export const PartnersSection: React.FC = () => {
         <div className="flex flex-col items-center text-center">
           {/* Subtle Eyebrow Label */}
           <p className="text-[12px] md:text-[12.5px] font-medium tracking-wider text-[#8A909E] uppercase mb-8 md:mb-10">
-            PARTNERS
+            WHAT SUITE HANDLES
           </p>
 
-          {/* Logos Row (Clean 2-col on mobile, 3-col on tablet, flex row on desktop) */}
+          {/* Capability row (2-col on mobile, 3-col on tablet, flex row on desktop) */}
           <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center justify-items-center justify-center gap-6 sm:gap-10 md:gap-16 lg:gap-20 text-[#6B7280]">
-            {partners.map((partner) => (
+            {capabilities.map((capability) => (
               <div
-                key={partner.name}
-                className="group transition-all duration-300 opacity-60 hover:opacity-100 hover:text-[#121316] transform hover:-translate-y-0.5 cursor-default flex items-center justify-center h-10"
+                key={capability.name}
+                className="group transition-all duration-300 opacity-60 hover:opacity-100 hover:text-[#121316] transform hover:-translate-y-0.5 cursor-default flex items-center justify-center gap-2 h-10"
               >
-                {partner.logo}
+                {capability.icon}
+                <span className="font-semibold text-[15px] tracking-tight whitespace-nowrap">
+                  {capability.name}
+                </span>
               </div>
             ))}
           </div>

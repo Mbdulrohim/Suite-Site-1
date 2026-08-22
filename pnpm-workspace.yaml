@@ -1,0 +1,11 @@
+# A single package, but this file still has to exist: pnpm refuses to install
+# while a dependency's build script is neither approved nor denied, and this is
+# where that decision is recorded.
+#
+# esbuild is Vite's bundler and genuinely needs its postinstall to fetch the
+# right platform binary. Nothing else here runs code at install time.
+packages:
+  - '.'
+
+allowBuilds:
+  esbuild: true

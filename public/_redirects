@@ -1,0 +1,4 @@
+# One canonical host. The <link rel="canonical"> says suite.ng, so www has to
+# actually go there rather than serving a second copy of the page that
+# disagrees with its own canonical tag.
+https://www.suite.ng/*  https://suite.ng/:splat  301

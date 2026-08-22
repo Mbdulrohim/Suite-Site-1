@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { MaskedRotator } from './MaskedRotator';
 import { ProductDashboard } from './ProductDashboard';
 
 export interface HeroProps {
-  onOpenSignUp: () => void;
+  onOpenSignUp: (email?: string) => void;
   onNavigateSection?: (sectionId: string) => void;
 }
 
-const ACTION_WORDS = ['Manage', 'Record', 'Track'];
-const NOUN_WORDS = ['products', 'goods', 'services'];
+/*
+ * The two rotators run on the same interval with a small stagger, so index i of
+ * one is read against index i of the other. They have to make three true
+ * sentences in order, not three interchangeable words.
+ */
+const ACTION_WORDS = ['Track', 'Record', 'Settle'];
+const NOUN_WORDS = ['stock', 'sales', 'books'];
 
-export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) => {
+  const [email, setEmail] = useState('');
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault();
+    onOpenSignUp(email.trim());
+  };
+
   return (
     <section id="hero-section" className="w-full pt-20 pb-20 md:pt-28 md:pb-28 lg:pt-32 lg:pb-36">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
@@ -25,7 +37,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
             {/* Eyebrow copy */}
             <a
               id="hero-eyebrow"
-              href="#"
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateSection?.('features');
+              }}
               className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border-[0.5px] border-gray-300 bg-transparent text-[13px] text-gray-600 hover:text-gray-900 mb-6 md:mb-8 transition-colors duration-150"
             >
               <span>Join Us: over 100M processed.</span>
@@ -57,20 +73,26 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp }) => {
             </h1>
 
             {/* CTA */}
-            <div className="w-full flex items-center gap-3 max-w-[360px]">
+            <form onSubmit={submit} className="w-full max-w-[360px]">
+              <div className="flex items-center gap-3">
               <input
                 type="email"
+                required
+                maxLength={254}
+                value={email}
+                onChange={(event) => { setEmail(event.target.value); }}
                 placeholder="Enter your email"
                 className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[14px] sm:text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
               />
               <button
-                type="button"
-                onClick={onOpenSignUp}
-                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0"
+                type="submit"
+                aria-label="Continue with your business details"
+                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0 cursor-pointer"
               >
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-            </div>
+              </div>
+            </form>
 
           </div>
 

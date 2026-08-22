@@ -1,9 +1,8 @@
 import React from 'react';
-import suiteLogo from '../../assets/suite-logo.svg';
 import wordmarkUrl from '../../assets/Wordmark.svg';
 
 export interface FooterProps {
-  onOpenSignUp: () => void;
+  onOpenSignUp?: () => void;
   onNavigateSection?: (sectionId: string) => void;
   onNavigateBlog?: () => void;
 }
@@ -24,8 +23,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection,
               </a>
             </div>
 
-            <div className="mt-8 md:mt-16 text-[11px] text-[#8C92A4] font-mono">
-              © 2026 Copper Ledger Inc.
+            <div className="mt-8 md:mt-16 flex flex-col gap-1.5 text-[11px] text-[#8C92A4] font-mono">
+              <span>© {new Date().getFullYear()} Copper Ledger LTD. Lagos, Nigeria.</span>
+              <span>
+                Built by{' '}
+                <a
+                  href="https://mbdulrohim.dev"
+                  rel="author"
+                  className="text-[#646A7A] hover:text-[#121316] transition-colors"
+                >
+                  mbdulrohim
+                </a>
+              </span>
             </div>
           </div>
 
@@ -41,6 +50,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection,
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Features
+              </a>
+              <a 
+                href="#why-suite" 
+                onClick={(e) => { e.preventDefault(); onNavigateSection?.('why-suite'); }} 
+                className="text-[#646A7A] hover:text-[#121316] transition-colors"
+              >
+                Why Suite
               </a>
               <a 
                 href="#pricing" 
@@ -76,11 +92,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection,
                 Blog
               </a>
               <a 
-                href="#signup" 
-                onClick={(e) => { e.preventDefault(); onOpenSignUp(); }} 
+                href="mailto:hello@suite.ng" 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
-                Careers
+                Contact
               </a>
             </div>
 

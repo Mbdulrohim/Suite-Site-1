@@ -16,9 +16,15 @@ import {
 
 export default function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [signUpEmail, setSignUpEmail] = useState('');
   const [currentView, setCurrentView] = useState<'home' | 'blog'>(() => {
-    return window.location.hash === '#blog' ? 'blog' : 'home';
+    return typeof window !== 'undefined' && window.location.hash === '#blog' ? 'blog' : 'home';
   });
+
+  const openSignUp = (email = '') => {
+    setSignUpEmail(email.trim());
+    setIsSignUpOpen(true);
+  };
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -66,10 +72,11 @@ export default function App() {
       <>
         <BlogPage 
           onBackToHome={navigateToHome}
-          onOpenSignUp={() => setIsSignUpOpen(true)}
+          onOpenSignUp={() => openSignUp()}
         />
         <SignUpModal 
           isOpen={isSignUpOpen}
+          initialEmail={signUpEmail}
           onClose={() => setIsSignUpOpen(false)}
         />
       </>
@@ -80,7 +87,7 @@ export default function App() {
     <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between selection:bg-[#121316] selection:text-[#FAF9F6] antialiased">
       {/* Top Header */}
       <Header 
-        onOpenSignUp={() => setIsSignUpOpen(true)}
+        onOpenSignUp={() => openSignUp()}
         onNavigateSection={scrollToSection}
       />
 
@@ -88,37 +95,37 @@ export default function App() {
       <main className="flex-1 w-full flex flex-col">
         {/* 1. Hero Section with dynamic masked rotating headline & software window visual */}
         <Hero 
-          onOpenSignUp={() => setIsSignUpOpen(true)}
+          onOpenSignUp={openSignUp}
           onNavigateSection={scrollToSection}
         />
 
-        {/* Partners / Social Proof Section */}
+        {/* Partners / What Suite handles strip */}
         <PartnersSection />
 
         {/* Word-by-word Scroll Reveal Prose */}
         <ProseReveal />
 
-        {/* 2. Section Two: Keep business moving (3-card interactive layout) */}
+        {/* 2. Built for how the counter really works (3-card interactive layout) */}
         <KeepMovingSection />
 
         {/* Demo Showcase: Big MacBook 5 with 70px rounded-12px Play Demo button */}
-        <DemoShowcase onOpenSignUp={() => setIsSignUpOpen(true)} />
+        <DemoShowcase onOpenSignUp={() => openSignUp()} />
 
-        {/* 3. Why Suite works differently: Products, Activity, Tools + Curved SVG connectors */}
+        {/* 3. Why Suite works differently: Products, Activity, Tools */}
         <WhySuiteSection />
 
         {/* 4. Pricing Section: 3 tiers, monthly/yearly toggle with savings */}
-        <PricingSection onOpenSignUp={() => setIsSignUpOpen(true)} />
+        <PricingSection onOpenSignUp={() => openSignUp()} />
 
         {/* 5. Main Conversion Section: Generous whitespace + bold statement */}
         <ConversionSection 
-          onOpenSignUp={() => setIsSignUpOpen(true)}
+          onOpenSignUp={() => openSignUp()}
         />
       </main>
 
       {/* 6. Refined Footer (only place with Blog link) */}
       <Footer 
-        onOpenSignUp={() => setIsSignUpOpen(true)}
+        onOpenSignUp={() => openSignUp()}
         onNavigateSection={scrollToSection}
         onNavigateBlog={navigateToBlog}
       />
@@ -126,6 +133,7 @@ export default function App() {
       {/* Interactive Sign Up Modal */}
       <SignUpModal 
         isOpen={isSignUpOpen}
+        initialEmail={signUpEmail}
         onClose={() => setIsSignUpOpen(false)}
       />
     </div>

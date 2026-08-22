@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, ArrowRight } from 'lucide-react';
+import { submitWaitlist } from '../../waitlist';
 
 export interface SignUpModalProps {
   isOpen: boolean;
+  initialEmail?: string;
   onClose: () => void;
 }
 
-export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
+export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, initialEmail = '', onClose }) => {
   const [email, setEmail] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [teamSize, setTeamSize] = useState('1-10');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [shopName, setShopName] = useState('');
+  const [counters, setCounters] = useState('1');
+  const [website, setWebsite] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // The hero is the first step of this same form. Carry its email into the
+  // detailed step instead of saving an incomplete lead before the person has
+  // had a chance to tell us who and where the shop is.
+  useEffect(() => {
+    if (!isOpen) return;
+    setEmail(initialEmail.trim());
+    setIsSubmitted(false);
+    setError(null);
+  }, [isOpen, initialEmail]);
 
   // Close on ESC key press
   useEffect(() => {
@@ -30,14 +46,26 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate short network request
-    setTimeout(() => {
-      setIsLoading(false);
+    setError(null);
+    try {
+      await submitWaitlist({
+        email,
+        name,
+        phone,
+        shopName,
+        note: `People selling: ${counters}`,
+        source: 'signup-modal',
+        website,
+      });
       setIsSubmitted(true);
-    }, 600);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'We could not save that just now.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,7 +78,7 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
     >
       <div 
         id="signup-modal-container"
-        className="relative w-full max-w-[440px] bg-[#FAF9F6] border border-[#EAE8E0] rounded-[24px] p-6 sm:p-8 shadow-2xl transition-all animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-[440px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-[#FAF9F6] border border-[#EAE8E0] rounded-[24px] p-6 sm:p-8 shadow-2xl transition-all animate-in zoom-in-95 duration-200"
       >
         {/* Close Button */}
         <button
@@ -66,54 +94,105 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
           <div>
             <div className="mb-6">
               <h3 className="text-[22px] font-bold text-[#121316] tracking-tight mb-2">
-                Join the Suite Early Access
+                Get Suite in your shop
               </h3>
               <p className="text-[14px] text-[#646A7A] leading-relaxed">
-                Connect stock, sales, services and operations in one workspace.
+                Stock, sales, credit and suppliers in one place. We set your shop up and move your stock in with you.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Work Email <span className="text-red-500">*</span>
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="name@company.com"
+                  maxLength={254}
+                  autoComplete="email"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
                 />
               </div>
 
-              <div>
-                <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Acme Goods Ltd"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
+                    Your name
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={120}
+                    autoComplete="name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    maxLength={32}
+                    autoComplete="tel"
+                    placeholder="0803 123 4567"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
-                  Team Size
+                  Shop name
+                </label>
+                <input
+                  type="text"
+                  maxLength={160}
+                  placeholder="e.g. Ade Gadgets, Ikeja"
+                  value={shopName}
+                  onChange={(e) => setShopName(e.target.value)}
+                  className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] placeholder:text-[#9AA0AF] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all"
+                />
+              </div>
+
+              <input
+                type="text"
+                name="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute h-px w-px opacity-0 pointer-events-none"
+              />
+
+              {error !== null && (
+                <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-[12px] text-red-700">
+                  {error}
+                </p>
+              )}
+
+              <div>
+                <label className="block text-[12px] font-medium text-[#121316] mb-1.5">
+                  People selling
                 </label>
                 <select
-                  value={teamSize}
-                  onChange={(e) => setTeamSize(e.target.value)}
+                  value={counters}
+                  onChange={(e) => setCounters(e.target.value)}
                   className="w-full h-[42px] px-3.5 rounded-xl border border-[#D5D3CB] bg-[#FFFFFF] text-[14px] text-[#121316] focus:outline-none focus:ring-2 focus:ring-[#121316]/20 focus:border-[#121316] transition-all cursor-pointer"
                 >
-                  <option value="1-10">1-10 employees</option>
-                  <option value="11-50">11-50 employees</option>
-                  <option value="51-200">51-200 employees</option>
-                  <option value="200+">200+ employees</option>
+                  <option value="1">Just me</option>
+                  <option value="2-3">2-3 people</option>
+                  <option value="4-10">4-10 people</option>
+                  <option value="10+">More than 10</option>
                 </select>
               </div>
 
@@ -123,10 +202,10 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
                 className="w-full h-[44px] mt-2 inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[14.5px] font-medium rounded-xl transition-all shadow-md active:scale-[0.99] cursor-pointer disabled:opacity-75"
               >
                 {isLoading ? (
-                  <span>Securing your spot...</span>
+                  <span>Sending...</span>
                 ) : (
                   <>
-                    <span>Request Early Access</span>
+                    <span>Request a setup</span>
                     <ArrowRight className="w-4 h-4 text-[#FAF9F6]/80" />
                   </>
                 )}
@@ -134,7 +213,7 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
 
               <div className="text-center">
                 <span className="text-[11px] text-[#8C92A4]">
-                  No credit card required. Private beta rollout.
+                  No card needed. We will call you to set it up.
                 </span>
               </div>
             </form>
@@ -145,10 +224,10 @@ export const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => 
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h3 className="text-[20px] font-bold text-[#121316] tracking-tight mb-2">
-              You're on the list!
+              We have your details
             </h3>
             <p className="text-[14px] text-[#646A7A] max-w-[300px] leading-relaxed mb-6">
-              We've reserved early access for <strong className="text-[#121316]">{email}</strong>. Look out for our invite code.
+              We will reach out to <strong className="text-[#121316]">{email}</strong> to arrange your setup.
             </p>
             <button
               onClick={onClose}

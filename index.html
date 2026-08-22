@@ -3,19 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Suite — Operations & Inventory Platform</title>
-    <meta name="description" content="Operations software that quietly keeps stock, sales, services and inventory in sync." />
-    <meta property="og:title" content="Suite — Operations & Inventory Platform" />
-    <meta property="og:description" content="Everything your business moves, in one place. One source of truth." />
+
+    <title>Suite — stock and sales for phone shops</title>
+    <meta
+      name="description"
+      content="Suite tracks every handset by IMEI from intake to sale, records sales and receipts, and keeps credit and supplier ledgers. Built for Nigerian phone shops."
+    />
+    <meta name="author" content="mbdulrohim" />
+    <link rel="canonical" href="https://suite.ng/" />
+
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Suite" />
+    <meta property="og:url" content="https://suite.ng/" />
+    <meta property="og:title" content="Suite — stock and sales for phone shops" />
+    <meta
+      property="og:description"
+      content="Every handset tracked by IMEI from intake to sale. Sales, receipts, credit and supplier ledgers, on a phone screen."
+    />
+    <meta property="og:image" content="https://suite.ng/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="twitter:title" content="Suite — stock and sales for phone shops" />
+    <meta
+      name="twitter:description"
+      content="Every handset tracked by IMEI from intake to sale. Sales, receipts, credit and supplier ledgers, on a phone screen."
+    />
+    <meta name="twitter:image" content="https://suite.ng/og.png" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/mask-icon.svg" color="#121316" />
+    <meta name="theme-color" content="#FAF9F6" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://suite.ng/#org",
+            "name": "Copper Ledger LTD",
+            "url": "https://copperledgerhq.com",
+            "email": "hello@suite.ng",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Lagos",
+              "addressCountry": "NG"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://suite.ng/#site",
+            "url": "https://suite.ng",
+            "name": "Suite",
+            "description": "Point-of-sale and stock control for phone shops.",
+            "publisher": { "@id": "https://suite.ng/#org" },
+            "author": {
+              "@type": "Person",
+              "name": "mbdulrohim",
+              "url": "https://mbdulrohim.dev"
+            }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Suite",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "description": "Tracks handsets per unit by IMEI, records sales and receipts, and keeps customer credit and supplier ledgers.",
+            "publisher": { "@id": "https://suite.ng/#org" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "NGN",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
-  <body class="bg-[#FAF9F6] text-[#121316] font-sans selection:bg-[#121316] selection:text-[#FAF9F6] min-h-screen overflow-x-hidden">
+  <body
+    class="bg-[#FAF9F6] text-[#121316] font-sans selection:bg-[#121316] selection:text-[#FAF9F6] min-h-screen overflow-x-hidden"
+  >
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
