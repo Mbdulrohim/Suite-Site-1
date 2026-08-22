@@ -72,14 +72,36 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
               </div>
             </h1>
 
-            {/* CTA */}
-            <form onSubmit={submit} className="w-full max-w-[360px]">
+            {/* CTA — pill label + flush 70×70 arrow circle */}
+            <form onSubmit={submit}>
               <button
                 type="submit"
-                className="flex items-center justify-center gap-3 w-full h-[48px] sm:h-[52px] bg-[#121316] hover:bg-[#000000] text-white text-[15px] sm:text-[16px] font-medium rounded-full transition-all duration-200 active:scale-[0.98] cursor-pointer shadow-xs"
+                className="inline-flex items-center h-[70px] bg-[#121316] hover:bg-[#000000] text-white rounded-full transition-all duration-200 active:scale-[0.98] cursor-pointer overflow-hidden group"
               >
-                <span>Get Started</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                {/* Label */}
+                <span className="text-[24px] font-medium leading-none px-8 whitespace-nowrap">
+                  Get Started
+                </span>
+
+                {/* Flush 70×70 arrow circle */}
+                <span className="w-[70px] h-[70px] rounded-full bg-white flex items-center justify-center shrink-0 ml-0">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ transform: 'rotate(-45deg)' }}
+                  >
+                    <path
+                      d="M3 11H19M19 11L11 3M19 11L11 19"
+                      stroke="#121316"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
               </button>
             </form>
 
