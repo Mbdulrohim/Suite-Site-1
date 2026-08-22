@@ -72,19 +72,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
               </div>
             </h1>
 
-            {/* CTA — pill label + flush 70×70 arrow circle */}
+            {/* CTA — pill button + flush black 70×70 circle with white arrow */}
             <form onSubmit={submit}>
-              <button
-                type="submit"
-                className="inline-flex items-center h-[70px] bg-[#121316] hover:bg-[#000000] text-white rounded-full transition-all duration-200 active:scale-[0.98] cursor-pointer overflow-hidden group"
-              >
-                {/* Label */}
-                <span className="text-[24px] font-medium leading-none px-8 whitespace-nowrap">
+              <div className="inline-flex items-center gap-0">
+                {/* Pill button */}
+                <button
+                  type="submit"
+                  className="inline-flex items-center h-[70px] bg-[#121316] hover:bg-[#000000] text-white rounded-full px-8 text-[24px] font-medium leading-none whitespace-nowrap transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                >
                   Get Started
-                </span>
+                </button>
 
-                {/* Flush 70×70 arrow circle */}
-                <span className="w-[70px] h-[70px] rounded-full bg-white flex items-center justify-center shrink-0 ml-0">
+                {/* Flush black 70×70 circle with white arrow at 45° */}
+                <button
+                  type="submit"
+                  aria-hidden="true"
+                  className="w-[70px] h-[70px] rounded-full bg-[#121316] hover:bg-[#000000] flex items-center justify-center shrink-0 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                >
                   <svg
                     width="22"
                     height="22"
@@ -95,14 +99,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
                   >
                     <path
                       d="M3 11H19M19 11L11 3M19 11L11 19"
-                      stroke="#121316"
+                      stroke="white"
                       strokeWidth="2.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                   </svg>
-                </span>
-              </button>
+                </button>
+              </div>
             </form>
 
           </div>
