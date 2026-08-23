@@ -1,69 +1,122 @@
-/**
- * The frame every content page sits in.
- *
- * These pages exist to be found and quoted, so the shape is deliberately plain:
- * one h1, prose an extractor can lift a whole answer out of without needing the
- * paragraph before it, and no interactive chrome competing with the text. The
- * homepage sells; these answer a question somebody typed.
- */
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { Footer, Header } from '../components';
 
+/**
+ * The frame the content pages sit in.
+ *
+ * Written to belong to the homepage rather than to look like documentation:
+ * the same #FAF9F6 ground, the same 1240 container, the same medium-weight
+ * tracking-tight headings with the second clause dropped to grey, the same
+ * 28px cards on a half-pixel border, the same pill button. A page that arrives
+ * from search is often the first thing somebody sees of Suite, so it cannot
+ * read as an appendix to the site — it is the site.
+ *
+ * What stays plain is the structure underneath: one h1, headings that are real
+ * questions, and prose an extractor can lift an answer out of without needing
+ * the paragraph before it.
+ */
+
 export const PageShell = ({
-  eyebrow, title, standfirst, children,
+  title, tail, standfirst, children,
 }: {
-  eyebrow: string;
   title: string;
+  /** The clause that drops to grey, the way the homepage's headings do. */
+  tail?: string;
   standfirst: string;
   children: ReactNode;
 }) => (
-  <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between antialiased">
+  <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between selection:bg-[#121316] selection:text-[#FAF9F6] antialiased">
     <Header onOpenSignUp={() => { window.location.href = '/#waitlist'; }} onNavigateSection={() => {}} />
+
     <main className="flex-1 w-full">
-      <article className="mx-auto w-full max-w-[720px] px-6 py-20 sm:py-28">
-        <p className="text-[11px] uppercase tracking-[0.14em] text-[#9CA3AF] font-semibold">{eyebrow}</p>
-        <h1 className="mt-4 text-[34px] sm:text-[44px] leading-[1.1] tracking-[-0.02em] font-semibold text-balance">
-          {title}
-        </h1>
-        <p className="mt-5 text-[17px] sm:text-[19px] leading-[1.6] text-[#6B7280]">{standfirst}</p>
-        <div className="mt-12 space-y-10">{children}</div>
-      </article>
+      <section className="w-full pt-20 pb-12 md:pt-32 md:pb-20 px-5 sm:px-8">
+        <div className="mx-auto max-w-[760px] text-center">
+          <h1 className="text-[#121316] font-medium tracking-tight text-[30px] sm:text-[40px] md:text-[48px] leading-[1.08] text-balance">
+            {title}
+            {tail !== undefined && <> <span className="text-gray-400">{tail}</span></>}
+          </h1>
+          <p className="mt-6 text-gray-500 text-[16px] sm:text-[18px] leading-[1.6] mx-auto max-w-[620px]">
+            {standfirst}
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8 pb-24 md:pb-36">
+        {children}
+      </div>
     </main>
+
     <Footer onNavigateSection={() => {}} />
   </div>
 );
 
-/** A question and its answer, sized so a model can lift the pair intact. */
+/** One question and its answer, at the measure the homepage sets for prose. */
 export const Section = ({ heading, children }: { heading: string; children: ReactNode }) => (
-  <section>
-    <h2 className="text-[22px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] font-semibold text-balance">
+  <section className="mx-auto max-w-[680px] pt-14 md:pt-20 first:pt-0">
+    <h2 className="text-[#121316] font-medium tracking-tight text-[22px] sm:text-[26px] leading-[1.2] text-balance">
       {heading}
     </h2>
-    <div className="mt-4 space-y-4 text-[16px] sm:text-[17px] leading-[1.65] text-[#374151]">
+    <div className="mt-5 space-y-4 text-gray-500 text-[16px] sm:text-[17px] leading-[1.65]">
       {children}
     </div>
   </section>
 );
 
-export const Bullets = ({ items }: { items: string[] }) => (
-  <ul className="space-y-2.5">
+/** The homepage's card: a soft panel on a half-pixel border, not a bordered box. */
+export const Panel: FC<{ children: ReactNode; className?: string }> = ({
+  children, className = '',
+}) => (
+  <div
+    className={`w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] ${className}`}
+  >
+    {children}
+  </div>
+);
+
+/**
+ * Facts as pills rather than a bulleted list. The homepage says everything this
+ * way, and a column of dots is the thing that made these pages read as a manual.
+ */
+export const Pills = ({ items }: { items: string[] }) => (
+  <ul className="flex flex-wrap gap-2 pt-1">
     {items.map((item) => (
-      <li key={item} className="flex gap-3">
-        <span aria-hidden className="mt-[10px] h-[5px] w-[5px] rounded-full bg-[#121316] shrink-0" />
-        <span>{item}</span>
+      <li
+        key={item}
+        className="bg-white shadow-sm border border-gray-100 rounded-full px-4 py-2 text-[14px] text-gray-700 font-medium"
+      >
+        {item}
       </li>
     ))}
   </ul>
 );
 
+/** A numbered idea in a panel — used where a list is genuinely a sequence. */
+export const Steps = ({ items }: { items: { title: string; body: string }[] }) => (
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 pt-2">
+    {items.map((item, index) => (
+      <Panel key={item.title} className="p-6 sm:p-7">
+        <span className="text-[13px] font-medium text-gray-400 tabular-nums">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <h3 className="mt-3 text-[17px] font-medium tracking-tight leading-[1.3]">{item.title}</h3>
+        <p className="mt-2 text-[14px] leading-[1.6] text-gray-500">{item.body}</p>
+      </Panel>
+    ))}
+  </div>
+);
+
 export const CallToAction = ({ line }: { line: string }) => (
-  <aside className="rounded-2xl border border-[#ECEAE3] bg-white p-6 sm:p-8">
-    <p className="text-[17px] leading-[1.55] font-medium">{line}</p>
+  <section className="w-full pt-24 md:pt-36 flex flex-col items-center text-center">
+    <p className="max-w-[620px] text-[#121316] font-medium tracking-tight text-[24px] sm:text-[30px] md:text-[34px] leading-[1.12] text-balance">
+      {line}
+    </p>
     <a
       href="/#waitlist"
-      className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#121316] px-5 py-2.5 text-[14px] font-medium text-[#FAF9F6] hover:opacity-90 transition-opacity"
+      className="group mt-8 inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[15px] font-medium tracking-tight rounded-full h-[46px] px-[24px] transition-all duration-200 shadow-md hover:shadow-xl active:scale-[0.98]"
     >
-      Ask us to set your shop up →
+      Set my shop up
+      <ArrowUpRight className="w-4 h-4 text-[#FAF9F6]/85 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </a>
-  </aside>
+  </section>
 );
