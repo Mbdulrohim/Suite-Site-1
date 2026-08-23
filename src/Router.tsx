@@ -16,12 +16,14 @@ import Home from './Home.tsx';
 import { Pricing } from './pages/Pricing.tsx';
 import { ImeiStockTracking } from './pages/ImeiStockTracking.tsx';
 import { CustomerDebt } from './pages/CustomerDebt.tsx';
+import { VsEposNow } from './pages/VsEposNow.tsx';
 
 const PAGES: Record<string, () => ReactElement> = {
   '/': Home,
   '/pricing': Pricing,
   '/imei-stock-tracking': ImeiStockTracking,
   '/customer-debt-tracking': CustomerDebt,
+  '/vs-epos-now': VsEposNow,
 };
 
 /** Trailing slashes are the same page, so /pricing/ never 404s or duplicates. */

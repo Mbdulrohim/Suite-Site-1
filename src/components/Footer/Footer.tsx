@@ -82,6 +82,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
               <a href="/customer-debt-tracking" className="text-[#646A7A] hover:text-[#121316] transition-colors">
                 Recording customer debts
               </a>
+              <a href="/vs-epos-now" className="text-[#646A7A] hover:text-[#121316] transition-colors">
+                Suite vs Epos Now
+              </a>
             </div>
 
             {/* Company Links */}

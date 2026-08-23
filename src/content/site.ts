@@ -56,6 +56,14 @@ export const routes = [
     changefreq: 'monthly',
     priority: 0.8,
   },
+  {
+    path: '/vs-epos-now',
+    title: 'Suite vs Epos Now for a Nigerian electronics shop',
+    description:
+      'An honest comparison: published naira pricing and no contract against a quoted, hardware-based till built for retail generally — including where Epos Now is the better buy.',
+    changefreq: 'monthly',
+    priority: 0.8,
+  },
 ] as const;
 
 /**
