@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Check } from 'lucide-react';
 
 export interface PricingSectionProps {
@@ -7,6 +7,18 @@ export interface PricingSectionProps {
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  // On mobile, scroll carousel so the popular card (index 1) is centred by default
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    // Only apply on mobile (md breakpoint = 768px)
+    if (window.innerWidth >= 768) return;
+    // Each card is 84vw wide + 24px gap
+    const cardWidth = el.scrollWidth / 3;
+    el.scrollLeft = cardWidth;
+  }, []);
 
   const plans = [
     {
@@ -117,7 +129,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
 
         {/* 3 Pricing Cards: 15k, 29.1k, Enterprise */}
         <div className="relative w-full">
-          <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-end max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-6 pt-4 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none">
+          <div ref={carouselRef} className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-end max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-6 pt-4 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none">
             {plans.map((plan) => {
               const currentPrice = billingCycle === 'yearly' ? plan.yearlyEffectivePrice : plan.monthlyPrice;
 
