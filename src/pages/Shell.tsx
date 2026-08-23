@@ -1,6 +1,6 @@
-import type { FC, ReactNode } from 'react';
+import { createContext, useContext, useState, type FC, type ReactNode } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { Footer, Header } from '../components';
+import { Footer, Header, SignUpModal } from '../components';
 
 /**
  * The frame the content pages sit in.
@@ -25,9 +25,23 @@ export const PageShell = ({
   tail?: string;
   standfirst: string;
   children: ReactNode;
-}) => (
+}) => {
+  /*
+   * The sign-up modal lives here too, rather than the buttons sending people
+   * to the homepage to find it. Somebody who arrived on /pricing already knows
+   * what they want; making them read the homepage first to say so is a step
+   * that only loses them.
+   */
+  const [signUpOpen, setSignUpOpen] = useState(false);
+
+  return (
   <div className="min-h-screen bg-[#FAF9F6] text-[#121316] flex flex-col justify-between selection:bg-[#121316] selection:text-[#FAF9F6] antialiased">
-    <Header onOpenSignUp={() => { window.location.href = '/#waitlist'; }} onNavigateSection={() => {}} />
+    {/*
+      No onNavigateSection: there are no sections on this page to scroll to, and
+      its absence is what tells the header to let its links navigate home
+      instead of cancelling the click.
+    */}
+    <Header onOpenSignUp={() => { setSignUpOpen(true); }} />
 
     <main className="flex-1 w-full">
       <section className="w-full pt-20 pb-12 md:pt-32 md:pb-20 px-5 sm:px-8">
@@ -43,13 +57,25 @@ export const PageShell = ({
       </section>
 
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8 pb-24 md:pb-36">
-        {children}
+        <SignUpContext.Provider value={() => { setSignUpOpen(true); }}>
+          {children}
+        </SignUpContext.Provider>
       </div>
     </main>
 
-    <Footer onNavigateSection={() => {}} />
+    <Footer />
+
+    <SignUpModal
+      isOpen={signUpOpen}
+      initialEmail=""
+      onClose={() => { setSignUpOpen(false); }}
+    />
   </div>
-);
+  );
+};
+
+/** So a CallToAction anywhere in the page can open the shell's own modal. */
+const SignUpContext = createContext<() => void>(() => {});
 
 /** One question and its answer, at the measure the homepage sets for prose. */
 export const Section = ({ heading, children }: { heading: string; children: ReactNode }) => (
@@ -106,17 +132,21 @@ export const Steps = ({ items }: { items: { title: string; body: string }[] }) =
   </div>
 );
 
-export const CallToAction = ({ line }: { line: string }) => (
-  <section className="w-full pt-24 md:pt-36 flex flex-col items-center text-center">
-    <p className="max-w-[620px] text-[#121316] font-medium tracking-tight text-[24px] sm:text-[30px] md:text-[34px] leading-[1.12] text-balance">
-      {line}
-    </p>
-    <a
-      href="/#waitlist"
-      className="group mt-8 inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[15px] font-medium tracking-tight rounded-full h-[46px] px-[24px] transition-all duration-200 shadow-md hover:shadow-xl active:scale-[0.98]"
-    >
-      Set my shop up
-      <ArrowUpRight className="w-4 h-4 text-[#FAF9F6]/85 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-    </a>
-  </section>
-);
+export const CallToAction = ({ line }: { line: string }) => {
+  const openSignUp = useContext(SignUpContext);
+  return (
+    <section className="w-full pt-24 md:pt-36 flex flex-col items-center text-center">
+      <p className="max-w-[620px] text-[#121316] font-medium tracking-tight text-[24px] sm:text-[30px] md:text-[34px] leading-[1.12] text-balance">
+        {line}
+      </p>
+      <button
+        type="button"
+        onClick={openSignUp}
+        className="group mt-8 inline-flex items-center justify-center gap-2 bg-[#121316] hover:bg-[#000000] text-[#FAF9F6] text-[15px] font-medium tracking-tight rounded-full h-[46px] px-[24px] transition-all duration-200 shadow-md hover:shadow-xl active:scale-[0.98] cursor-pointer"
+      >
+        Set my shop up
+        <ArrowUpRight className="w-4 h-4 text-[#FAF9F6]/85 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </button>
+    </section>
+  );
+};

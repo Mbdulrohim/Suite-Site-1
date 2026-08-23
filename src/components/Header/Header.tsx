@@ -23,10 +23,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
         <nav id="desktop-nav" className="hidden md:flex items-center gap-8 text-[18px] text-[#555861] font-medium tracking-tight">
           <a
             id="nav-link-about"
-            href="#why-suite"
+            href="/#why-suite"
             onClick={(e) => {
+              /*
+               * Only swallow the click when there is a section on this page to
+               * scroll to. On /pricing the handler is absent, preventDefault would
+               * cancel a navigation nothing replaces, and the link would do nothing
+               * at all — which is what it did.
+               */
+              if (onNavigateSection === undefined) return;
               e.preventDefault();
-              onNavigateSection?.('why-suite');
+              onNavigateSection('why-suite');
             }}
             className="hover:text-[#121316] transition-colors duration-150 py-1"
           >
@@ -34,10 +41,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSignUp, onNavigateSection 
           </a>
           <a
             id="nav-link-features"
-            href="#features"
+            href="/#features"
             onClick={(e) => {
+              /*
+               * Only swallow the click when there is a section on this page to
+               * scroll to. On /pricing the handler is absent, preventDefault would
+               * cancel a navigation nothing replaces, and the link would do nothing
+               * at all — which is what it did.
+               */
+              if (onNavigateSection === undefined) return;
               e.preventDefault();
-              onNavigateSection?.('features');
+              onNavigateSection('features');
             }}
             className="hover:text-[#121316] transition-colors duration-150 py-1"
           >

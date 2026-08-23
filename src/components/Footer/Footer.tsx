@@ -42,15 +42,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
             <div className="flex flex-col gap-2.5 text-[13px]">
               <span className="font-semibold text-[#121316] text-[13px] tracking-tight mb-1">Product</span>
               <a 
-                href="#features" 
-                onClick={(e) => { e.preventDefault(); onNavigateSection?.('features'); }} 
+                href="/#features" 
+                onClick={(e) => {
+                  if (onNavigateSection === undefined) return;
+                  e.preventDefault();
+                  onNavigateSection('features');
+                }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Features
               </a>
               <a 
-                href="#why-suite" 
-                onClick={(e) => { e.preventDefault(); onNavigateSection?.('why-suite'); }} 
+                href="/#why-suite" 
+                onClick={(e) => {
+                  if (onNavigateSection === undefined) return;
+                  e.preventDefault();
+                  onNavigateSection('why-suite');
+                }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Why Suite
@@ -80,8 +88,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
             <div className="flex flex-col gap-2.5 text-[13px]">
               <span className="font-semibold text-[#121316] text-[13px] tracking-tight mb-1">Company</span>
               <a 
-                href="#why-suite" 
-                onClick={(e) => { e.preventDefault(); onNavigateSection?.('why-suite'); }} 
+                href="/#why-suite" 
+                onClick={(e) => {
+                  if (onNavigateSection === undefined) return;
+                  e.preventDefault();
+                  onNavigateSection('why-suite');
+                }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 About
@@ -98,21 +110,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
             <div className="flex flex-col gap-2.5 text-[13px]">
               <span className="font-semibold text-[#121316] text-[13px] tracking-tight mb-1">Info</span>
               <a 
-                href="#security" 
+                href="/#security" 
                 onClick={(e) => { e.preventDefault(); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Security
               </a>
               <a 
-                href="#terms" 
+                href="/#terms" 
                 onClick={(e) => { e.preventDefault(); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Terms of service
               </a>
               <a 
-                href="#privacy" 
+                href="/#privacy" 
                 onClick={(e) => { e.preventDefault(); }} 
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >

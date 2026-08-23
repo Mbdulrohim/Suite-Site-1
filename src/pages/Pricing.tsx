@@ -40,6 +40,22 @@ const TIERS = [
       'A public page and online storefront',
     ],
   },
+  {
+    name: 'Enterprise',
+    who: 'More than five locations.',
+    /*
+     * No figure, because there genuinely is not one — this tier exists for
+     * groups and for work built to order. Saying "let us talk" plainly beats
+     * inventing a number nobody would honour, and beats leaving the tier off
+     * the page and letting a big shop conclude Suite is not for them.
+     */
+    has: [
+      'Everything in Plus',
+      'As many branches as you run',
+      'Work built for how your group actually operates',
+      'A person to call, not a form',
+    ],
+  },
 ];
 
 const naira = (value: number) => `₦${value.toLocaleString('en-NG')}`;
@@ -50,38 +66,61 @@ export const Pricing = () => (
     tail="₦15,000 if you pay for the year."
     standfirst="No card, no setup fee, and nothing charged per person. You pay by bank transfer, the way you already pay for everything else."
   >
-    <div className="mx-auto max-w-[900px] grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">
+    <div className="mx-auto max-w-[1140px] grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
       {TIERS.map((tier) => (
         <Panel key={tier.name} className={`p-7 sm:p-9 ${tier.feature === true ? 'bg-white' : ''}`}>
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-[15px] font-medium tracking-tight">{tier.name}</h2>
             {/*
-              The discount was grey text in the middle of a sentence, which is
-              the wrong weight for the number we most want read. Paying yearly is
-              the thing being pushed, so the saving carries the loudest treatment
-              on the card — the same dark pill the primary button uses.
+              The saving used to be grey text mid-sentence — the lightest
+              treatment on the card, on the number we most want read. Paying
+              yearly is what is being pushed, so it carries the same dark pill
+              the primary button uses. Enterprise has no percentage to show, so
+              it says what it is instead of leaving a hole where a badge goes.
             */}
-            <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
-              Save {tier.off} yearly
-            </span>
+            {tier.off === undefined ? (
+              <span className="shrink-0 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-[12px] font-medium tracking-tight text-gray-500">
+                Per agreement
+              </span>
+            ) : (
+              <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
+                Save {tier.off} yearly
+              </span>
+            )}
           </div>
 
-          <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
-            {naira(tier.monthly)}
-            <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /month</span>
-          </p>
+          {tier.monthly === undefined || tier.yearly === undefined ? (
+            <>
+              <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none">
+                Let’s talk
+              </p>
+              <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
+                Priced on what you actually run
+              </p>
+              <p className="mt-1.5 text-[13px] text-gray-400">
+                Tell us how many shops and we will quote you properly
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
+                {naira(tier.monthly)}
+                <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /month</span>
+              </p>
 
-          <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
-            or <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong>
-            {' '}a month paid yearly
-          </p>
+              <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
+                or <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong>
+                {' '}a month paid yearly
+              </p>
 
-          <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
-            {naira(tier.yearly * 12)} for the year, instead of {naira(tier.monthly * 12)} — you keep{' '}
-            <strong className="font-medium text-[#121316]">
-              {naira((tier.monthly - tier.yearly) * 12)}
-            </strong>
-          </p>
+              <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
+                {naira(tier.yearly * 12)} for the year, instead of {naira(tier.monthly * 12)} — you keep{' '}
+                <strong className="font-medium text-[#121316]">
+                  {naira((tier.monthly - tier.yearly) * 12)}
+                </strong>
+              </p>
+            </>
+          )}
 
           <p className="mt-5 text-[13px] text-gray-400">{tier.who}</p>
 
@@ -96,10 +135,6 @@ export const Pricing = () => (
         </Panel>
       ))}
     </div>
-
-    <p className="mx-auto max-w-[900px] mt-5 text-center text-[14px] text-gray-400">
-      More than five locations, or something built to order — we price that per agreement.
-    </p>
 
     <Section heading="What does Suite cost in Nigeria?">
       <p>
