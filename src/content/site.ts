@@ -32,6 +32,30 @@ export const routes = [
     changefreq: 'weekly',
     priority: 1.0,
   },
+  {
+    path: '/pricing',
+    title: 'Suite pricing — ₦25,000 a month, or ₦15,000 paid yearly',
+    description:
+      'What Suite costs in naira: ₦25,000 a month for one shop, ₦55,000 for up to five, 40% off when you pay for the year. Bank transfer, no card needed.',
+    changefreq: 'monthly',
+    priority: 0.9,
+  },
+  {
+    path: '/imei-stock-tracking',
+    title: 'How to track stock by IMEI or serial number',
+    description:
+      'Every phone, laptop and inverter counted one by one against its IMEI or serial, so you know what you own, what it cost and how long it has been sitting.',
+    changefreq: 'monthly',
+    priority: 0.8,
+  },
+  {
+    path: '/customer-debt-tracking',
+    title: 'How to keep records of customers who owe you money',
+    description:
+      'Track who owes your shop, how much, when it is due and what they have repaid — instead of a notebook nobody can read but you.',
+    changefreq: 'monthly',
+    priority: 0.8,
+  },
 ] as const;
 
 /**

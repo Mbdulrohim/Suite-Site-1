@@ -12,7 +12,7 @@ import {
   SignUpModal 
 } from './components';
 
-export default function App() {
+export default function Home() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [signUpEmail, setSignUpEmail] = useState('');
 

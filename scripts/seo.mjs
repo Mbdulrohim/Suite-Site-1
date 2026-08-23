@@ -6,12 +6,17 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const DIST = 'dist';
-const url = 'https://suite.ng';
 const today = new Date().toISOString().slice(0, 10);
 
-const routes = [{ path: '/', changefreq: 'weekly', priority: '1.0' }];
+// Read from the SSR bundle, which compiled the same route table the pages were
+// rendered from. This file used to keep its own list and it had already drifted.
+const { site, routes } = await import(
+  pathToFileURL(path.resolve('dist-ssr/entry-server.js')).href
+);
+const url = site.url;
 
 fs.mkdirSync(DIST, { recursive: true });
 
@@ -64,6 +69,13 @@ there is nothing to install.
 - Trade-ins and swaps taken against a sale
 - Staff roles, so a seller does not see what a handset cost
 - More than one branch, with stock transfers between them
+
+## Pages
+
+${routes
+  .filter((r) => r.path !== '/')
+  .map((r) => `- [${r.title}](${url}${r.path}): ${r.description}`)
+  .join('\n')}
 
 ## Plans
 

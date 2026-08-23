@@ -18,6 +18,10 @@
  * context surface used here is small, stable and written out below.
  */
 import { renderProfilePage, type PublicProfile } from '../src/public-profile/render.ts';
+import { routes } from '../src/content/site.ts';
+
+/** Every path the marketing site owns. A shop can never take one of these. */
+const RESERVED = new Set<string>(routes.map((route) => route.path));
 
 interface Context {
   request: Request;
@@ -77,6 +81,22 @@ export const onRequestGet = async (context: Context): Promise<Response> => {
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug;
 
   if (!SLUG.test(slug)) return next();
+
+  /*
+   * The site's own pages win, and are recognised by name rather than by asking
+   * the asset server.
+   *
+   * /pricing is shaped exactly like a shop slug, so without this a marketing
+   * page would be swallowed by a profile lookup for a shop that does not exist
+   * and the crawler would be told "no such shop". Asking `next()` first and
+   * treating a non-404 as "this is a real page" is the obvious fix and the
+   * wrong one — Pages answers 200 for paths it does not have, which is how
+   * every shop page once became the homepage for half an hour.
+   *
+   * Reading the same route table the pages are built from means adding a page
+   * needs no second edit here, and no list anybody has to remember.
+   */
+  if (RESERVED.has(`/${slug}`)) return next();
 
   const origin = new URL(request.url).origin;
   const api = (env.SUITE_API_URL ?? DEFAULT_API).replace(/\/$/, '');

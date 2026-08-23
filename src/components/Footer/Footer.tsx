@@ -55,6 +55,25 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection }) => {
               >
                 Why Suite
               </a>
+              {/*
+                Real hrefs, not scroll handlers. These are separate documents,
+                and a page nothing links to is a page a crawler has to be told
+                about twice — once in the sitemap and never again.
+              */}
+              <a href="/pricing" className="text-[#646A7A] hover:text-[#121316] transition-colors">
+                Pricing
+              </a>
+            </div>
+
+            {/* Guides — the pages that answer what people actually search for. */}
+            <div className="flex flex-col gap-2.5 text-[13px]">
+              <span className="font-semibold text-[#121316] text-[13px] tracking-tight mb-1">Guides</span>
+              <a href="/imei-stock-tracking" className="text-[#646A7A] hover:text-[#121316] transition-colors">
+                Tracking stock by IMEI
+              </a>
+              <a href="/customer-debt-tracking" className="text-[#646A7A] hover:text-[#121316] transition-colors">
+                Recording customer debts
+              </a>
             </div>
 
             {/* Company Links */}
