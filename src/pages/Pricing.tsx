@@ -53,9 +53,17 @@ export const Pricing = () => (
     <div className="mx-auto max-w-[900px] grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">
       {TIERS.map((tier) => (
         <Panel key={tier.name} className={`p-7 sm:p-9 ${tier.feature === true ? 'bg-white' : ''}`}>
-          <div className="flex items-baseline justify-between gap-3">
+          <div className="flex items-center justify-between gap-3">
             <h2 className="text-[15px] font-medium tracking-tight">{tier.name}</h2>
-            <span className="text-[13px] text-gray-400">{tier.who}</span>
+            {/*
+              The discount was grey text in the middle of a sentence, which is
+              the wrong weight for the number we most want read. Paying yearly is
+              the thing being pushed, so the saving carries the loudest treatment
+              on the card — the same dark pill the primary button uses.
+            */}
+            <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
+              Save {tier.off} yearly
+            </span>
           </div>
 
           <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
@@ -63,10 +71,19 @@ export const Pricing = () => (
             <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /month</span>
           </p>
 
-          <p className="mt-3 text-[14px] text-gray-500 leading-[1.55]">
-            or <strong className="font-medium text-[#121316]">{naira(tier.yearly)}</strong> a month
-            paid yearly — <span className="text-gray-400">{tier.off} off</span>
+          <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
+            or <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong>
+            {' '}a month paid yearly
           </p>
+
+          <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
+            {naira(tier.yearly * 12)} for the year, instead of {naira(tier.monthly * 12)} — you keep{' '}
+            <strong className="font-medium text-[#121316]">
+              {naira((tier.monthly - tier.yearly) * 12)}
+            </strong>
+          </p>
+
+          <p className="mt-5 text-[13px] text-gray-400">{tier.who}</p>
 
           <ul className="mt-7 space-y-2.5">
             {tier.has.map((line) => (
