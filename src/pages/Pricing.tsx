@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Check } from 'lucide-react';
 import { CallToAction, PageShell, Panel, Section } from './Shell.tsx';
 
@@ -60,12 +61,28 @@ const TIERS = [
 
 const naira = (value: number) => `₦${value.toLocaleString('en-NG')}`;
 
-export const Pricing = () => (
+export const Pricing = () => {
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
+
+  return (
   <PageShell
-    title="₦25,000 a month."
-    tail="₦15,000 if you pay for the year."
+    title={billing === 'monthly' ? '₦25,000 a month.' : '₦180,000 a year.'}
+    tail={billing === 'monthly' ? 'Or save 40% when you pay yearly.' : 'That works out to ₦15,000 a month.'}
     standfirst="No card, no setup fee, and nothing charged per person. You pay by bank transfer, the way you already pay for everything else."
   >
+    <div className="mx-auto mb-7 flex w-fit rounded-full border border-gray-200 bg-white p-1" aria-label="Billing period">
+      {(['monthly', 'yearly'] as const).map((term) => (
+        <button
+          key={term}
+          type="button"
+          aria-pressed={billing === term}
+          onClick={() => setBilling(term)}
+          className={`rounded-full px-5 py-2 text-[13px] font-medium transition-colors ${billing === term ? 'bg-[#121316] text-[#FAF9F6]' : 'text-gray-500 hover:text-[#121316]'}`}
+        >
+          {term === 'monthly' ? 'Pay monthly' : 'Pay yearly · save up to 40%'}
+        </button>
+      ))}
+    </div>
     <div className="mx-auto max-w-[1140px] grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
       {TIERS.map((tier) => (
         <Panel key={tier.name} className={`p-7 sm:p-9 ${tier.feature === true ? 'bg-white' : ''}`}>
@@ -84,7 +101,7 @@ export const Pricing = () => (
               </span>
             ) : (
               <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
-                Save {tier.off} yearly
+                {billing === 'yearly' ? `Save ${tier.off}` : 'Yearly discount'}
               </span>
             )}
           </div>
@@ -104,19 +121,20 @@ export const Pricing = () => (
           ) : (
             <>
               <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
-                {naira(tier.monthly)}
-                <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /month</span>
+                {naira(billing === 'yearly' ? tier.yearly * 12 : tier.monthly)}
+                <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /{billing === 'yearly' ? 'year' : 'month'}</span>
               </p>
 
               <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
-                or <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong>
-                {' '}a month paid yearly
+                {billing === 'yearly'
+                  ? <><strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month, billed once yearly</>
+                  : <>Switch to yearly and pay <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month</>}
               </p>
 
               <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
-                {naira(tier.yearly * 12)} for the year, instead of {naira(tier.monthly * 12)} — you keep{' '}
+                {billing === 'yearly' ? `${naira(tier.monthly * 12)} at the monthly rate — you keep ` : 'Yearly total: '}
                 <strong className="font-medium text-[#121316]">
-                  {naira((tier.monthly - tier.yearly) * 12)}
+                  {billing === 'yearly' ? naira((tier.monthly - tier.yearly) * 12) : naira(tier.yearly * 12)}
                 </strong>
               </p>
             </>
@@ -176,4 +194,5 @@ export const Pricing = () => (
 
     <CallToAction line="Tell us about your shop and we will set it up and move your stock in." />
   </PageShell>
-);
+  );
+};
