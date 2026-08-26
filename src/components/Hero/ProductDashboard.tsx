@@ -1,274 +1,235 @@
-import React, { useState } from 'react';
-import { 
-  Search, 
-  Layers, 
-  Package, 
-  TrendingUp, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  Wrench, 
-  Box
-} from 'lucide-react';
+import React from 'react';
+import { Bell, Boxes, CalendarCheck, ContactRound, Handshake, Landmark, Search, Zap } from 'lucide-react';
 
-export const ProductDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'home' | 'stock' | 'sales' | 'items'>('home');
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+/**
+ * What Suite actually looks like.
+ *
+ * This used to be a different product: a four-tab window called Overview /
+ * Stock / Sales / Credit, in macOS chrome, with a ⌘K palette Suite has never
+ * had and a "Syncing 4/4" badge advertising the offline layer we are removing.
+ * A shop that signed up on the strength of it would have opened something else
+ * entirely on the Monday.
+ *
+ * Built in markup rather than shipped as a screenshot, deliberately:
+ *
+ *  - every label here is text a crawler and an answer engine can read, which a
+ *    PNG is opaque to, and being cited is half the point of this page;
+ *  - it holds no real shop's cost prices, customers or IMEIs, which a
+ *    screenshot of a live workspace would;
+ *  - it reflows on a phone, where most of this site is read;
+ *  - it is a few KB against a few hundred, on the largest element above the
+ *    fold.
+ *
+ * The colours are Suite's own tokens, copied rather than imported because the
+ * two apps are separate builds. If Suite's palette moves, this moves with it —
+ * `src/index.css` in the Suite repo is the source of truth.
+ */
 
-  return (
-    <div id="product-dashboard-container" className="relative w-full max-w-[680px] mx-auto select-none">
-      {/* Main Window Frame */}
-      <div 
-        id="dashboard-window"
-        className="w-full bg-[#FFFFFF] border border-[#E7E5DE] rounded-[18px] md:rounded-[22px] overflow-hidden"
+const INK = '#16181d';
+const INK_SOFT = '#5b606b';
+const INK_FAINT = '#8c919c';
+const PAPER = '#f2f3f0';
+const SURFACE = '#ffffff';
+const SUNKEN = '#ebece8';
+const LINE = '#e7e8e4';
+const ACCENT = '#2f6fed';
+const GOOD = '#13744c';
+const GOOD_WASH = '#e7f6ee';
+const WARN = '#b4790e';
+const WARN_WASH = '#fbf1de';
+
+/** The real navigation, in the real groups, in the real order. */
+const NAV: [string, { label: string; icon: React.ReactNode; active?: boolean }[]][] = [
+  ['Operate', [
+    { label: 'Inventory', icon: <Boxes className="w-3.5 h-3.5" />, active: true },
+    { label: 'Counter sale', icon: <Zap className="w-3.5 h-3.5" /> },
+    { label: 'Partner sourcing', icon: <Handshake className="w-3.5 h-3.5" /> },
+    { label: 'Day close', icon: <CalendarCheck className="w-3.5 h-3.5" /> },
+  ]],
+  ['Manage', [
+    { label: 'Customers', icon: <ContactRound className="w-3.5 h-3.5" /> },
+  ]],
+  ['Insight', [
+    { label: 'Finance', icon: <Landmark className="w-3.5 h-3.5" /> },
+  ]],
+];
+
+/** Stock lines, as Suite groups them: a model, and the units underneath it. */
+const LINES = [
+  { model: 'iPhone 13 Pro Max', spec: '256GB · Good · UK-Used', units: 4, cost: '2.1M', retail: '2.7M', profit: '596k', age: '9d', tone: 'fresh' },
+  { model: 'Samsung S23 Ultra', spec: '512GB · Mint · Open Box', units: 2, cost: '1.4M', retail: '1.8M', profit: '384k', age: '21d', tone: 'aging' },
+  { model: 'Infinix Note 40', spec: '256GB · Sealed', units: 11, cost: '1.9M', retail: '2.4M', profit: '517k', age: '4d', tone: 'fresh' },
+];
+
+/** One line opened, because per-unit tracking is the thing worth showing. */
+const UNITS = [
+  { imei: '356938•••472190', spec: 'Graphite · 92%', price: '₦685,000' },
+  { imei: '356938•••118034', spec: 'Silver · 88%', price: '₦672,000' },
+];
+
+export const ProductDashboard: React.FC = () => (
+  <div className="relative w-full max-w-[680px] mx-auto select-none">
+    {/*
+      A picture of an application, not an application. Nothing here responds to
+      a click, so nothing here should look as though it would.
+    */}
+    <figure
+      className="w-full rounded-[18px] md:rounded-[22px] overflow-hidden border m-0"
+      style={{ background: PAPER, borderColor: LINE }}
+    >
+      <figcaption className="sr-only">
+        Suite&rsquo;s Inventory workspace: stock grouped into lines by model, with every
+        physical unit kept separately under its own IMEI, cost price and stock age.
+      </figcaption>
+
+      {/* Top bar — the shop's own name and branch, which is what Suite shows. */}
+      <div
+        className="h-[46px] px-4 flex items-center justify-between border-b"
+        style={{ background: SURFACE, borderColor: LINE }}
       >
-        {/* Window Top Navigation / Titlebar */}
-        <div className="h-[46px] border-b border-[#EFECE6] px-4.5 bg-[#FAF9F7] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Minimalist window controls */}
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E5E3DC] border border-[#D5D3CC]" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E5E3DC] border border-[#D5D3CC]" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E5E3DC] border border-[#D5D3CC]" />
-            </div>
-
-            <div className="h-3.5 w-[1px] bg-[#E5E3DC] mx-1" />
-
-            {/* Suite App identifier */}
-            <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#252830] tracking-tight">
-              <div className="w-3.5 h-3.5 border border-[#121316] rounded-[2px] rotate-45 flex items-center justify-center">
-                <div className="w-1 h-1 bg-[#121316] rounded-[0.5px]" />
-              </div>
-              <span>Suite</span>
-              <span className="text-[11px] font-normal text-[#8A8F9E] ml-1 hidden sm:inline">Ade Gadgets / Ikeja</span>
-            </div>
-          </div>
-
-          {/* Search bar + Live Sync indicator */}
-          <div className="flex items-center gap-2.5">
-            <div className="hidden sm:flex items-center gap-2 bg-[#FFFFFF] border border-[#E5E3DC] rounded-md px-2.5 py-1 text-[11.5px] text-[#7E8392]">
-              <Search className="w-3 h-3 text-[#9CA3AF]" />
-              <span>Search IMEI, model, customer...</span>
-              <kbd className="font-mono text-[9px] bg-[#F3F2EE] px-1 py-0.5 rounded text-[#717684] border border-[#E5E3DC]">⌘K</kbd>
-            </div>
-
-            <div className="flex items-center gap-1.5 bg-[#F0FDF4] border border-[#DCFCE7] text-[#15803D] text-[10.5px] font-medium px-2 py-0.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
-              <span className="hidden xs:inline font-mono">Syncing 4/4</span>
-            </div>
-          </div>
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span
+            className="w-[18px] h-[18px] rounded-[5px] shrink-0"
+            style={{ background: INK }}
+            aria-hidden
+          />
+          <span className="text-[12.5px] font-semibold tracking-tight truncate" style={{ color: INK }}>
+            Ade Gadgets
+          </span>
+          <span className="text-[11px] hidden sm:inline truncate" style={{ color: INK_FAINT }}>
+            Ikeja · Shop B12
+          </span>
         </div>
 
-        {/* Window Body: Left Sidebar + Main Content */}
-        <div className="flex flex-col md:flex-row min-h-[360px]">
-          {/* Left Minimal Sidebar */}
-          <aside className="w-full md:w-[130px] border-b md:border-b-0 md:border-r border-[#EFECE6] bg-[#FAFAF8] p-2 md:p-3 flex md:flex-col justify-between md:justify-start gap-1">
-            <div className="flex md:flex-col gap-1 w-full overflow-x-auto">
-              <button 
-                onClick={() => setActiveTab('home')}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[12px] font-medium transition-colors text-left ${
-                  activeTab === 'home' 
-                    ? 'bg-[#EAE8E1] text-[#121316] font-semibold' 
-                    : 'text-[#646A79] hover:text-[#121316] hover:bg-[#F2F0E8]'
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5 opacity-75" />
-                <span>Overview</span>
-              </button>
-
-              <button 
-                onClick={() => setActiveTab('stock')}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[12px] font-medium transition-colors text-left ${
-                  activeTab === 'stock' 
-                    ? 'bg-[#EAE8E1] text-[#121316] font-semibold' 
-                    : 'text-[#646A79] hover:text-[#121316] hover:bg-[#F2F0E8]'
-                }`}
-              >
-                <Box className="w-3.5 h-3.5 opacity-75" />
-                <span>Stock</span>
-                <span className="ml-auto text-[10px] font-mono text-[#8C92A4] hidden md:inline">284</span>
-              </button>
-
-              <button 
-                onClick={() => setActiveTab('sales')}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[12px] font-medium transition-colors text-left ${
-                  activeTab === 'sales' 
-                    ? 'bg-[#EAE8E1] text-[#121316] font-semibold' 
-                    : 'text-[#646A79] hover:text-[#121316] hover:bg-[#F2F0E8]'
-                }`}
-              >
-                <TrendingUp className="w-3.5 h-3.5 opacity-75" />
-                <span>Sales</span>
-              </button>
-
-              <button 
-                onClick={() => setActiveTab('items')}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[12px] font-medium transition-colors text-left ${
-                  activeTab === 'items' 
-                    ? 'bg-[#EAE8E1] text-[#121316] font-semibold' 
-                    : 'text-[#646A79] hover:text-[#121316] hover:bg-[#F2F0E8]'
-                }`}
-              >
-                <Package className="w-3.5 h-3.5 opacity-75" />
-                <span>Credit</span>
-              </button>
-            </div>
-
-            <div className="hidden md:flex flex-col gap-1 mt-auto pt-3 border-t border-[#EAE8E0]">
-              <div className="px-2.5 py-1 text-[10px] font-mono text-[#949AA8] uppercase tracking-wider">
-                Locations
-              </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] text-[#555A68]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-                <span className="truncate">Ikeja Main</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] text-[#555A68]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-                <span className="truncate">Computer Village</span>
-              </div>
-            </div>
-          </aside>
-
-          {/* Main Dashboard Canvas */}
-          <main className="flex-1 p-3.5 sm:p-5 bg-[#FFFFFF] flex flex-col justify-between">
-            {/* Top Metric Cards Row */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[13px] font-semibold text-[#1F2228] tracking-tight">Overview</span>
-                <span className="text-[11px] font-mono text-[#7D8392]">Live feed • updated just now</span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                {/* Metric 1 */}
-                <div className="bg-[#FAF9F7] border border-[#ECEAE4] rounded-lg p-3 transition-colors hover:border-[#DFDDD6]">
-                  <div className="text-[11px] text-[#6B7280] font-medium tracking-tight mb-1">Sales this month</div>
-                  <div className="text-[19px] sm:text-[21px] font-semibold tracking-[-0.03em] text-[#121316] font-mono">
-                    ₦12.4m
-                  </div>
-                  <div className="flex items-center gap-1 mt-1 text-[10px] text-[#15803D] font-medium">
-                    <TrendingUp className="w-2.5 h-2.5" />
-                    <span>+14.2% this mo</span>
-                  </div>
-                </div>
-
-                {/* Metric 2 */}
-                <div className="bg-[#FAF9F7] border border-[#ECEAE4] rounded-lg p-3 transition-colors hover:border-[#DFDDD6]">
-                  <div className="text-[11px] text-[#6B7280] font-medium tracking-tight mb-1">Units in stock</div>
-                  <div className="text-[19px] sm:text-[21px] font-semibold tracking-[-0.03em] text-[#121316] font-mono">
-                    284
-                  </div>
-                  <div className="flex items-center gap-1 mt-1 text-[10px] text-[#4B5563] font-medium">
-                    <span>9 on hold</span>
-                  </div>
-                </div>
-
-                {/* Metric 3 (hidden on small mobile) */}
-                <div className="hidden sm:block bg-[#FAF9F7] border border-[#ECEAE4] rounded-lg p-3 transition-colors hover:border-[#DFDDD6]">
-                  <div className="text-[11px] text-[#6B7280] font-medium tracking-tight mb-1">Owed by customers</div>
-                  <div className="text-[19px] sm:text-[21px] font-semibold tracking-[-0.03em] text-[#121316] font-mono">
-                    ₦1.9m
-                  </div>
-                  <div className="flex items-center gap-1 mt-1 text-[10px] text-[#2563EB] font-medium">
-                    <span>6 accounts running</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Activity Table */}
-            <div className="mt-4 pt-3 border-t border-[#F0EEE8]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11.5px] font-semibold text-[#1F2228] tracking-tight">Recent activity</span>
-                <span className="text-[10.5px] text-[#868C9C] hover:text-[#121316] cursor-pointer">View all 142 →</span>
-              </div>
-
-              <div className="space-y-1.5 text-[12px]">
-                {/* Item 1 */}
-                <div 
-                  onClick={() => setSelectedRow(0)}
-                  className={`flex items-center justify-between p-2 rounded-md transition-colors cursor-pointer border ${
-                    selectedRow === 0 
-                      ? 'bg-[#F4F6F8] border-[#D1D5DB]' 
-                      : 'bg-[#FAF9F7] border-[#EFECE5] hover:bg-[#F5F4F0]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-5 h-5 rounded bg-[#ECFDF5] text-[#059669] flex items-center justify-center shrink-0">
-                      <ArrowDownLeft className="w-3 h-3" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-[#121316] truncate">iPhone 17 Pro Max</div>
-                      <div className="text-[10px] text-[#717684]">Booked in • Alaba Imports</div>
-                    </div>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-mono font-semibold text-[#059669]">+12</div>
-                    <div className="text-[9.5px] text-[#9AA0AF] font-mono">2m ago</div>
-                  </div>
-                </div>
-
-                {/* Item 2 */}
-                <div 
-                  onClick={() => setSelectedRow(1)}
-                  className={`flex items-center justify-between p-2 rounded-md transition-colors cursor-pointer border ${
-                    selectedRow === 1 
-                      ? 'bg-[#F4F6F8] border-[#D1D5DB]' 
-                      : 'bg-[#FAF9F7] border-[#EFECE5] hover:bg-[#F5F4F0]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-5 h-5 rounded bg-[#FEF2F2] text-[#DC2626] flex items-center justify-center shrink-0">
-                      <ArrowUpRight className="w-3 h-3" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-[#121316] truncate">Samsung S25 Ultra</div>
-                      <div className="text-[10px] text-[#717684]">Sold • Receipt PS-INV-0142</div>
-                    </div>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-mono font-semibold text-[#DC2626]">-1</div>
-                    <div className="text-[9.5px] text-[#9AA0AF] font-mono">14m ago</div>
-                  </div>
-                </div>
-
-                {/* Item 3 */}
-                <div 
-                  onClick={() => setSelectedRow(2)}
-                  className={`flex items-center justify-between p-2 rounded-md transition-colors cursor-pointer border ${
-                    selectedRow === 2 
-                      ? 'bg-[#F4F6F8] border-[#D1D5DB]' 
-                      : 'bg-[#FAF9F7] border-[#EFECE5] hover:bg-[#F5F4F0]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-5 h-5 rounded bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0">
-                      <Wrench className="w-3 h-3" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-[#121316] truncate">Screen repair — iPhone 14</div>
-                      <div className="text-[10px] text-[#717684]">Inspection • Amina</div>
-                    </div>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#DCFCE7] text-[#166534]">
-                      Completed
-                    </span>
-                    <div className="text-[9.5px] text-[#9AA0AF] font-mono">1h ago</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-
-        {/* Window Bottom Subtle Bar */}
-        <div className="px-4 py-2 bg-[#FAF9F7] border-t border-[#EFECE6] flex items-center justify-between text-[11px] text-[#7B8191]">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#3B82F6]" />
-            <span>All tills in sync — nothing waiting to send</span>
+        <div className="flex items-center gap-2">
+          <div
+            className="hidden sm:flex items-center gap-2 rounded-lg px-2.5 h-7 text-[11px] border"
+            style={{ background: PAPER, borderColor: LINE, color: INK_FAINT }}
+          >
+            <Search className="w-3 h-3" aria-hidden />
+            <span>Search a stock line, IMEI, colour, or supplier</span>
           </div>
-          <span className="font-mono text-[10px] text-[#9CA3AF]">v2.4.8-prod</span>
+          <span className="relative" aria-hidden>
+            <Bell className="w-4 h-4" style={{ color: INK_SOFT }} />
+            <span
+              className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full"
+              style={{ background: '#c9432f' }}
+            />
+          </span>
         </div>
       </div>
-    </div>
-  );
-};
+
+      <div className="flex flex-col md:flex-row">
+        {/* The real sidebar: three groups, one solid accent row for where you are. */}
+        <aside
+          className="w-full md:w-[142px] shrink-0 border-b md:border-b-0 md:border-r p-2.5 space-y-3"
+          style={{ background: SURFACE, borderColor: LINE }}
+        >
+          {NAV.map(([group, items]) => (
+            <div key={group}>
+              <p
+                className="px-2 mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.1em]"
+                style={{ color: INK_FAINT }}
+              >
+                {group}
+              </p>
+              <div className="flex md:block gap-1 md:gap-0 md:space-y-0.5 overflow-hidden">
+                {items.map((item) => (
+                  <span
+                    key={item.label}
+                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] whitespace-nowrap"
+                    style={item.active
+                      ? { background: ACCENT, color: '#ffffff', fontWeight: 600 }
+                      : { color: INK_SOFT, fontWeight: 500 }}
+                  >
+                    {item.icon}
+                    <span className="truncate">{item.label}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </aside>
+
+        {/* Inventory: the screen that shows what Suite is for. */}
+        <div className="flex-1 min-w-0 p-3 md:p-4 space-y-3">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 px-1 text-[11.5px]" style={{ color: INK_SOFT }}>
+            <span><strong style={{ color: INK }}>17</strong> units in stock</span>
+            <span>Expected retail <strong style={{ color: INK }}>₦6.9M</strong></span>
+            <span className="hidden sm:inline">Potential profit <strong style={{ color: GOOD }}>₦1.5M</strong></span>
+          </div>
+
+          <div className="rounded-xl overflow-hidden border" style={{ background: SURFACE, borderColor: LINE }}>
+            <div
+              className="hidden lg:grid grid-cols-[2fr_.6fr_1fr_1fr_.7fr] gap-3 px-4 py-2 text-[9.5px] font-bold uppercase tracking-wider border-b"
+              style={{ background: SUNKEN, borderColor: LINE, color: INK_SOFT }}
+            >
+              <div>Stock line</div><div>Units</div><div>Cost (₦)</div><div>Retail (₦)</div><div>Oldest</div>
+            </div>
+
+            {LINES.map((line, index) => (
+              <div key={line.model}>
+                <div
+                  className="grid grid-cols-[2fr_.6fr_1fr_1fr_.7fr] gap-3 px-4 py-2.5 items-center text-[12px]"
+                  style={index > 0 ? { borderTop: `1px solid ${LINE}` } : undefined}
+                >
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate" style={{ color: INK }}>{line.model}</p>
+                    <p className="text-[10.5px] truncate" style={{ color: INK_FAINT }}>{line.spec}</p>
+                  </div>
+                  <div style={{ color: INK_SOFT }}>{line.units}</div>
+                  <div className="tabular-nums" style={{ color: INK_SOFT }}>{line.cost}</div>
+                  <div className="tabular-nums font-medium" style={{ color: INK }}>{line.retail}</div>
+                  <div>
+                    <span
+                      className="text-[9.5px] px-1.5 py-0.5 rounded-full font-semibold"
+                      style={line.tone === 'aging'
+                        ? { background: WARN_WASH, color: WARN }
+                        : { background: GOOD_WASH, color: GOOD }}
+                    >
+                      {line.age}
+                    </span>
+                  </div>
+                </div>
+
+                {/*
+                  One line opened. A stock line is a convenience; the unit is the
+                  record, and this is the only way to say that without prose.
+                */}
+                {index === 0 && (
+                  <div className="px-4 pb-3" style={{ background: PAPER }}>
+                    <p
+                      className="text-[9.5px] font-bold uppercase tracking-wider pt-2.5 pb-1.5"
+                      style={{ color: INK_FAINT }}
+                    >
+                      Units · each tracked on its own
+                    </p>
+                    <div className="rounded-lg overflow-hidden border" style={{ background: SURFACE, borderColor: LINE }}>
+                      {UNITS.map((unit, unitIndex) => (
+                        <div
+                          key={unit.imei}
+                          className="flex items-center justify-between gap-3 px-3 py-1.5 text-[11px]"
+                          style={unitIndex > 0 ? { borderTop: `1px solid ${LINE}` } : undefined}
+                        >
+                          <span className="font-mono truncate" style={{ color: INK }}>{unit.imei}</span>
+                          <span className="hidden sm:inline truncate" style={{ color: INK_FAINT }}>{unit.spec}</span>
+                          <span className="tabular-nums font-semibold shrink-0" style={{ color: INK }}>{unit.price}</span>
+                        </div>
+                      ))}
+                      <div
+                        className="px-3 py-1.5 text-[10.5px]"
+                        style={{ borderTop: `1px solid ${LINE}`, color: INK_FAINT }}
+                      >
+                        + 2 more units on this line
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+);
