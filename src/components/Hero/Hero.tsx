@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { MaskedRotator } from './MaskedRotator';
-import { ProductDashboard } from './ProductDashboard';
+import suiteBg from '../../assets/suite-bg.png';
+import macbookImg from '../../assets/macbook-5.png';
 
 export interface HeroProps {
   onOpenSignUp: (email?: string) => void;
@@ -112,9 +113,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
           </div>
 
           {/* Right Column: 58% on desktop (7 cols out of 12) */}
-          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-100 lg:scale-[1.1]">
-            <div className="w-full p-3.5 sm:p-5 md:p-6 bg-gradient-to-br from-[#EEF4FB] via-[#F4F7FB] to-[#F7F5F0] rounded-[28px] border border-[#E4ECF4]">
-              <ProductDashboard />
+          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-100 lg:scale-[1.05]">
+            <div 
+              className="relative w-full rounded-[24px] sm:rounded-[28px] md:rounded-[32px] overflow-hidden border border-[#E4ECF4] shadow-lg p-3.5 sm:p-5 md:p-6 flex items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: `url(${suiteBg})` }}
+            >
+              <img 
+                src={macbookImg} 
+                alt="Suite Dashboard Preview" 
+                className="w-full h-auto block object-contain drop-shadow-2xl rounded-[12px] sm:rounded-[16px]"
+              />
             </div>
           </div>
 
