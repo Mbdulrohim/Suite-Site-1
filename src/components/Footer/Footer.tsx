@@ -108,8 +108,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection,
             </div>
           </div>
 
-          {/* Right Column: 4-column link groups (Product, Guides, Company, Info) */}
-          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+          {/* Right Column: 3-column link groups (Product, Company, Info) */}
+          <div className="md:col-span-7 grid grid-cols-3 gap-6 sm:gap-10">
             
             {/* Product Links */}
             <div className="flex flex-col gap-2.5 text-[13px]">
@@ -146,20 +146,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSignUp, onNavigateSection,
                 className="text-[#646A7A] hover:text-[#121316] transition-colors"
               >
                 Pricing
-              </a>
-            </div>
-
-            {/* Guides — the pages that answer what people actually search for. */}
-            <div className="flex flex-col gap-2.5 text-[13px]">
-              <span className="font-semibold text-[#121316] text-[13px] tracking-tight mb-1">Guides</span>
-              <a href="/imei-stock-tracking" className="text-[#646A7A] hover:text-[#121316] transition-colors">
-                Tracking stock by IMEI
-              </a>
-              <a href="/customer-debt-tracking" className="text-[#646A7A] hover:text-[#121316] transition-colors">
-                Recording customer debts
-              </a>
-              <a href="/vs-epos-now" className="text-[#646A7A] hover:text-[#121316] transition-colors">
-                Suite vs Epos Now
               </a>
             </div>
 
