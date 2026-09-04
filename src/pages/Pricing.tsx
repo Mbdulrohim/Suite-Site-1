@@ -12,11 +12,11 @@ import { CallToAction, PageShell, Panel, Section } from './Shell.tsx';
  */
 const TIERS = [
   {
-    name: 'Standard',
+    name: '1 Shop',
     monthly: 25000,
     yearly: 15000,
     off: '40%',
-    who: 'One shop.',
+    who: '1 shop.',
     has: [
       'Every unit tracked by IMEI or serial number',
       'Counter sales, receipts, invoices and waybills',
@@ -28,22 +28,25 @@ const TIERS = [
     ],
   },
   {
-    name: 'Plus',
+    name: '2–5 Shops',
     monthly: 55000,
     yearly: 35000,
     off: '36%',
-    who: 'Up to five locations.',
+    who: '2–5 shops.',
     feature: true,
     has: [
-      'Everything in Standard',
-      'Up to five branches under one account',
+      'Up to 5 branches under one account',
       'Stock transfers between your branches',
+      'Real-time multi-branch stock visibility',
+      'Centralized sales, receipts and waybills',
+      'Multi-branch customer credit & debt tracking',
+      'Consolidated day close & profit reporting',
       'A public page and online storefront',
     ],
   },
   {
-    name: 'Enterprise',
-    who: 'More than five locations.',
+    name: '5 or more shops',
+    who: '5 or more shops.',
     /*
      * No figure, because there genuinely is not one — this tier exists for
      * groups and for work built to order. Saying "let us talk" plainly beats
@@ -51,10 +54,11 @@ const TIERS = [
      * the page and letting a big shop conclude Suite is not for them.
      */
     has: [
-      'Everything in Plus',
-      'As many branches as you run',
-      'Work built for how your group actually operates',
-      'A person to call, not a form',
+      'Custom Workflow Integration',
+      'Dedicated Account Manager',
+      'Unlimited Team Seats',
+      'Custom Audit Logs & SLA',
+      '24/7 Priority Support',
     ],
   },
 ];
@@ -156,11 +160,11 @@ export const Pricing = () => {
 
     <Section heading="What does Suite cost in Nigeria?">
       <p>
-        Suite costs <strong className="font-medium text-[#121316]">₦25,000 a month</strong> for a
-        single shop, or ₦15,000 a month if you pay for a year at once — ₦180,000 for the year
-        instead of ₦300,000. A business running up to five locations pays{' '}
+        Suite costs <strong className="font-medium text-[#121316]">₦25,000 a month</strong> for 1
+        shop, or ₦15,000 a month if you pay for a year at once — ₦180,000 for the year
+        instead of ₦300,000. A business running 2–5 shops pays{' '}
         <strong className="font-medium text-[#121316]">₦55,000 a month</strong>, or ₦35,000 a month
-        on the yearly rate. Larger groups are priced per agreement.
+        on the yearly rate. Businesses with 5 or more shops are priced per agreement.
       </p>
       <p>
         Nothing is charged per staff member. Everyone at the counter can have their own login on

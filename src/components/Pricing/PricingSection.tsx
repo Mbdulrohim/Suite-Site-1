@@ -22,46 +22,46 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
 
   const plans = [
     {
-      id: 'basic',
-      name: 'Basic Plan',
+      id: '1-shop',
+      name: '1 Shop',
       monthlyPrice: '₦25,000',
       yearlyEffectivePrice: '₦15,000',
       isPopular: false,
       isCustom: false,
       ctaText: 'Get Started',
-      iconType: 'info',
+      iconType: 'check',
       features: [
-        'Update Cycle',
-        'Subscription Policy',
-        'Communication',
-        'Companies',
-        'Requests',
-        'Support',
-        'Additional Director',
+        'Every unit tracked by IMEI or serial number',
+        'Counter sales, receipts, invoices and waybills',
+        'Customer debts, repayments and due dates',
+        'Suppliers, payables and landed costs',
+        'Trade-ins and swaps',
+        'Day close, expenses and reporting',
+        'As many staff logins as you need',
       ],
     },
     {
-      id: 'standard',
-      name: 'Standard Plan',
+      id: '2-5-shops',
+      name: '2–5 Shops',
       monthlyPrice: '₦55,000',
-      yearlyEffectivePrice: '₦29,166',
+      yearlyEffectivePrice: '₦35,000',
       isPopular: true,
       isCustom: false,
       ctaText: 'Get Started',
       iconType: 'green-check',
       features: [
-        'Update Cycle',
-        'Subscription Policy',
-        'Communication',
-        'Companies',
-        'Requests',
-        'Support',
-        'Additional Director',
+        'Up to 5 branches under one account',
+        'Stock transfers between your branches',
+        'Real-time multi-branch stock visibility',
+        'Centralized sales, receipts and waybills',
+        'Multi-branch customer credit & debt tracking',
+        'Consolidated day close & profit reporting',
+        'A public page and online storefront',
       ],
     },
     {
       id: 'enterprise',
-      name: 'Enterprise Plan',
+      name: '5 or more shops',
       monthlyPrice: 'Custom',
       yearlyEffectivePrice: 'Custom',
       isPopular: false,
@@ -97,7 +97,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
             {/* Green Discount Floating Badge */}
             <div className="absolute -top-3.5 right-1 z-10">
               <span className="bg-[#D8F8E5] text-[#16A34A] text-[10px] font-medium px-2 py-0.5 rounded-full border border-[#BBF7D0]">
-                5 months FREE
+                Save up to 40%
               </span>
             </div>
 
