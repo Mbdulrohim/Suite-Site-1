@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Check } from 'lucide-react';
-import { CallToAction, PageShell, Panel, Section } from './Shell.tsx';
+import { CallToAction, PageShell, Panel, Section, SignUpContext } from './Shell.tsx';
 
 /**
  * The price, in naira, on a page.
@@ -12,41 +12,35 @@ import { CallToAction, PageShell, Panel, Section } from './Shell.tsx';
  */
 const TIERS = [
   {
-    name: '1 Shop',
+    name: 'Standard',
     monthly: 25000,
     yearly: 15000,
     off: '40%',
-    who: '1 shop.',
     has: [
-      'Every unit tracked by IMEI or serial number',
-      'Counter sales, receipts, invoices and waybills',
-      'Customer debts, repayments and due dates',
-      'Suppliers, payables and landed costs',
-      'Trade-ins and swaps',
-      'Day close, expenses and reporting',
-      'As many staff logins as you need',
+      '1 shop',
+      'IMEI tracking',
+      'Counter sales',
+      'Customer debts',
+      'Supplier records',
+      'Device swaps',
+      'Unlimited staff',
     ],
   },
   {
-    name: '2–5 Shops',
+    name: 'Plus',
     monthly: 55000,
     yearly: 35000,
     off: '36%',
-    who: '2–5 shops.',
     feature: true,
     has: [
-      'Up to 5 branches under one account',
-      'Stock transfers between your branches',
-      'Real-time multi-branch stock visibility',
-      'Centralized sales, receipts and waybills',
-      'Multi-branch customer credit & debt tracking',
-      'Consolidated day close & profit reporting',
-      'A public page and online storefront',
+      '2–5 shops',
+      'Everything in Standard',
+      'Stock transfers',
+      'Online storefront',
     ],
   },
   {
-    name: '5 or more shops',
-    who: '5 or more shops.',
+    name: 'Enterprise',
     /*
      * No figure, because there genuinely is not one — this tier exists for
      * groups and for work built to order. Saying "let us talk" plainly beats
@@ -54,11 +48,10 @@ const TIERS = [
      * the page and letting a big shop conclude Suite is not for them.
      */
     has: [
-      'Custom Workflow Integration',
-      'Dedicated Account Manager',
-      'Unlimited Team Seats',
-      'Custom Audit Logs & SLA',
-      '24/7 Priority Support',
+      '5 or more shops',
+      'Everything in Plus',
+      'Custom workflows',
+      'Dedicated contact',
     ],
   },
 ];
@@ -67,6 +60,7 @@ const naira = (value: number) => `₦${value.toLocaleString('en-NG')}`;
 
 export const Pricing = () => {
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
+  const openSignUp = useContext(SignUpContext);
 
   return (
   <PageShell
@@ -89,82 +83,95 @@ export const Pricing = () => {
     </div>
     <div className="mx-auto max-w-[1140px] grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
       {TIERS.map((tier) => (
-        <Panel key={tier.name} className={`p-7 sm:p-9 ${tier.feature === true ? 'bg-white' : ''}`}>
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-[15px] font-medium tracking-tight">{tier.name}</h2>
-            {/*
-              The saving used to be grey text mid-sentence — the lightest
-              treatment on the card, on the number we most want read. Paying
-              yearly is what is being pushed, so it carries the same dark pill
-              the primary button uses. Enterprise has no percentage to show, so
-              it says what it is instead of leaving a hole where a badge goes.
-            */}
-            {tier.off === undefined ? (
-              <span className="shrink-0 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-[12px] font-medium tracking-tight text-gray-500">
-                Per agreement
-              </span>
+        <Panel key={tier.name} className={`p-7 sm:p-9 flex flex-col justify-between ${tier.feature === true ? 'bg-white' : ''}`}>
+          <div>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-[15px] font-medium tracking-tight">{tier.name}</h2>
+              {/*
+                The saving used to be grey text mid-sentence — the lightest
+                treatment on the card, on the number we most want read. Paying
+                yearly is what is being pushed, so it carries the same dark pill
+                the primary button uses. Enterprise has no percentage to show, so
+                it says what it is instead of leaving a hole where a badge goes.
+              */}
+              {tier.off === undefined ? (
+                <span className="shrink-0 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-[12px] font-medium tracking-tight text-gray-500">
+                  Per agreement
+                </span>
+              ) : (
+                <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
+                  {billing === 'yearly' ? `Save ${tier.off}` : 'Yearly discount'}
+                </span>
+              )}
+            </div>
+
+            {tier.monthly === undefined || tier.yearly === undefined ? (
+              <>
+                <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none">
+                  Let’s talk
+                </p>
+                <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
+                  Priced on what you actually run
+                </p>
+                <p className="mt-1.5 text-[13px] text-gray-400">
+                  Tell us how many shops and we will quote you properly
+                </p>
+              </>
             ) : (
-              <span className="shrink-0 rounded-full bg-[#121316] text-[#FAF9F6] px-3 py-1.5 text-[12px] font-medium tracking-tight tabular-nums">
-                {billing === 'yearly' ? `Save ${tier.off}` : 'Yearly discount'}
-              </span>
+              <>
+                <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
+                  {naira(billing === 'yearly' ? tier.yearly * 12 : tier.monthly)}
+                  <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /{billing === 'yearly' ? 'year' : 'month'}</span>
+                </p>
+
+                <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
+                  {billing === 'yearly'
+                    ? <><strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month, billed once yearly</>
+                    : <>Switch to yearly and pay <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month</>}
+                </p>
+
+                <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
+                  {billing === 'yearly' ? `${naira(tier.monthly * 12)} at the monthly rate — you keep ` : 'Yearly total: '}
+                  <strong className="font-medium text-[#121316]">
+                    {billing === 'yearly' ? naira((tier.monthly - tier.yearly) * 12) : naira(tier.yearly * 12)}
+                  </strong>
+                </p>
+              </>
             )}
+
+            <ul className="mt-7 space-y-2.5">
+              {tier.has.map((line) => (
+                <li key={line} className="flex gap-2.5 text-[14px] leading-[1.55] text-gray-600">
+                  <Check className="w-4 h-4 mt-[2px] shrink-0 text-blue-500" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {tier.monthly === undefined || tier.yearly === undefined ? (
-            <>
-              <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none">
-                Let’s talk
-              </p>
-              <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
-                Priced on what you actually run
-              </p>
-              <p className="mt-1.5 text-[13px] text-gray-400">
-                Tell us how many shops and we will quote you properly
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="mt-6 text-[#121316] font-medium tracking-tight text-[38px] leading-none tabular-nums">
-                {naira(billing === 'yearly' ? tier.yearly * 12 : tier.monthly)}
-                <span className="text-[15px] font-normal text-gray-400 tracking-normal"> /{billing === 'yearly' ? 'year' : 'month'}</span>
-              </p>
-
-              <p className="mt-3 text-[15px] leading-[1.5] text-gray-600">
-                {billing === 'yearly'
-                  ? <><strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month, billed once yearly</>
-                  : <>Switch to yearly and pay <strong className="font-medium text-[#121316] tabular-nums">{naira(tier.yearly)}</strong> a month</>}
-              </p>
-
-              <p className="mt-1.5 text-[13px] text-gray-400 tabular-nums">
-                {billing === 'yearly' ? `${naira(tier.monthly * 12)} at the monthly rate — you keep ` : 'Yearly total: '}
-                <strong className="font-medium text-[#121316]">
-                  {billing === 'yearly' ? naira((tier.monthly - tier.yearly) * 12) : naira(tier.yearly * 12)}
-                </strong>
-              </p>
-            </>
-          )}
-
-          <p className="mt-5 text-[13px] text-gray-400">{tier.who}</p>
-
-          <ul className="mt-7 space-y-2.5">
-            {tier.has.map((line) => (
-              <li key={line} className="flex gap-2.5 text-[14px] leading-[1.55] text-gray-600">
-                <Check className="w-4 h-4 mt-[2px] shrink-0 text-blue-500" />
-                <span>{line}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-8 pt-4">
+            <button
+              type="button"
+              onClick={openSignUp}
+              className={tier.monthly === undefined
+                ? "w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50 text-[#121316] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
+                : "w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-[#121316] hover:bg-black text-[#FAF9F6] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
+              }
+            >
+              {tier.monthly === undefined ? "Tell us about your group" : "Start today, free"}
+            </button>
+          </div>
         </Panel>
       ))}
     </div>
 
     <Section heading="What does Suite cost in Nigeria?">
       <p>
-        Suite costs <strong className="font-medium text-[#121316]">₦25,000 a month</strong> for 1
-        shop, or ₦15,000 a month if you pay for a year at once — ₦180,000 for the year
-        instead of ₦300,000. A business running 2–5 shops pays{' '}
+        Suite costs <strong className="font-medium text-[#121316]">₦25,000 a month</strong> for a
+        single shop, or ₦15,000 a month if you pay for a year at once — ₦180,000 for the year
+        instead of ₦300,000. A business running up to five locations pays{' '}
         <strong className="font-medium text-[#121316]">₦55,000 a month</strong>, or ₦35,000 a month
-        on the yearly rate. Businesses with 5 or more shops are priced per agreement.
+        on the yearly rate. Larger groups are priced per agreement.
       </p>
       <p>
         Nothing is charged per staff member. Everyone at the counter can have their own login on

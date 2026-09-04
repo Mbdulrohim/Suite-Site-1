@@ -22,59 +22,55 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
 
   const plans = [
     {
-      id: '1-shop',
-      name: '1 Shop',
+      id: 'standard',
+      name: 'Standard Plan',
       monthlyPrice: '₦25,000',
       yearlyEffectivePrice: '₦15,000',
       isPopular: false,
       isCustom: false,
-      ctaText: 'Get Started',
+      ctaText: 'Start today, free',
       iconType: 'check',
       features: [
-        'Every unit tracked by IMEI or serial number',
-        'Counter sales, receipts, invoices and waybills',
-        'Customer debts, repayments and due dates',
-        'Suppliers, payables and landed costs',
-        'Trade-ins and swaps',
-        'Day close, expenses and reporting',
-        'As many staff logins as you need',
+        '1 shop',
+        'IMEI tracking',
+        'Counter sales',
+        'Customer debts',
+        'Supplier records',
+        'Device swaps',
+        'Unlimited staff',
       ],
     },
     {
-      id: '2-5-shops',
-      name: '2–5 Shops',
+      id: 'plus',
+      name: 'Plus Plan',
       monthlyPrice: '₦55,000',
       yearlyEffectivePrice: '₦35,000',
       isPopular: true,
       isCustom: false,
-      ctaText: 'Get Started',
+      ctaText: 'Start today, free',
       iconType: 'green-check',
       features: [
-        'Up to 5 branches under one account',
-        'Stock transfers between your branches',
-        'Real-time multi-branch stock visibility',
-        'Centralized sales, receipts and waybills',
-        'Multi-branch customer credit & debt tracking',
-        'Consolidated day close & profit reporting',
-        'A public page and online storefront',
+        '2–5 shops',
+        'Everything in Standard',
+        'Stock transfers',
+        'Online storefront',
       ],
     },
     {
       id: 'enterprise',
-      name: '5 or more shops',
-      monthlyPrice: 'Custom',
-      yearlyEffectivePrice: 'Custom',
+      name: 'Enterprise Plan',
+      monthlyPrice: 'Let’s talk',
+      yearlyEffectivePrice: 'Let’s talk',
       isPopular: false,
       isCustom: true,
-      description: 'Custom workflows designed around your infrastructure. Trusted by teams like Joshville.',
-      ctaText: 'Contact Team',
+      description: 'Priced on what you actually run. Tell us how many shops and we will quote you properly.',
+      ctaText: 'Tell us about your group',
       iconType: 'dark-check',
       features: [
-        'Custom Workflow Integration',
-        'Dedicated Account Manager',
-        'Unlimited Team Seats',
-        'Custom Audit Logs & SLA',
-        '24/7 Priority Support',
+        '5 or more shops',
+        'Everything in Plus',
+        'Custom workflows',
+        'Dedicated contact',
       ],
     },
   ];
@@ -97,7 +93,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
             {/* Green Discount Floating Badge */}
             <div className="absolute -top-3.5 right-1 z-10">
               <span className="bg-[#D8F8E5] text-[#16A34A] text-[10px] font-medium px-2 py-0.5 rounded-full border border-[#BBF7D0]">
-                Save up to 40%
+                5 months FREE
               </span>
             </div>
 
@@ -227,19 +223,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
                     <div className="space-y-4 text-left">
                       {plan.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-3 text-[14px] sm:text-[14.5px] font-medium text-[#444444]">
-                          {plan.iconType === 'info' ? (
-                            <span className="inline-flex items-center gap-2">
-                              <span>{feature}</span>
-                              <span className="w-4 h-4 rounded-full border border-gray-300 text-gray-400 flex items-center justify-center text-[10px] font-medium">
-                                !
-                              </span>
-                            </span>
-                          ) : (
-                            <>
-                              <Check className="w-4 h-4 text-[#444444] stroke-[2.5] shrink-0" />
-                              <span>{feature}</span>
-                            </>
-                          )}
+                          <Check className="w-4 h-4 text-[#444444] stroke-[2.5] shrink-0" />
+                          <span>{feature}</span>
                         </div>
                       ))}
                     </div>
