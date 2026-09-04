@@ -1,6 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Check } from 'lucide-react';
-import { CallToAction, PageShell, Panel, Section, SignUpContext } from './Shell.tsx';
+import { CallToAction, PageShell, Panel, Section, useSignUp } from './Shell.tsx';
 
 /**
  * The price, in naira, on a page.
@@ -12,46 +12,49 @@ import { CallToAction, PageShell, Panel, Section, SignUpContext } from './Shell.
  */
 const TIERS = [
   {
-    name: 'Standard',
+    name: 'Basic Plan',
     monthly: 25000,
     yearly: 15000,
     off: '40%',
+    who: '1 shop.',
     has: [
       '1 shop',
       'IMEI tracking',
-      'Counter sales',
-      'Customer debts',
-      'Supplier records',
-      'Device swaps',
+      'Invoicing & receipts',
+      'Debts & payables',
+      'Trade-in tracking',
+      'Reports & accounting',
       'Unlimited staff',
     ],
   },
   {
-    name: 'Plus',
+    name: 'Standard Plan',
     monthly: 55000,
     yearly: 35000,
     off: '36%',
+    who: '2–5 shops.',
     feature: true,
     has: [
       '2–5 shops',
-      'Everything in Standard',
+      'Everything in Basic',
       'Stock transfers',
+      'Multi-branch sync',
       'Online storefront',
+      'Daily close reports',
+      'Unlimited staff',
     ],
   },
   {
-    name: 'Enterprise',
-    /*
-     * No figure, because there genuinely is not one — this tier exists for
-     * groups and for work built to order. Saying "let us talk" plainly beats
-     * inventing a number nobody would honour, and beats leaving the tier off
-     * the page and letting a big shop conclude Suite is not for them.
-     */
+    name: 'Enterprise Plan',
+    who: '5+ shops.',
     has: [
-      '5 or more shops',
-      'Everything in Plus',
+      '5+ shops',
+      'Everything in Standard',
       'Custom workflows',
-      'Dedicated contact',
+      'Unlimited staff',
+      'Dedicated manager',
+      'Audit logs & SLA',
+      '24/7 priority support',
     ],
   },
 ];
@@ -60,7 +63,7 @@ const naira = (value: number) => `₦${value.toLocaleString('en-NG')}`;
 
 export const Pricing = () => {
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
-  const openSignUp = useContext(SignUpContext);
+  const openSignUp = useSignUp();
 
   return (
   <PageShell
@@ -83,7 +86,7 @@ export const Pricing = () => {
     </div>
     <div className="mx-auto max-w-[1140px] grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
       {TIERS.map((tier) => (
-        <Panel key={tier.name} className={`p-7 sm:p-9 flex flex-col justify-between ${tier.feature === true ? 'bg-white' : ''}`}>
+        <Panel key={tier.name} className={`p-7 sm:p-9 flex flex-col justify-between ${tier.feature === true ? 'bg-white shadow-sm' : ''}`}>
           <div>
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-[15px] font-medium tracking-tight">{tier.name}</h2>
@@ -139,6 +142,8 @@ export const Pricing = () => {
               </>
             )}
 
+            <p className="mt-5 text-[13px] text-gray-400">{tier.who}</p>
+
             <ul className="mt-7 space-y-2.5">
               {tier.has.map((line) => (
                 <li key={line} className="flex gap-2.5 text-[14px] leading-[1.55] text-gray-600">
@@ -154,8 +159,8 @@ export const Pricing = () => {
               type="button"
               onClick={openSignUp}
               className={tier.monthly === undefined
-                ? "w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50 text-[#121316] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
-                : "w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-[#121316] hover:bg-black text-[#FAF9F6] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
+                ? "w-full inline-flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50 text-[#121316] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
+                : "w-full inline-flex items-center justify-center rounded-full bg-[#121316] hover:bg-black text-[#FAF9F6] text-[13.5px] font-medium tracking-tight px-6 py-2.5 transition-colors cursor-pointer"
               }
             >
               {tier.monthly === undefined ? "Tell us about your group" : "Start today, free"}
