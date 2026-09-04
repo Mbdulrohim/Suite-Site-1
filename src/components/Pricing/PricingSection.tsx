@@ -5,9 +5,34 @@ export interface PricingSectionProps {
   onOpenSignUp: () => void;
 }
 
+const BASIC_FEATURE_DESCRIPTIONS: Record<string, string> = {
+  '1 shop': 'Full cloud license and dedicated ledger for a single physical store or retail location.',
+  'IMEI tracking': 'Track every phone, laptop, and device by unique IMEI or serial number from intake to sale.',
+  'Invoicing & receipts': 'Generate branded counter receipts, printable invoices, waybills, and instant WhatsApp receipts.',
+  'Debts & payables': 'Keep clear, tamper-proof ledgers of customer debts, repayment schedules, and supplier payables.',
+  'Trade-in tracking': 'Record device swaps and customer trade-ins with verified valuations and serial matching.',
+  'Reports & accounting': 'Daily sales summaries, end-of-day cash reconciliation, gross profit calculation, and expense tracking.',
+  'Unlimited staff': 'Create independent logins with individual permissions for all your sales reps and cashier staff at no extra cost.',
+};
+
 export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
+  const [activeInfo, setActiveInfo] = useState<string | null>(null);
+  const [hoveredInfo, setHoveredInfo] = useState<string | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Close info tooltip when clicking/tapping away on mobile or desktop
+  useEffect(() => {
+    if (!activeInfo) return;
+    const handleClickAway = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest?.('[data-info-popover]')) {
+        setActiveInfo(null);
+      }
+    };
+    document.addEventListener('pointerdown', handleClickAway);
+    return () => document.removeEventListener('pointerdown', handleClickAway);
+  }, [activeInfo]);
 
   // On mobile, scroll carousel so the popular card (index 1) is centred by default
   useEffect(() => {
@@ -227,12 +252,78 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
 
                     {/* Feature List */}
                     <div className="space-y-4 text-left">
-                      {plan.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-3 text-[14px] sm:text-[14.5px] font-medium text-[#444444]">
-                          <Check className="w-4 h-4 text-[#444444] stroke-[2.5] shrink-0" />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                      {plan.features.map((feature, idx) => {
+                        const isBasic = plan.id === 'basic';
+                        const desc = BASIC_FEATURE_DESCRIPTIONS[feature];
+                        const isPopoverOpen = (hoveredInfo === feature) || (activeInfo === feature);
+
+                        if (isBasic && desc) {
+                          return (
+                            <div
+                              key={idx}
+                              data-info-popover
+                              className="relative flex items-center text-[14px] sm:text-[14.5px] font-medium text-[#444444]"
+                              onMouseEnter={() => setHoveredInfo(feature)}
+                              onMouseLeave={() => setHoveredInfo(null)}
+                            >
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveInfo((prev) => (prev === feature ? null : feature));
+                                }}
+                                className="inline-flex items-center gap-2 cursor-pointer group text-left focus:outline-none select-none py-0.5"
+                                aria-expanded={isPopoverOpen}
+                              >
+                                <span className="group-hover:text-[#121316] transition-colors">{feature}</span>
+                                <span className="w-4 h-4 rounded-full border border-gray-300 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-700 flex items-center justify-center text-[10px] font-serif italic transition-colors shrink-0">
+                                  i
+                                </span>
+                              </button>
+
+                              {/* Tooltip / Small Modal */}
+                              {isPopoverOpen && (
+                                <div
+                                  data-info-popover
+                                  className="absolute left-0 bottom-full mb-2.5 z-50 w-[260px] sm:w-[280px] p-3.5 bg-white text-[#121316] rounded-2xl shadow-xl border border-gray-200/90 text-left pointer-events-auto select-text animate-in fade-in zoom-in-95 duration-150"
+                                  role="tooltip"
+                                >
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className="text-[12.5px] font-semibold text-[#121316] tracking-tight">{feature}</span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveInfo(null);
+                                        setHoveredInfo(null);
+                                      }}
+                                      className="text-gray-400 hover:text-gray-600 p-0.5 rounded-full cursor-pointer transition-colors"
+                                      aria-label="Close"
+                                    >
+                                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                  <p className="text-[12px] leading-relaxed text-[#555861] font-normal">
+                                    {desc}
+                                  </p>
+                                  {/* Downward pointing arrow */}
+                                  <div className="absolute top-full left-6 -mt-[1px] w-2.5 h-2.5 bg-white border-b border-r border-gray-200/90 transform rotate-45" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div key={idx} className="flex items-center gap-3 text-[14px] sm:text-[14.5px] font-medium text-[#444444]">
+                            <Check className="w-4 h-4 text-[#444444] stroke-[2.5] shrink-0" />
+                            <span>{feature}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
