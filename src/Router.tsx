@@ -17,6 +17,11 @@ import { Pricing } from './pages/Pricing.tsx';
 import { ImeiStockTracking } from './pages/ImeiStockTracking.tsx';
 import { CustomerDebt } from './pages/CustomerDebt.tsx';
 import { VsEposNow } from './pages/VsEposNow.tsx';
+import { BlogPage } from './components/Blog/BlogPage.tsx';
+
+const BlogRoute = () => (
+  <BlogPage onBackToHome={() => { if (typeof window !== 'undefined') window.location.href = '/'; }} />
+);
 
 const PAGES: Record<string, () => ReactElement> = {
   '/': Home,
@@ -24,6 +29,7 @@ const PAGES: Record<string, () => ReactElement> = {
   '/imei-stock-tracking': ImeiStockTracking,
   '/customer-debt-tracking': CustomerDebt,
   '/vs-epos-now': VsEposNow,
+  '/blog': BlogRoute,
 };
 
 /** Trailing slashes are the same page, so /pricing/ never 404s or duplicates. */
