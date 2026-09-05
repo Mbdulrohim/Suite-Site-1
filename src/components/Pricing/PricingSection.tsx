@@ -156,33 +156,33 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
 
         {/* 3 Pricing Cards: 15k, 29.1k, Enterprise */}
         <div className="relative w-full">
-          <div ref={carouselRef} className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-end max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-6 pt-4 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none">
+          <div ref={carouselRef} className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-6 md:gap-8 items-start max-w-[1100px] mx-auto px-4 sm:px-6 md:px-0 pb-6 pt-4 md:pt-14 -mx-4 sm:-mx-6 md:mx-auto scrollbar-none">
             {plans.map((plan) => {
               const currentPrice = billingCycle === 'yearly' ? plan.yearlyEffectivePrice : plan.monthlyPrice;
 
               if (plan.isPopular) {
                 return (
-                  /* Popular Standard Plan (29.1k / 55k) - Taller at top, bottom-aligned */
+                  /* Popular Standard Plan (29.1k / 55k) - Popular banner sits above, inner card aligns with side cards */
                   <div
                     key={plan.id}
-                    className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center relative rounded-[32px] bg-[#444444] p-[2.5px] flex flex-col z-10"
+                    className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center relative rounded-[32px] bg-[#444444] p-[2.5px] flex flex-col z-10 md:-mt-[44px]"
                   >
                     {/* Top 'Popular' header banner */}
-                    <div className="py-3 px-6 text-white text-[14px] font-medium tracking-wide text-left">
+                    <div className="h-[44px] px-6 text-white text-[14px] font-medium tracking-wide flex items-center text-left">
                       Popular
                     </div>
 
                     {/* White Inner Card Body */}
                     <div className="bg-white rounded-[29px] p-6 sm:p-8 flex-1 flex flex-col justify-between">
                       <div>
-                        {/* Title */}
-                        <div className="text-[15px] sm:text-[16px] font-medium text-[#444444] mb-2 text-left">
+                        {/* Title - Fixed height so all card prices and CTAs line up horizontally */}
+                        <div className="text-[15px] sm:text-[16px] font-medium text-[#444444] mb-2 text-left h-[24px] flex items-center">
                           {plan.name}
                         </div>
 
-                        {/* Price Figure (444444 fill, font-medium) */}
-                        <div className="flex items-baseline gap-1 mb-8 text-left">
-                          <span className="text-[38px] sm:text-[46px] font-medium text-[#444444] tracking-tight font-sans">
+                        {/* Price Figure (444444 fill, font-medium) - Fixed height for horizontal CTA alignment */}
+                        <div className="h-[56px] sm:h-[60px] flex items-baseline gap-1 mb-8 text-left">
+                          <span className="text-[38px] sm:text-[46px] font-medium text-[#444444] tracking-tight font-sans leading-none">
                             {currentPrice}
                           </span>
                           <span className="text-[18px] sm:text-[20px] font-medium text-[#444444]">/m</span>
@@ -213,20 +213,20 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
               }
 
               return (
-                /* Unfilled / Transparent Cards (Basic 15k & Enterprise Plan) - Bottom-aligned */
+                /* Unfilled / Transparent Cards (Basic 15k & Enterprise Plan) - Top-aligned so CTAs are on a straight line */
                 <div
                   key={plan.id}
                   className="w-[84vw] max-w-[340px] md:w-full shrink-0 snap-center bg-transparent p-6 sm:p-8 flex flex-col justify-between"
                 >
                   <div>
-                    {/* Title */}
-                    <div className="text-[15px] sm:text-[16px] font-medium text-[#444444] mb-2 text-left">
+                    {/* Title - Fixed height matching popular card */}
+                    <div className="text-[15px] sm:text-[16px] font-medium text-[#444444] mb-2 text-left h-[24px] flex items-center">
                       {plan.name}
                     </div>
 
-                    {/* Price Figure / Custom Title */}
-                    <div className="flex items-baseline gap-1 mb-8 text-left">
-                      <span className="text-[38px] sm:text-[46px] font-medium text-[#444444] tracking-tight font-sans">
+                    {/* Price Figure / Custom Title - Fixed height matching popular card */}
+                    <div className="h-[56px] sm:h-[60px] flex items-baseline gap-1 mb-8 text-left">
+                      <span className="text-[38px] sm:text-[46px] font-medium text-[#444444] tracking-tight font-sans leading-none">
                         {currentPrice}
                       </span>
                       {!plan.isCustom && (
@@ -234,7 +234,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenSignUp }) 
                       )}
                     </div>
 
-                    {/* Primary CTA Button */}
+                    {/* Primary CTA Button - Aligned on straight horizontal line */}
                     <button
                       type="button"
                       onClick={onOpenSignUp}
