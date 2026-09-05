@@ -60,11 +60,7 @@ const TIERS = [
     has: [
       '5+ shops',
       'Everything in Standard',
-      'Custom workflows',
-      'Unlimited staff',
-      'Dedicated manager',
-      'Audit logs & SLA',
-      '24/7 priority support',
+      'Dedicated manager & SLA',
     ],
   },
 ];
