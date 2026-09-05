@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { MaskedRotator } from './MaskedRotator';
-import { ProductDashboard } from './ProductDashboard';
+import suiteBg from '../../assets/suite-bg.png';
+import macbookImg from '../../assets/macbook-5.png';
 
 export interface HeroProps {
   onOpenSignUp: (email?: string) => void;
@@ -44,7 +45,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
               }}
               className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border-[0.5px] border-gray-300 bg-transparent text-[13px] text-gray-600 hover:text-gray-900 mb-6 md:mb-8 transition-colors duration-150"
             >
-              <span>Every handset tracked by IMEI</span>
+              <span>Join Us: over 100M processed.</span>
               <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
             </a>
 
@@ -72,34 +73,56 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSignUp, onNavigateSection }) =
               </div>
             </h1>
 
-            {/* CTA */}
-            <form onSubmit={submit} className="w-full max-w-[360px]">
-              <div className="flex items-center gap-3">
-              <input
-                type="email"
-                required
-                maxLength={254}
-                value={email}
-                onChange={(event) => { setEmail(event.target.value); }}
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-[14px] sm:text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
-              />
-              <button
-                type="submit"
-                aria-label="Continue with your business details"
-                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E5E5E5] text-gray-600 transition-colors shrink-0"
-              >
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+            {/* CTA — pill button + flush black 70×70 circle with white arrow */}
+            <form onSubmit={submit}>
+              <div className="inline-flex items-center gap-0">
+                {/* Pill button */}
+                <button
+                  type="submit"
+                  className="inline-flex items-center h-[70px] bg-[#121316] hover:bg-[#000000] text-white rounded-full px-8 text-[24px] font-medium leading-none whitespace-nowrap transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                >
+                  Get Started
+                </button>
+
+                {/* Flush black 70×70 circle with white arrow at 45° */}
+                <button
+                  type="submit"
+                  aria-hidden="true"
+                  className="w-[70px] h-[70px] rounded-full bg-[#121316] hover:bg-[#000000] flex items-center justify-center shrink-0 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ transform: 'rotate(-45deg)' }}
+                  >
+                    <path
+                      d="M3 11H19M19 11L11 3M19 11L11 19"
+                      stroke="white"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
               </div>
             </form>
 
           </div>
 
           {/* Right Column: 58% on desktop (7 cols out of 12) */}
-          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-100 lg:scale-[1.1]">
-            <div className="w-full p-3.5 sm:p-5 md:p-6 bg-gradient-to-br from-[#EEF4FB] via-[#F4F7FB] to-[#F7F5F0] rounded-[28px] border border-[#E4ECF4]">
-              <ProductDashboard />
+          <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full mt-4 lg:mt-0 relative scale-100 lg:scale-[1.05]">
+            <div 
+              className="relative w-full rounded-[24px] sm:rounded-[28px] md:rounded-[32px] overflow-hidden border border-[#E4ECF4] shadow-lg p-3.5 sm:p-5 md:p-6 flex items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: `url(${suiteBg})` }}
+            >
+              <img 
+                src={macbookImg} 
+                alt="Suite Dashboard Preview" 
+                className="w-full h-auto block object-contain drop-shadow-2xl rounded-[12px] sm:rounded-[16px]"
+              />
             </div>
           </div>
 

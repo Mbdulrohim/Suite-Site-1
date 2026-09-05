@@ -75,7 +75,8 @@ export const PageShell = ({
 };
 
 /** So a CallToAction anywhere in the page can open the shell's own modal. */
-const SignUpContext = createContext<() => void>(() => {});
+export const SignUpContext = createContext<() => void>(() => {});
+export const useSignUp = () => useContext(SignUpContext);
 
 /** One question and its answer, at the measure the homepage sets for prose. */
 export const Section = ({ heading, children }: { heading: string; children: ReactNode }) => (

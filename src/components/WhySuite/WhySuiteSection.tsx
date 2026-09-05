@@ -39,14 +39,14 @@ export const WhySuiteSection: React.FC = () => {
         {/* Section Title */}
         <div className="max-w-[620px] mb-12 md:mb-24">
           <h2 className="text-[#121316] font-medium tracking-tight text-[28px] sm:text-[36px] md:text-[44px] leading-[1.1] mb-4">
-            How is Suite different<br className="hidden sm:inline"/>from <span className="text-gray-400">spreadsheets</span>
+            Why Nigeria's top gadget stores<br className="hidden sm:inline"/> run on <span className="text-[#121316]">Suite</span>
           </h2>
           <p className="text-gray-500 text-[16px] sm:text-[18px] leading-[1.6]">
-            A sheet does not know that the row you are typing is a handset somebody already sold on the other till. Suite does, and it says so before the money changes hands.
+            Suite tracks your IMEIs in real time, logs every counter sale, manages customer credit, and calculates your daily profits with complete clarity.
           </p>
         </div>
 
-        {/* 3 Columns (Desktop grid, responsive on mobile) - All same size matching Tools */}
+        {/* 3 Columns (Desktop grid, responsive on mobile) */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-stretch justify-center relative z-10 max-w-[1140px] mx-auto">
 
           {/* Column 1: One system */}
@@ -61,27 +61,27 @@ export const WhySuiteSection: React.FC = () => {
                 <span className="bg-white shadow-sm border border-gray-100 rounded-full px-4 py-2 text-[14px] text-gray-700 font-medium">Suppliers</span>
               </div>
             </div>
-            <span className="text-[17px] text-gray-700 font-medium tracking-tight">One system</span>
+            <span className="text-[17px] text-gray-700 font-medium tracking-tight">All-in-one platform</span>
           </div>
 
           {/* Column 2: Activity — who changed what */}
           <div className="flex flex-col items-center w-full">
             <div className="w-full bg-[#FAF9F7]/90 border-[0.5px] border-[#e8e8e8] rounded-[28px] p-6 sm:p-8 h-[280px] sm:h-[300px] md:h-[320px] flex flex-col items-center justify-center relative mb-5 gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
               <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-400 w-full max-w-[260px] text-left">
-                Who dropped the floor on that Pro Max?
+                Who approved the special deal on this iPhone?
               </div>
               <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-3.5 text-[13px] text-gray-700 w-full max-w-[260px] text-left flex items-center gap-2.5">
                 <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 shrink-0">
                   <BookOpen className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-medium">Chuka, Tuesday 4:12pm.</span>
+                <span className="font-medium">Chuka · Tuesday 4:12 PM</span>
               </div>
               <div className="bg-white/90 shadow-sm border border-gray-100 rounded-xl px-3 py-1.5 text-[11px] text-gray-500 w-fit self-start ml-2 sm:ml-4 flex items-center gap-1.5">
                 <User className="w-3 h-3 text-gray-400" />
-                <span>₦950,000 → ₦900,000 · “Clearing slow stock”</span>
+                <span>₦950,000 → ₦900,000 · “VIP customer deal”</span>
               </div>
             </div>
-            <span className="text-[17px] text-gray-700 font-medium tracking-tight">Activity</span>
+            <span className="text-[17px] text-gray-700 font-medium tracking-tight">Verified activity log</span>
           </div>
 
           {/* Column 3: What it records */}
@@ -101,14 +101,13 @@ export const WhySuiteSection: React.FC = () => {
                 ))}
               </div>
             </div>
-            <span className="text-[17px] text-gray-700 font-medium tracking-tight">What it records</span>
+            <span className="text-[17px] text-gray-700 font-medium tracking-tight">Made for gadget retail</span>
           </div>
 
         </div>
 
-        {/* Connector: everything above converges into one set of books */}
+        {/* Connector */}
         <div className="mt-8 md:mt-14 flex flex-col items-center w-full max-w-[420px]">
-          {/* Vertical line on mobile, curved SVG on desktop */}
           <div className="w-[1px] h-10 bg-gray-300 md:hidden my-2" />
 
           <svg width="480" height="50" viewBox="0 0 480 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="hidden md:block mb-5">
@@ -118,14 +117,14 @@ export const WhySuiteSection: React.FC = () => {
           </svg>
 
           <div className="text-[12px] text-gray-400 font-medium tracking-tight mb-3">
-            It all adds up to...
+            Always in sync...
           </div>
 
           <div className="w-full sm:w-auto bg-[#F2F8F5] border border-[#A7F3D0] text-[#047857] text-[16px] sm:text-[17px] font-semibold px-8 py-3.5 rounded-full shadow-sm flex items-center justify-center gap-3">
             <div className="w-6 h-6 rounded-full bg-[#059669] flex items-center justify-center text-white">
               <BookOpen className="w-3.5 h-3.5" />
             </div>
-            <span>One set of books</span>
+            <span>One clean, profitable ledger</span>
           </div>
         </div>
 

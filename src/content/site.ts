@@ -64,6 +64,14 @@ export const routes = [
     changefreq: 'monthly',
     priority: 0.8,
   },
+  {
+    path: '/blog',
+    title: 'Suite Blog — Engineering & Inventory Architecture Notes',
+    description:
+      'Engineering, systems design, and product perspectives on building inventory infrastructure for Nigerian electronics retailers.',
+    changefreq: 'monthly',
+    priority: 0.7,
+  },
 ] as const;
 
 /**
